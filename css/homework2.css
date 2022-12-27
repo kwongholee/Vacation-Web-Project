@@ -1,0 +1,27 @@
+.email {
+  border: 1px solid black;
+  height: 20px;
+  width: 350px;
+}
+
+.name {
+  border-radius: 5px;
+  border: 1px solid black;
+  height: 25px
+}
+
+.message {
+  border: 1px solid black;
+  height: 200px;
+  width: 350px;
+  border-radius: 5px;
+}
+
+.submit {
+  border-radius: 5px;
+  border: none;
+  margin-left: 160px;
+  padding: 10px 30px;
+  background-color: gold;
+  color: white;
+}

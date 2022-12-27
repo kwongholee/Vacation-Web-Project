@@ -1,0 +1,127 @@
+div {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.profile {
+  width: 100px; 
+  display: block; 
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+.name {
+  text-align: center;
+  font-size: 30px;
+}
+
+.content {
+  text-align: center;
+}
+
+.box {
+  width: 200px;
+  background-color: cadetblue;
+  margin: 10px;
+  padding: 40px;
+  border-radius: 5px;
+  margin-left: auto; 
+  margin-right: auto;
+  text-align: center;
+  font-family: gulim;
+  color: white;
+  box-shadow: 10px 10px 10px black;
+}
+
+.container{
+  width: 800px;
+}
+
+.header {
+  width: 100%;
+  height: 50px;
+  background-color: aquamarine;
+}
+
+.left-menu {
+  width: 20%;
+  height: 400px;
+  background-color: cornflowerblue;
+  display: inline-block;
+  /* float: left; */
+}
+
+.right {
+  width: 80%;
+  height: 400px;
+  background-color: coral;
+  display: inline-block;
+  /* float: left; */
+}
+
+.footer {
+  width: 100%;
+  height: 100px;
+  background-color: grey;
+  /* clear: both; */
+}
+
+.main-background {
+  width: 100%;
+  height: 500px;
+  background-image: url(../html/shoes.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 1px;
+}
+
+.main-title {
+  color: white;
+  font-size: 40px;
+  margin-top: 300px;
+  text-align: center;
+}
+
+.main-paragraph {
+  color: aqua;
+  text-align: center;
+}
+
+.main-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: white;
+  border: none;
+  position: relative;
+}
+
+.main-background a{
+  text-decoration: none;
+}
+
+.main-div {
+  width: 80%;
+  position: relative;
+  top: -40px;
+  margin: auto;
+  background-color: gray;
+}
+
+.main-div p {
+  text-align: center;
+  font-size: 10px;
+}
+
+input[type=text] {
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
