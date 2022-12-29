@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <div class="alert-box" id="alert"><p id="p">알림창임</p> <button id="close">닫기</button></div>
+  <button onclick="알림창('alert', 'block'), 알림창2('p', '아이디를 입력해주세요')">ID</button>
+  <button onclick="알림창('alert', 'block'), 알림창2('p', '비밀번호를 입력해주세요')">PassWord</button>
+
+  <script>
+    document.getElementById('close').addEventListener('click', function() {
+      document.getElementById('alert').style.display = 'none';
+    });
+
+    function 알림창(id, a) {
+      document.getElementById(id).style.display = a;
+    }
+
+    function 알림창2(c, a) {
+      document.getElementById(c).innerHTML = a;
+    }
+  </script>
+</body>
+</html>
