@@ -11,9 +11,35 @@
   <div class="black-bg">
     <div class="white-bg">
       <h4>로그인하세요</h4>
-      <button class="btn btn-danger" id="close">닫기</button>
+      <form name="loginform" action="success.html">
+        <div class="my-3">
+          <input type="text" class="form-control" name="id">
+         </div>
+         <div class="my-3">
+           <input type="password" class="form-control" name="password">
+         </div>
+         <button type="submit" class="btn btn-primary">전송</button>
+         <button type="button" class="btn btn-danger" id="close">닫기</button>
+      </form> 
     </div>
   </div> 
+
+  <script>
+    $('.btn-primary').on('click', function(e) {
+      if(loginform.id.value == "") {
+        alert('아이디를 입력하세요');
+        e.preventDefault();
+      }
+      else if(loginform.password.value == "") {
+        alert('비밀번호를 입력하세요');
+        e.preventDefault();
+      }
+      else if(loginform.password.value.length < 6) {
+        alert('비밀번호를 6자 이상 입력해주세요');
+        e.preventDefault();
+      }
+    })
+  </script>
 
   <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
@@ -32,11 +58,18 @@
     <li class="list-group-item">And a fifth one</li>
   </ul>
 
-  <button id="login">로그인</button>
+  <div class="main-bg">
+    <h4>Shirts on Sale</h4>
+    <button id="login" class="btn btn-danger">로그인</button>
+  </div>
 
   <script>
     $('#login').on('click', function() {
-      $('.black-bg').toggleClass('show');
+      $('.black-bg').addClass('show');
+    });
+
+    $('#close').on('click', function() {
+      $('.black-bg').removeClass('show');
     });
 
     document.querySelector('.navbar-toggler').addEventListener('click', function() {

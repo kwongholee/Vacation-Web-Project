@@ -1,0 +1,6 @@
+0. css에 클래스로 만들어 놓음
+1. 시작스타일 만들기
+2. 최종스타일 만들기
+3. 원할 때 최종 스타일로 변하라고 코드 짜기
+4. transition 추가하기
+(display: none 대신 visibility: hidden 사용)

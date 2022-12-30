@@ -5,7 +5,9 @@
   background : rgba(0,0,0,0.5);
   z-index : 5;
   padding: 30px;
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 1s;
 }
 .white-bg {
   background: white;
@@ -21,10 +23,16 @@
   display: none;
 }
 
+.main-bg {
+  padding: 100px 20px;
+  background-color: lightgrey;
+}
+
 .list-group {
   display: none;
 }
 
 .show {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
