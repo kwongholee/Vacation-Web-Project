@@ -57,7 +57,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
     </div>
-  </nav>
+  </nav> 
 
   <script>
     var count = 0;
@@ -70,7 +70,18 @@
         $('.badge').html('Dark 🔄');
       }
     })
+
+    $(window).on('scroll', function() {
+      if($(window).scrollTop() >= 100) {
+        $('.navbar-brand').css('font-size', '10px');
+      }
+      else {
+        $('.navbar-brand').css('font-size', '20px');
+      }
+    });
   </script>
+
+  <div style="height: 1000px;"></div>
   
   <ul class="list-group">
     <li class="list-group-item">An item</li>
@@ -113,6 +124,18 @@
         $('.alert').hide();
       }
     }, 1000)
+  </script>
+
+  <div class="lorem" style="width: 200px; height: 100px; overflow-y: scroll">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae voluptas voluptatum minus praesentium fugit debitis at, laborum ipsa itaque placeat sit, excepturi eius. Nostrum perspiciatis, eligendi quae consectetur praesentium exercitationem.
+  </div>
+
+  <script>
+    $('.lorem').on('scroll', function() {
+      if($('.lorem').scrollTop() + 100 >= document.querySelector('.lorem').scrollHeight) {
+        alert('hi');
+      }
+    });
   </script>
 
   <div style="overflow: hidden;">
