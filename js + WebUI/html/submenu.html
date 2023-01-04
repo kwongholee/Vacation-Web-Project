@@ -47,6 +47,12 @@
         e.preventDefault();
       }
     })
+
+    $('.black-bg').on('click', function(e) {
+      if(e.target == document.querySelector('.black-bg')) {
+        $('.black-bg').removeClass('show');
+      }
+    })
   </script>
 
   <nav class="navbar navbar-light bg-light">
@@ -80,8 +86,6 @@
       }
     });
   </script>
-
-  <div style="height: 1000px;"></div>
   
   <ul class="list-group">
     <li class="list-group-item">An item</li>
@@ -95,6 +99,8 @@
     <h4>Shirts on Sale</h4>
     <button id="login" class="btn btn-danger">로그인</button>
   </div>
+
+  <div style="height: 1000px;"></div>
 
   <script>
     $('#login').on('click', function() {
