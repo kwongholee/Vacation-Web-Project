@@ -6,5 +6,5 @@ var products = [
 
 for(let i = 0; i < 3; i++) {
   $('.title').eq(i).html(products[i].title);
-  $('.price').eq(i).html(products[i].price);
+  $('.price').eq(i).html(`가격: ${products[i].price}`);
 }
