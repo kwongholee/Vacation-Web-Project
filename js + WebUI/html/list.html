@@ -34,6 +34,14 @@
       </div>
     </div>
   </div>
+  
+  <script>
+    $.get('https://codingapple1.github.io/price.json').done(function(data) {
+      console.log(data);
+    }).fail(function() {
+      console.log('fail');
+    });
+  </script>
 
   <script src="../js/list.js"></script>
   
