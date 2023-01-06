@@ -14,6 +14,7 @@ $('#price').on('click', function() {
     <img src="https://via.placeholder.com/600" class="w-100">
     <h5>${products[i].title}</h5>
     <p>가격 : <span>${products[i].price}</span></p>
+    <button class="buy">구매</button>
     </div>`;
     $('.row').append(template);
   })
@@ -34,6 +35,7 @@ $('#title').on('click', function() {
     <img src="https://via.placeholder.com/600" class="w-100">
     <h5>${products[i].title}</h5>
     <p>가격 : <span>${products[i].price}</span></p>
+    <button class="buy">구매</button>
     </div>`;
     $('.row').append(template);
   })
@@ -49,6 +51,7 @@ $('#price6').on('click', function() {
     <img src="https://via.placeholder.com/600" class="w-100">
     <h5>${newproducts[i].title}</h5>
     <p>가격 : <span>${newproducts[i].price}</span></p>
+    <button class="buy">구매</button>
     </div>`;
     $('.row').append(template);
   })
@@ -58,6 +61,7 @@ var template = `<div class="col-sm-4">
 <img src="https://via.placeholder.com/600" class="w-100">
 <h5>Card title</h5>
 <p>가격 : <span>70000</span></p>
+<button class="buy">구매</button>
 </div>`;
 
 function producthtml(a, b) {
@@ -86,3 +90,22 @@ $('#more').on('click', function() {
     })
   }
 })
+
+$('.buy').on('click', function(e) {
+  if(localStorage.getItem('cart') == null) {
+    var a = [e.target.previousElementSibling.previousElementSibling.innerHTML];
+    var b = JSON.stringify(a);
+    localStorage.setItem('cart', b);
+  }
+  else {
+    var a = localStorage.getItem('cart');
+    var b = JSON.parse(a);
+    if(b.includes(e.target.previousElementSibling.previousElementSibling.innerHTML) == false) {
+      b.push(e.target.previousElementSibling.previousElementSibling.innerHTML);
+      var c = JSON.stringify(b);
+      localStorage.setItem('cart', c);
+    }
+  }
+})
+
+// e.target.previousElementSibling.previousElementSibling.innerHTML == $(e.target).siblings('h5').text()
