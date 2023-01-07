@@ -1,0 +1,58 @@
+.gray-bg {
+    background-color: lightslategray;
+    margin-top: 10px;
+    width: 100%;
+    height: 3000px;
+}
+
+.gray-bg input{
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.black-bg {
+    width: 100%;
+    background-color: black;
+}
+
+.black-bg h3 {
+    color: white;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+.black-bg p {
+    color: white;
+    display: inline-block;
+    padding: auto;
+    margin-right: 10px;
+}
+
+.white-bg {
+    background-color: white;
+    margin-top: 20px;
+    margin-left: 50px;
+    padding: 30px;
+    display: inline-block;
+}
+
+.darkgray-bg {
+    background-color: gray;
+    width: 90%;
+    height: 700px;
+    margin: auto;
+}
+
+.darkgray-bg h3 {
+    font-size: 25px;
+    padding-top: 50px;
+    padding-left: 30px;
+}
+
+.black-bg2 {
+    background-color: black;
+    width: 95%;
+    margin: auto;
+    height: 500px;
+}
