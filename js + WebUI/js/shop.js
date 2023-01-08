@@ -36,7 +36,7 @@ product.products.forEach((a) => {
     <img src="../shop/${a.photo}" width="200px">
     <h3>${a.title}</h3>
     <p>${a.brand}</p>
-    <h4>가격: ${a.price}</h4>
+    <h4>가격: <span>${a.price}</span></h4>
     <button class="cart-in">담기</button>
     </div>`;
     $('#cart').append(template);
@@ -78,5 +78,23 @@ $('#input-list').change(function() {
 })
 
 $('.cart-in').on('click', function(e) {
-  
+  $('.black-bg2 p').html('');
+  var count = 1;
+  var model = $(e.target).siblings('h3').text();
+  var company = $(e.target).siblings('p').text();
+  var price = $(e.target).siblings('h4').children('span').text();
+  var image = e.target.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling;
+  var template = `<div class="white-bg2" style="text-align: center;" id="${model}">
+    ${image}
+    <h3>${model}</h3>
+    <p>${company}</p>
+    <h4>${price}</h4>
+    <p>${count}</p>
+  </div>`;
+  if(document.getElementById(`${model}`)) {
+    $(`#${model} p`).eq(1).html(count++);
+  }
+  else {
+    $('.black-bg2').eq(0).append(template);
+  }
 })
