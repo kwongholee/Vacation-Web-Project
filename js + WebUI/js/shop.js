@@ -34,10 +34,49 @@ const product = {
 product.products.forEach((a) => {
     var template = `<div class="white-bg">
     <img src="../shop/${a.photo}" width="200px">
-    <h4>${a.title}</h4>
+    <h3>${a.title}</h3>
     <p>${a.brand}</p>
     <h4>가격: ${a.price}</h4>
     <button class="cart-in">담기</button>
     </div>`;
     $('#cart').append(template);
+})
+
+$('#input-list').change(function() {
+  var search = $('#input-list').val();
+  if(search == '') {
+    $('.white-bg').css('display', 'inline-block');
+    $('.white-bg h3 span').removeClass('highlight');
+    $('.white-bg p span').removeClass('highlight');
+  }
+  else {
+    for(let i = 0; i < 4; i++) {
+      var h3 = $('.white-bg h3').eq(i).text();
+      var p = $('.white-bg p').eq(i).text();
+      $('.white-bg h3 span').eq(i).removeClass('highlight');
+      $('.white-bg p span').eq(i).removeClass('highlight');
+      if(h3.includes(search) || p.includes(search)) {
+        $('.white-bg').eq(i).css('display', 'inline-block');
+        if(h3.includes(search)) {
+          var newH3 = h3.split(search).join(`<span class="highlight">${search}</span>`);
+          $('.white-bg h3').eq(i).html('');
+          $('.white-bg h3').eq(i).html(newH3);
+        }
+        else {
+          var newP = p.split(search).join(`<span class="highlight">${search}</span>`);
+          $('.white-bg p').eq(i).html('');
+          $('.white-bg p').eq(i).html(newP);
+        }
+      }
+      else {
+        $('.white-bg').eq(i).css('display', 'none');
+        $('.white-bg h3 span').eq(i).removeClass('highlight');
+        $('.white-bg p span').eq(i).removeClass('highlight');
+      }
+    }
+  }
+})
+
+$('.cart-in').on('click', function(e) {
+  
 })
