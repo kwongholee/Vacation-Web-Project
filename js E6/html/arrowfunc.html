@@ -1,0 +1,57 @@
+<div></div>
+<button id="btn">버튼</button>
+<button id="btn2">버튼이에요</button>
+
+<script>
+
+    // var func = () => {
+    //     // 함수: 기능 압축 + 입출력 기계(return) 역할
+    //     // props
+    //     // 입출력 기게 만들때 보기 쉬움
+    //     // 파라미터 1개면 소괄호 생략 가능 + 코드 한줄이면 중괄호 생략 가능
+    // }
+
+    // func();
+
+    [1,2,3,4].forEach((a) => {
+        console.log(a);
+    })
+
+    document.getElementById('btn').addEventListener('click', (e) => {
+        console.log(this);
+    });
+
+    var object = {
+        func : () => {
+            console.log(this);
+        }
+    }
+    object.func();
+
+    var person = {
+        name: 'son',
+        sayHi: function() {
+            console.log(`안녕 나는 ${person.name}`);
+        }
+    }
+    person.sayHi();
+
+    var Data = {
+        data: [1,2,3,4,5],
+        total: () => {
+            var total = 0;
+            Data.data.forEach((a) => {
+                total += a;
+            })
+            console.log(total);
+        }
+    }
+    Data.total();
+
+    document.getElementById('btn2').addEventListener('click', function() {
+        setTimeout(() => {
+            console.log(this.innerHTML);
+        }, 1000);
+    });
+
+</script>
