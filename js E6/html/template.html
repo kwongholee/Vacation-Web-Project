@@ -1,0 +1,37 @@
+<div></div>
+
+<script>
+
+    var letter = `손흥민`; // backquote 문자열 (엔터키 가능, 중간에 변수넣기 쉬움)
+
+    var sentence = `hi my name ${letter} 임`;
+
+    function func() {
+        return 10
+    }
+
+    function 해체분석기(문자들,변수들) {
+        console.log(문자들); //문자들을 array화 해줌
+        console.log(변수들); // 변수(중괄호를 기준으로 분리, 변수 수에 따라 파라미터 개수도 바뀜)
+    }
+
+    해체분석기`hi my name is ${letter}`; // ["hi my name ", " 임"] / 손흥민
+
+    var pants = 0;
+    var socks = 100;
+    `바지${pants} 양말${socks}`;
+
+    function pantsSocks(a, b, c) {
+        console.log(`${a[1]}${b} ${a[0]}${c}`);
+    }
+    pantsSocks`바지${pants} 양말${socks}`;
+
+    function 해체분석기2(a,b,c) {
+        if(b==0) {
+            var d = `바지 안 팔아요`;
+            console.log(`${d} ${a[1]}${c}`);
+        }
+    }
+    해체분석기2`바지${pants} 양말${socks}`;
+
+</script>
