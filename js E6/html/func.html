@@ -9,7 +9,38 @@
     plus(1); //11
 
     function func(a,b,c) {
-        console(arguments); // array와 비슷한 형태로 저장
+        console(arguments); // array와 비슷한 형태로 저장(모든 파라미터를 []에 담아줌)
     }
+
+    function func(a,b,c) {
+        for(var i = 0; i < arguments.length; i++) {
+            console.log(arguments[i]);
+        }
+    }
+
+    function func2(a,b,...rest) { //rest parameter(...rest 파라미터에 들어온 자료를 array 안에 보관)(가장 오른쪽에 써야 함, 중복 금지)
+        console.log(rest);
+    }
+    func2(1,2,3,4,5,6,7); // [3,4,5,6,7]
+
+    function arr(...rest) {
+        return rest;
+    }
+    var newarr = arr(1,2,3,4,5);
+    console.log(newarr);
+
+    function letterCount(a) {
+        var result = {};
+        [...a].forEach(function(i) {
+            if(result[i] == null) {
+                result[i] = 1;
+            }
+            else {
+                (result[i])++;
+            }
+        })
+        console.log(result);
+    }
+    letterCount('asdfasdfajasdfi');
 
 </script>
