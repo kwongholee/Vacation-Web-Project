@@ -1,0 +1,46 @@
+<div></div>
+
+<script>
+
+    var array = ['hello', 'world'];
+    console.log(...array); // 대괄호 제거
+
+    var letter = 'hello';
+    console.log(...letter); // 문자를 붙이면 펼침
+
+    var a = [1,2,3];
+    var b = [4,5];
+
+    var c = [...a, ...b]; // 대괄호 제거(어레이 합치기, 복사 및 독립적인 값 복사(참조))
+    console.log(c); 
+
+    var ol = {a: 1, b: 2};
+    var o2 = {...o1, c: 1};
+
+    var o3 = {a: 1, b: 2};
+    var o4 = {a: 2, ...o1}; //값 중복(가장 뒤에 있는 걸 적용)
+
+    // spread operator : 괄호 안에서 사용 가능
+
+    function plus(a,b,c) {
+        console.log(a+b+c);
+    }
+
+    var arr = [10,20,30];
+    plus.apply(undefined, arr); //옛날 방식
+    plus(...arr); // 요즘 방식
+
+    var person = {
+        hi: function() {
+            console.log(this.name + ' hi');
+        }
+    }
+    var person2 = {
+        name: 'son'
+    }
+    person.hi(); // undefined hi
+    person.hi.apply(person2); // son hi
+    person.hi.apply(person2, [1]);
+    person.hi.call(person2, 1);
+
+</script>
