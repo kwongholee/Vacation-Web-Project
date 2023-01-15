@@ -1,0 +1,30 @@
+<script>
+
+    var a = 1234;
+    // primitive data type: 그냥 문자 또는 숫자
+    // 변수에 값이 그대로 저장됨
+
+    var arr = [1,2,3];
+    // array, object는 변수에 값이 저장되지 않음
+    // 변수에 reference(화살표)가 저장됨
+
+    var name1 = 'kim'; // kim
+    var name2 = name1; // kim
+    name1 = 'park'; // park
+
+    var name3 = {name: 'kim'}; // name3.name = 'kim';
+    var name4 = name3; // name4.name = 'kim'
+    name3.name = 'park'; // name3.name = 'park', name4.name = 'park'
+
+    var name5 = {name: 'kim'};
+    var name6 = {name: 'kim'};
+    console.log(name5==name6); // false
+
+    var name7 = {name: 'kim'};
+    function change(obj) {
+        obj = {name: 'park'};
+    }
+    change(name7);
+    console.log(name7.name); // kim
+
+</script>

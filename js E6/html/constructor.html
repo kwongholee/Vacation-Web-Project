@@ -1,0 +1,24 @@
+<script>
+    
+    function Machine(a,b) { // this = 새로 생성되는 오브젝트
+        this.name = a;
+        this.age = b;
+        this.sayHi = function() {
+            console.log(`hi my name is ${this.name}`);
+        }
+    }
+
+    var person1 = new Machine('kim', 15);
+    var person2 = new Machine('park', 16);
+
+    function Machine2(a,b) {
+        this.name = a;
+        this.price = b;
+        this.tax = function() {
+            console.log(`부가세는 ${this.price * 0.1}원입니다`);
+        }
+    }
+    var product1 = new Machine2('shirts', 50000);
+    var product2 = new Machine2('pants', 60000);
+
+</script>
