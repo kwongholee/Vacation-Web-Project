@@ -1,0 +1,26 @@
+<script>
+
+    class Grandfather {
+        constructor(a) {
+            this.firstName = 'kim';
+            this.lastName = a;
+        }
+        sayHi() {
+            console.log(`I'm grandfather`);
+        }
+    }
+    var grandfather1 = new Grandfather('Mad deok');
+
+    class Father extends Grandfather {
+        constructor(a) {
+            super(a); // == 부모 클래스의 constructor
+            this.age = 50;
+        }
+        sayHi() {
+            console.log(`I'm father`);
+            super.sayHi(); // == 부모 클래스의 prototype
+        }
+    }
+    var father1 = new Father('Man su');
+
+</script>

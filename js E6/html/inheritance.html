@@ -1,0 +1,34 @@
+<script>
+
+    // prototype, function Machine(){} -> 옛날 방식
+
+    // ES5
+
+    var parent = {name: 'kim', age: 50};
+
+    var child = Object.create(parent);
+    child.age = 20;
+
+    var grandChild = Object.create(child);
+
+    // ES6
+
+    class Parent2 {
+        constructor(a) {
+            this.name = a;
+            // this.sayHi = function() { function 넣는 법 1 (자식이 직접 함수를 가짐)
+            //     console.log('hello');
+            // }
+        }
+        sayHi() { // function 넣는 법 2 (부모의 prototype에 추가됨, 상속X)
+            console.log('hi');
+        }
+        sayHello() { // function 넣는 법 2 (부모의 prototype에 추가됨, 상속X)
+            console.log('hello');
+        }
+    }
+
+    var child2 = new Parent2();
+    // child2.__proto__ == Object.getPrototypeOf(child2) 둘이 같음
+
+</script>
