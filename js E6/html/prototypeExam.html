@@ -1,0 +1,43 @@
+<script>
+
+    // 1.
+    function Machine(a,b) {
+        this.name = a;
+        this.age = b;
+        this.sayHi = function() {
+            console.log('hi my name is ' + this.name);
+        }
+    }
+    var student1 = new Machine('Kim', 20);
+    var student2 = new Machine('Park', 21);
+    var student3 = new Machine('Lee', 22);
+
+    // 2. 
+    function Parent() {
+        this.name = 'kim';
+    }
+    var a = new Parent();
+    a.__proto__.name = 'Park';
+    console.log(a.name); // kim
+
+    // 3.
+    function Student(a,b) {
+        this.name = a;
+        this.age = b;
+    }
+    Student.prototype.sayHi = () => {
+        console.log(`hi i'm ` + this.name);
+    }
+    var student1 = new Student('kim', 20);
+    student1.sayHi(); // arrowfunc에서 this의 의미는 window를 의미함
+
+    // 4. 
+    Array.prototype.remove3 = function() {
+        this.pop(3);
+    }
+    var arr = [1,2,3];
+    arr.remove3();
+
+    console.log(arr);
+
+</script>

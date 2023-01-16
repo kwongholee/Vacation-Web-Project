@@ -1,0 +1,24 @@
+<script>
+
+    // prototype: 유전자
+
+    function Machine(a) {
+        this.name = a;
+        this.age = 15;
+        this.sayHi = function() {
+            console.log(this.name + 'hi');
+        }
+    }
+    Machine.prototype.gender = 'M';
+
+    var student1 = new Machine('kim');
+    student1.toString();
+
+    // student1.__proto__ : 부모의 유전자 출력
+
+    var parent = {name: 'kim'};
+    var child = {};
+    child.__proto__ = parent;
+    console.log(child.name); // 'kim'
+
+</script>
