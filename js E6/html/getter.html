@@ -1,0 +1,37 @@
+<script>
+
+    var person = {
+        name: 'Park',
+        age: 30,
+        get nextAge() {
+            return this.age + 1;
+        },
+        set setAge(a) { 
+            this.age = parseInt(a);
+        }
+    }
+    person.nextAge; // == person.nextAge() == person.age + 1;
+    person.setAge = '200'; // person.setAge('200');
+
+    // 함수를 만들어서 object 데이터를 다루는 이유
+    // 1. object 자료가 복잡할 때 좋음
+    // 2. object 자료 수정할 때 편함
+
+    // set: 데이터 변경하는 함수에 붙임 + parameter 무조건 1개 필수 (오직 1개만 가능)
+    // get: 데이터 꺼내쓰는 함수에 붙임 + return 필수 + parameter 없어야함
+
+    class Person2 {
+        constructor() {
+            this.name = 'park';
+            this.age = 20;
+        }
+        get nextAge() {
+            return this.age + 1;
+        }
+        set setAge(a) {
+            this.age = a;
+        }
+    }
+    new person1 = new Person2();
+
+</script>

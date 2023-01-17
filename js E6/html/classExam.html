@@ -1,0 +1,68 @@
+<script>
+
+    // 1.
+    class Doggy {
+        constructor(a,b) {
+            this.type = a;
+            this.color = b;
+        }
+    }
+    var doggy1 = new Doggy('말티즈', 'white');
+    var doggy2 = new Doggy('진돗개', 'brown');
+
+    // 2.
+    class Cat extends Doggy {
+        constructor(a,b,c) {
+            super(a,b);
+            this.age = c;
+        } 
+    }
+    var cat1 = new Cat('코숏', 'white', 5);
+    var cat2 = new Cat('러시안블루', 'brown', 2);
+
+    // 3. 
+    Cat.prototype.nextAge = function() {
+        console.log(this.age+1);
+    }
+    //doggy1.nextAge();
+    cat1.nextAge();
+
+    // 4.
+    class Unit {
+        constructor() {
+            this.attack = 5;
+            this.hp = 100;
+        }
+        get battlePoint() {
+            return this.attack +this.hp;
+        }
+        set heal(a) {
+            this.hp = this.hp + a;
+        }
+    }
+    var unit1 = new Unit();
+
+    // 5.
+    var data = {
+        odd: [],
+        even: [],
+        setter(...r) {
+            console.log(r);
+            for(let i = 0; i < r.length; i++) {
+                if(r[i] % 2 == 0) {
+                    this.even.push(r[i]);
+                }
+                else{
+                    this.odd.push(r[i]);
+                }
+            }
+        },
+        getter() {
+            this.odd.sort();
+            this.even.sort();
+            console.log(this.odd);
+            console.log(this.even);
+        }
+    }
+
+</script>
