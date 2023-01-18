@@ -1,0 +1,53 @@
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
+<img id="test" src="https://codingapple1.github.io/kona.jpg"> 
+
+<script>
+
+    // 1. 
+    var promise1 = new Promise(function(res, rej) {
+        var image = document.querySelector('#test');
+        image.addEventListener('load', function() {
+            res();
+        });
+        image.addEventListener('error', function() {
+            rej();
+        });
+    })
+
+    promise1.then(function() {
+        console.log('success');
+    }).catch(function() {
+        console.log('fail');
+    })
+
+    // 2.
+    var promise2 = new Promise(function(res, rej) {
+        $.get('https://codingapple1.github.io/hello.txt').done(function(a) {
+            res(a);
+        })
+    })
+
+    promise2.then(function(a) {
+        console.log(a);
+    })
+
+    // 3.
+    var promise3 = new Promise(function(res, rej) {
+        $.get('https://codingapple1.github.io/hello.txt').done(function(a) {
+            res(a);
+        })
+    })
+
+    promise3.then(function(a) {
+        console.log(a);
+        return new Promise(function(res, rej) {
+            $.get('https://codingapple1.github.io/hello2.txt').done(function(b) {
+                res(b);
+            })
+        });
+    }).then(function(b) {
+        console.log(b);
+    })
+
+</script>

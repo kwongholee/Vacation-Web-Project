@@ -1,0 +1,18 @@
+<script>
+
+    console.log(1);
+    setTimeout(() => {
+        console.log(2); 
+    }, 1000); // js를 순차적으로 실행하기 위해 콜백함수 사용
+    console.log(3);
+
+    function func1(a) {
+        console.log(1);
+        a();
+    }
+    function func2() {
+        console.log(2);
+    }
+    func1(func2);
+
+</script>
