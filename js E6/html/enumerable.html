@@ -1,0 +1,30 @@
+<script>
+
+    var obj = {name: 'kim', age: 30};
+    Object.getOwnPropertyDescriptors(obj, 'name');
+
+    // 단순히 코드를 여러번 실행할 때
+    for (var i = 0; i < 3; i++) {
+
+    }
+
+    // Array, Object에서 자료 꺼낼 때
+    [1,2,3].forEach();
+
+    for (var key in obj) {
+        // Object에 있던 값을 전부 하나씩 꺼내서 쓸 때
+        // 1. enumerable(셀 수 있는지) 한 것만 반복해줌
+        // 2. 부모의 prototype도 반복해줌
+        // 3. Object 자료형에만 씀
+        console.log(obj[key]);
+    }
+
+    var arr = [1,2,3,4,5]
+    for (var a of arr) {
+        // Array, 문자, arguments, NodeList, Map, Set
+        // iterable한 자료형에만 사용 가능
+        console.log(a);
+    }
+    console.log(arr[Symbol.iterator]());
+
+</script>

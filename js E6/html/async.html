@@ -1,0 +1,43 @@
+<button id="success">버튼</button>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<script>
+
+    async function plus() { // async 사용 시 성공만 가능
+        var promise = new Promise(function(res, rej) {
+            var a = 1+1;
+            res(a);
+        });
+        try {
+            var result = await promise;
+            console.log(result);
+        } catch {
+            console.log('error');
+        }
+        // await: 프로미스 해결까지 기다려라(async 안에서 사용가능)
+        // await은 프로미스 실패시 에러가 나고 멈춤
+
+        // return 1+1; 성공 결과값 
+    }
+    plus();
+    // plus().then(function(res) {
+    //     console.log(res);
+    // })
+
+    async function btn() {
+        var promise2 = new Promise(function(res, rej) {
+            $('#success').on('click', function() {
+                res('success');
+            })
+        });
+        try {
+            var result2 = await promise2;
+            console.log(result2);
+        } catch {
+            console.log('fail');
+        }
+    }
+    btn();
+
+</script>

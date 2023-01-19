@@ -1,0 +1,24 @@
+<script>
+
+    // Object 자료형의 비밀스런 key값
+    // 1. 설명이 같다고 해서 같은 Symbol이 아님
+    // 2. 전역 변수 같은 전역 Symbol 설정 가능 - Symbol.for('설명')
+    var symbol = Symbol('description');
+
+    var height = Symbol('my secret height');
+    var height2 = Symbol('my secret height');
+    console.log(height === height2); // false
+
+    var height3 = Symbol.for('my secret height2');
+    var height4 = Symbol.for('my secret height2');
+    console.log(height3 === height4) // true
+
+    var person = {name: 'kim'};
+    person.weight = 100;
+    person[height] = 180; // 반복문에서 출력 안 됨
+
+    for (var key in person) {
+        console.log(person[key]);
+    }
+
+</script>
