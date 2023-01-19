@@ -1,0 +1,16 @@
+<script>
+
+    var user = {
+        name: 'kim',
+        age: {value: 20}
+    };
+
+    console.log(user.age?.value); 
+    // ?: 왼쪽이 null, undefined이면 undefined로 내줌(조건부)
+    // 보통 .이 2개 이상일 때만 사용(.이 1개면 ? 사용 안해도 undefined 내줌)
+    // 에러를 감추는 문법
+
+    console.log(undefined ?? 'hi');
+    // ??: 왼쪽이 undefined이면 오른쪽 값으로 출력
+
+</script>
