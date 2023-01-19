@@ -1,0 +1,28 @@
+<script>
+
+    var person = new Map(); // Map: 자료간의 연관성을 표현하기 위해 사용
+    person.set('name', 'kim'); 
+    person.set('age', 20);
+    person.set(180, 'height'); // key 값에 아무 자료형이나 사용 가능
+
+    person.get('age');
+    person.delete(180);
+    console.log(person.size);
+
+    for(var key of person.keys()) {
+        console.log(key);
+    }
+
+    var person2 = new Map([[1,2,3], 'list'], ['name', 'kim']);
+
+    var sign = ['john', 'tom', 'andy', 'tom'];              // Array
+    var sign2 = new Set(['john', 'tom', 'andy', 'tom']);    // Set: 중복 요소 제거
+    sign2.add('sally');
+    sign2.delete('sally');
+    console.log(sign2.has('sally'));
+    console.log(sign2.size);
+
+    var sign3 = new Set(sign);
+    var sign3 = [...sign3];
+
+</script>

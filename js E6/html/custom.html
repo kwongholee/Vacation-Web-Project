@@ -1,0 +1,25 @@
+<body>
+
+    <custom-input name="hi"></custom-input>
+    <custom-input></custom-input>
+
+    <script>
+
+        class class1 extends HTMLElement {
+            connectedCallback() {
+                let name = this.getAttribute('name');
+                // let a = document.createElement('label');
+                // this.appendChild(a);
+                this.innerHTML = `<label>${name}인풋</label><input>`
+            }
+            static get observedAttributes() {
+                return ['name'];
+            }
+            attributeChangedCallback() {
+                console.log(this.getAttribute('name'));
+            }
+        }
+        customElements.define('custom-input', class1);
+
+    </script>
+</body>
