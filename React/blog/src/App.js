@@ -9,7 +9,8 @@ function App() {
   let post = '강남 우동 맛집';
   let [blogtitle, setlogo] = useState('ReactBlog');
   let [posttitle, posttitlechange] = useState(['남성 코트 추천','강남 우동 맛집','파이썬 독학']);
-  let [like, likeplus] = useState(0);
+  let [like, setLike] = useState([0,0,0]);
+  let [modal, setModal] = useState(false);
 
   return (
     <div className="App">
@@ -21,7 +22,7 @@ function App() {
         copytitle2.sort();
         posttitlechange(copytitle2);
       }}>가나다순 정렬</button>
-      <div className="list">
+      {/* <div className="list">
         <h4>{posttitle[0]} <span onClick={() => {likeplus(like+1)}}>Like👍</span> {like} </h4>
         <p>2.17 post</p>
         <button className='btn-fem' onClick={() => {
@@ -35,11 +36,44 @@ function App() {
         <p>2.17 post</p>
       </div>
       <div className="list">
-        <h4>{posttitle[2]}</h4>
+        <h4 onClick={() => {
+          if(modal == true) {
+            setModal(false);
+          } else {
+            setModal(true);
+          }
+        }}>{posttitle[2]}</h4>
         <p>2.17 post</p>
-      </div>
+      </div> */}
+      {
+        posttitle.map((a,i) => { // i: 반복문이 돌 때마다 0부터 1씩 증가하는 정수
+          return (
+            <div className="list">
+              <h4>{a} <span onClick={() => {
+                let copy = [...like];
+                copy[i] = copy[i] + 1;
+                setLike(copy);
+              }}>Like👍</span> {like[i]} </h4>
+              <p>2.17 post</p>
+            </div>
+          )
+        })
+      }
+      {
+        modal == true ? <Modal></Modal> : null
+      }
     </div>
   );
+}
+
+function Modal() { // 다른 function 밖에다가 작성 + 영어 대문자 사용
+  return (
+    <div className='modal'>
+      <h4>title</h4>
+      <p>date</p>
+      <p>postwrite</p>
+    </div>
+  )
 }
 
 export default App;
@@ -55,3 +89,9 @@ export default App;
 // state는 자동 렌더링 됨
 // 기존 state == 신규 state의 경우 변경하지 않음
 // array, object: refernce type임을 명심할 것
+// component 만드는 법: function 만들기 => return() 안에 html 담기 => <함수명></함수명> 쓰기
+// component 사용 이유: 반복적인 html 축약, 큰 페이지들 만들기, 자주 변경되는 것들 만들기
+// component 단점: state를 가져다 쓸 때 문제가 생김
+// 동적 UI 제작: 디자인 미리 완성 => UI의 현재 상태를 state에 저장 => state에 따라 UI 보이는 유무 작성
+// if문 대신 사용하는 조건문 = 삼항 연산자 => 조건식 ? 참 : 거짓
+// for 대신 사용하는 반복문 = map: array 자료 갯수만큼 콜백함수 실행, 함수의 파라미터는 array 안에 있는 자료, return에는 array로 담아줌
