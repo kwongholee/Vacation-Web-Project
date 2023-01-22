@@ -50,7 +50,7 @@ function App() {
       {
         posttitle.map((a,i) => { // i: 반복문이 돌 때마다 0부터 1씩 증가하는 정수
           return (
-            <div className="list">
+            <div className="list" key={i}>
               <h4  onClick={() => {
                 if(modal == true) {
                   setTitle(i);
