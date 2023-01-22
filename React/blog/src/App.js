@@ -2,15 +2,17 @@
 
 import logo from './logo.svg';
 import './App.css';
-import {useState} from 'react';
+import React, {useState} from 'react';
 
 function App() {
 
   let post = '강남 우동 맛집';
   let [blogtitle, setlogo] = useState('ReactBlog');
-  let [posttitle, posttitlechange] = useState(['남성 코트 추천','강남 우동 맛집','파이썬 독학']);
+  let [posttitle, posttitlechange] = useState(['남성 코트 추천','성수동 브런치 맛집','파이썬 독학']);
   let [like, setLike] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
+  let [title, setTitle] = useState(0);
+  let [input, setInput] = useState('');
 
   return (
     <div className="App">
@@ -49,31 +51,76 @@ function App() {
         posttitle.map((a,i) => { // i: 반복문이 돌 때마다 0부터 1씩 증가하는 정수
           return (
             <div className="list">
-              <h4>{a} <span onClick={() => {
+              <h4  onClick={() => {
+                if(modal == true) {
+                  setTitle(i);
+                  setModal(false);
+                } else {
+                  setTitle(i);
+                  setModal(true);
+                }
+              }}>{a} <span onClick={(e) => {
+                e.stopPropagation();
                 let copy = [...like];
                 copy[i] = copy[i] + 1;
                 setLike(copy);
               }}>Like👍</span> {like[i]} </h4>
               <p>2.17 post</p>
+              <button onClick={() => {
+                let copy = [...posttitle];
+                copy.splice(i,1);
+                posttitlechange(copy);
+              }}>delete</button>
             </div>
           )
         })
       }
+      <input onChange={(e) => { setInput(e.target.value) }} />
+      <button onClick={() => {
+        let copy = [...posttitle];
+        copy.push(input);
+        let copy2 = [...like];
+        copy2.push(0);
+        posttitlechange(copy);
+        setLike(copy2);
+      }}>post</button>
       {
-        modal == true ? <Modal></Modal> : null
+        modal == true ? <Modal title={title} posttitle={posttitle} posttitlechange={posttitlechange}></Modal>: null
       }
     </div>
   );
 }
 
-function Modal() { // 다른 function 밖에다가 작성 + 영어 대문자 사용
+function Modal(props) { // 다른 function 밖에다가 작성 + 영어 대문자 사용
   return (
-    <div className='modal'>
-      <h4>title</h4>
+    <div className='modal' style={{background: 'skyblue'}}>
+      <h4>{props.posttitle[props.title]}</h4>
       <p>date</p>
-      <p>postwrite</p>
+      <button onClick={() => {
+        let copy = [...props.posttitle]; 
+        copy[0] = '여성 코트 추천'
+        props.posttitlechange(copy)}}>postchange</button>
     </div>
   )
+}
+
+class Modal2 extends React.Component { // class: React의 옛날 component 생성 방식
+  constructor(props) {
+    super(props);
+    this.state = { // state 생성 방법
+      name: 'kim',
+      age: 20
+    }
+  }
+  render() {
+    return (
+      <div>Hi {this.state.age}
+        <button onClick={() => {
+          this.setState({age:21}); // setState: 기존은 똑같고 수정부분만 변경됨
+        }}>btn</button>
+      </div>
+    )
+  }
 }
 
 export default App;
@@ -95,3 +142,7 @@ export default App;
 // 동적 UI 제작: 디자인 미리 완성 => UI의 현재 상태를 state에 저장 => state에 따라 UI 보이는 유무 작성
 // if문 대신 사용하는 조건문 = 삼항 연산자 => 조건식 ? 참 : 거짓
 // for 대신 사용하는 반복문 = map: array 자료 갯수만큼 콜백함수 실행, 함수의 파라미터는 array 안에 있는 자료, return에는 array로 담아줌
+// 부모에서 자식으로 state 전송하는법: <자식컴퍼넌트 작명={state이름}> => props 파라미터 등록후 props.작명 사용
+// state를 만드는 곳: state를 사용하는 컴퍼넌트 중 가장 최상위 컴퍼넌트
+// 이벤트 버블링 막는 법: 이벤트 객체 e 선언(in eventlistner) => e.stoppropagation()
+// class의 필수 콜백 함수: constructor(){super()}, render(){}
