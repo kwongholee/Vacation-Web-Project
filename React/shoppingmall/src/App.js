@@ -2,16 +2,20 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // react-bootstrap
 import {Navbar, Container, Nav} from 'react-bootstrap'; // react-bootstrap component
 import bg from './img/bg.png'; // react에서 img 파일 import 하고 url 사용
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import Detail from './routes/Detail';
 import products from './components/data';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 import axios from 'axios';
+import Cart from './routes/Cart';
+
+// export let Context1 = createContext(); // state 보관함
 
 function App() {
 
   let [shoes, setShoes] = useState(products);
   let navigate = useNavigate();
+  // let [product, setProduct] = useState([10,11,12]);
 
   return (
     <div className="App">
@@ -22,8 +26,9 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link onClick={() => {navigate('/')}}>Home</Nav.Link>
             <Nav.Link onClick={() => {navigate('/about')}}>About</Nav.Link>
-            <Nav.Link onClick={() => {navigate('/detail')}}>Detail</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/detail/0')}}>Detail</Nav.Link>
             <Nav.Link onClick={() => {navigate('/event')}}>Event</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/cart')}}>Cart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -47,10 +52,17 @@ function App() {
               .catch((e) => {
                 console.error(e);
               })
-            }}>btn</button>
+
+              axios.post('/data', {name: 'kim'})
+            }}>More</button>
           </>
         } />
-        <Route path="/detail/:id" element={<Detail  shoes={shoes}/>} />
+        <Route path="/detail/:id" element={
+          // <Context1.Provider value={{product, shoes}}></Context1.Provider>
+            <Detail shoes={shoes}/>   
+        } />
+
+        <Route path='/cart' element={<Cart></Cart>} />  
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>}/>
@@ -128,4 +140,15 @@ export default App;
 // 서버와 통신시 방법(GET(가져올 떄)/POST(보낼 때))과 자료(URL(서버개발자가 알고 있음))이 필요함
 // ajax 이용하면 새로고침 없이 GET/POST 요청 가능
 // axios.get('url'): axios를 이용한 get 요청
-// 
+// axios.post('url', {data}): axios를 이용한 post 요청
+// 동시에 ajax 요청 보내기: Promise.all([ axios.get('url'), axios.get('url') ]).then(()=>{})
+// 서버와 통신할 때 모든 데이터는 문자 형태여야 하기 때문에 json 파일을 주고 받음
+// fetch로도 ajax 요청 가능. 그러나 json data 변환이 필요함
+// props 사용하기 귀찮을 때 파라미터 안에 {data작명이름}을 넣으면 props 없이 사용 가능
+// 전환애니메이션: css에서 애니메이션 동작 전 className 만들기 => 애니메이션 동작 후 className 만들기 => className에 transition 속성 추가 => 원할 때 후 className 장착
+// state 변경 함수가 있으면 automatic batching 기능 대문에 모든 변경 함수를 하나의 랜더링으로만 실행함(마지막 함수 이외에는 기능이 씹힘)(따라서 타이머를 둬서 시간을 둬야함)
+// single page application 단점: 컴퍼넌트간 state 공유 불가능
+// props 전송은 {부모->자식}만 가능
+// Context API: props 없이 state 공유 가능(실전에서 많이 사용하지는 않음) -> 자손들도 사용 가능
+// Redux(외부 라이브러리): 한 js파일에 state를 넣어놓고 모든 파일에서 끌어당겨서 씀
+// Redux store에는 다른 컴퍼넌트들과 공유할 state만 넣어놓을 것

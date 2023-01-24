@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Nav } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
+import {Context1} from './../App'
 
 class Detail2 extends React.Component { // 옛 component에서 lifecycle 간섭 방식
   componentDidMount() {
@@ -28,10 +30,14 @@ class Detail2 extends React.Component { // 옛 component에서 lifecycle 간섭 
 
 function Detail(props) {
 
+  // let {product, shoes} = useContext(Context1);
+
   let [show, setShow] = useState(true);
   let [count, setCount] = useState(0);
   let {id} = useParams();
   let [input, setInput] = useState(0);
+  let [tab, setTab] = useState(0);
+  let [fade2, setFade2] = useState('');
 
   useEffect(() => {
     setTimeout(() => {
@@ -48,6 +54,15 @@ function Detail(props) {
     }
   }, [input])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setFade2('end')
+    }, 100);
+    return () => {
+      setFade2('')
+    }
+  },[])
+
   function findId(element) {
     if(element.id == id) {
       return true;
@@ -56,7 +71,7 @@ function Detail(props) {
   let array = props.shoes.find(findId);
 
   return (
-    <div className="container">
+    <div className={`container start ${fade2}`}>
       {/* <Yellowbtn bg='blue'>btn</Yellowbtn> */}
       {
         show == true ? <div className="alert alert-warning"> 2 Seconds left~ Hurry up!</div>: null 
@@ -75,8 +90,41 @@ function Detail(props) {
           <button className="btn btn-danger">주문하기</button> 
         </div>
       </div>
+
+      <Nav variant="tabs"  defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link eventKey="link0" onClick={() => {setTab(0)}}>버튼0</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link1" onClick={() => {setTab(1)}}>버튼1</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link2" onClick={() => {setTab(2)}}>버튼2</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent tab={tab}></TabContent>
+
     </div> 
   )
+}
+
+function TabContent({tab}) {
+
+  let [fade, setFade] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade('end')
+    }, 100);
+    return () => {
+      clearTimeout();
+      setFade('')
+    }
+  }, [tab])
+
+  return (<div className={`start + ${fade}`}>
+    {[<div>post0</div>,<div>post1</div>,<div>post2</div>][tab]}
+  </div>)
 }
 
 export default Detail;
