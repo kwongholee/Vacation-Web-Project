@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
+import { order } from "../store";
 import {Context1} from './../App'
 
 class Detail2 extends React.Component { // 옛 component에서 lifecycle 간섭 방식
@@ -38,6 +40,7 @@ function Detail(props) {
   let [input, setInput] = useState(0);
   let [tab, setTab] = useState(0);
   let [fade2, setFade2] = useState('');
+  let dispatch = useDispatch();
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,7 +90,9 @@ function Detail(props) {
           <h4 className="pt-5">{array.title}</h4>
           <p>{array.content}</p>
           <p>{array.price}</p>
-          <button className="btn btn-danger">주문하기</button> 
+          <button className="btn btn-danger" onClick={() => {
+            dispatch(order({id: Number(id), name: array.title, count: 1}))
+          }}>주문하기</button> 
         </div>
       </div>
 

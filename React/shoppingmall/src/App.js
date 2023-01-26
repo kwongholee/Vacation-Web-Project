@@ -152,3 +152,6 @@ export default App;
 // Context API: props 없이 state 공유 가능(실전에서 많이 사용하지는 않음) -> 자손들도 사용 가능
 // Redux(외부 라이브러리): 한 js파일에 state를 넣어놓고 모든 파일에서 끌어당겨서 씀
 // Redux store에는 다른 컴퍼넌트들과 공유할 state만 넣어놓을 것
+// Redux state 변경하는 법: state 수정해주는 함수 만들rl => 만든 함수 export => 만든 함수 import => useDispatch 사용
+// Redux state 변경하는 거 방법이 거지같지만 사이즈가 커지면 이게 굉장히 효율적인 방식임
+// 만약 state가 array/object인 경우 return 쓰지 않고 직접 수정해도 state 변경됨
