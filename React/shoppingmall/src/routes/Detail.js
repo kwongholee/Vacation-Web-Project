@@ -41,6 +41,7 @@ function Detail(props) {
   let [tab, setTab] = useState(0);
   let [fade2, setFade2] = useState('');
   let dispatch = useDispatch();
+  let findProduct = props.shoes.find(x => x.id == id);
 
   useEffect(() => {
     setTimeout(() => {
@@ -72,6 +73,15 @@ function Detail(props) {
     }
   }
   let array = props.shoes.find(findId);
+
+  useEffect(() => {
+    let watched = JSON.parse(localStorage.getItem('watched'));
+    watched.push(findProduct.id);
+    watched.sort();
+    watched = new Set(watched);
+    watched = Array.from(watched);
+    localStorage.setItem('watched', JSON.stringify(watched));
+  }, [])
 
   return (
     <div className={`container start ${fade2}`}>

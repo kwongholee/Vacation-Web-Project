@@ -2,12 +2,13 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // react-bootstrap
 import {Navbar, Container, Nav} from 'react-bootstrap'; // react-bootstrap component
 import bg from './img/bg.png'; // react에서 img 파일 import 하고 url 사용
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Detail from './routes/Detail';
 import products from './components/data';
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
+import {Routes, Route, Link, useNavigate, Outlet, json, Navigate} from 'react-router-dom';
 import axios from 'axios';
 import Cart from './routes/Cart';
+import { useQuery } from 'react-query';
 
 // export let Context1 = createContext(); // state 보관함
 
@@ -17,10 +18,20 @@ function App() {
   let navigate = useNavigate();
   // let [product, setProduct] = useState([10,11,12]);
 
+  useEffect(() => {
+    localStorage.setItem('watched', JSON.stringify([]))
+  },[]);
+
+  let result = useQuery('name', () => {
+    return axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      return a.data
+    })
+  })
+
   return (
     <div className="App">
 
-      <Navbar bg="dark" variant="dark">
+      <Navbar bg="Light" variant="Light">
         <Container>
           <Navbar.Brand href="/">KwongHo Shop</Navbar.Brand>
           <Nav className="me-auto">
@@ -29,6 +40,11 @@ function App() {
             <Nav.Link onClick={() => {navigate('/detail/0')}}>Detail</Nav.Link>
             <Nav.Link onClick={() => {navigate('/event')}}>Event</Nav.Link>
             <Nav.Link onClick={() => {navigate('/cart')}}>Cart</Nav.Link>
+          </Nav>
+          <Nav className='ms-auto'>
+            {result.isLoading && '로딩중'}
+            {result.error && 'Error'}
+            {result.data && result.data.name}
           </Nav>
         </Container>
       </Navbar>
@@ -60,7 +76,7 @@ function App() {
         <Route path="/detail/:id" element={
           // <Context1.Provider value={{product, shoes}}></Context1.Provider>
             <Detail shoes={shoes}/>   
-        } />
+        }/>
 
         <Route path='/cart' element={<Cart></Cart>} />  
 
@@ -99,11 +115,15 @@ function Event() {
 }
 
 function Products(props) {
+  let navigate = useNavigate();
+
   return(
     props.shoes.map((a,i) => {
       return(
         <div className='col-md-4'>
-          <img src={'https://codingapple1.github.io/shop/shoes' + (i+1) +'.jpg'} width="80%" />
+          <img src={'https://codingapple1.github.io/shop/shoes' + (i+1) +'.jpg'} width="80%" onClick={() => {
+            navigate(`/detail/` + Number(i));           
+          }}/>
           <h4>{a.title}</h4>
           <p>{a.content}</p>
         </div>
@@ -155,3 +175,12 @@ export default App;
 // Redux state 변경하는 법: state 수정해주는 함수 만들rl => 만든 함수 export => 만든 함수 import => useDispatch 사용
 // Redux state 변경하는 거 방법이 거지같지만 사이즈가 커지면 이게 굉장히 효율적인 방식임
 // 만약 state가 array/object인 경우 return 쓰지 않고 직접 수정해도 state 변경됨
+// localstorage: key,value 형태로 저장 가능 / 문자만 5MB 저장 가능 / 브라우저를 청소하지 않는 한 사이트 접속해도 남아있음
+// sessionstorage: 브라우저 끄면 날라감(휘발성 있는 데이터를 저장할 때 사용)
+// 데이터저장: localstorage.setItem('이름', '값')/ 데이터 출럭: localstorage.getItem('이름')/ 데이터 삭제: localstorage.removeItem('이름')
+// localstorage 데이터를 수정하는 문법은 따로 없고 안에 있는 데이터를 꺼내서 직접 수정해야함
+// localstorage에 array/object를 저장하려면 JSON 형태로 바꿔서 저장해야함
+// JSON화하려면 JSON.stringify(변수), 다시 되돌릴려면 JSON.parse(변수)
+// react-query: 실시간 데이터를 계속 받아올 때 유용
+// 성공,실패,로딩중 쉽게 파악 가능/ 자동으로 refetch해줌/ 실패시에도 재시도 알아서 해줌/ ajax로 가져온 결과는 state 공유하지 않아도 됨/ ajax 결과 캐싱가능
+// 
