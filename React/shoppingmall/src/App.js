@@ -2,13 +2,16 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // react-bootstrap
 import {Navbar, Container, Nav} from 'react-bootstrap'; // react-bootstrap component
 import bg from './img/bg.png'; // react에서 img 파일 import 하고 url 사용
-import { createContext, useEffect, useState } from 'react';
-import Detail from './routes/Detail';
+import { createContext, lazy, Suspense, useEffect, useState } from 'react';
+// import Detail from './routes/Detail';
 import products from './components/data';
 import {Routes, Route, Link, useNavigate, Outlet, json, Navigate} from 'react-router-dom';
 import axios from 'axios';
-import Cart from './routes/Cart';
+// import Cart from './routes/Cart';
 import { useQuery } from 'react-query';
+
+const Detail = lazy(() => import('./routes/Detail'));
+const Cart = lazy(() => import('./routes/Cart'));
 
 // export let Context1 = createContext(); // state 보관함
 
@@ -75,7 +78,9 @@ function App() {
         } />
         <Route path="/detail/:id" element={
           // <Context1.Provider value={{product, shoes}}></Context1.Provider>
-            <Detail shoes={shoes}/>   
+            <Suspense fallback={<div>Loading</div>}>
+              <Detail shoes={shoes}/>
+            </Suspense>   
         }/>
 
         <Route path='/cart' element={<Cart></Cart>} />  
@@ -183,4 +188,12 @@ export default App;
 // JSON화하려면 JSON.stringify(변수), 다시 되돌릴려면 JSON.parse(변수)
 // react-query: 실시간 데이터를 계속 받아올 때 유용
 // 성공,실패,로딩중 쉽게 파악 가능/ 자동으로 refetch해줌/ 실패시에도 재시도 알아서 해줌/ ajax로 가져온 결과는 state 공유하지 않아도 됨/ ajax 결과 캐싱가능
-// 
+// 대부분의 지연 시간은 서버에서 데이터가 늦게 와서 그런거임
+// React devTool, Redux devTool: react를 사용할 때 유용한 개발자 도구
+// 메인 페이지 이외의 페이지를 따로 로딩하고 싶으면 lazy import 사용(단 lazy를 사용한 페이지를 띄울 때 로딩이 생길 수 있음)
+// <Suspense>를 통해 로딩중 ui 생성 가능
+// 부모를 재랜더링하면 자식들도 재랜더링됨
+// 자식을 꼭 필요할 때만 재랜더랑하고 싶으면 memo 사용
+// memo: props가 변할 때만 재랜더링해줌
+// useMemo: useEffect와 거의 동일, 실행 시점에 있어서 차이가 있음
+// useTransition, useDeferredValue: 느린 컴퍼넌트 성능 향상
