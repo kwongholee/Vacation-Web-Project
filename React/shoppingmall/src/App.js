@@ -197,3 +197,8 @@ export default App;
 // memo: props가 변할 때만 재랜더링해줌
 // useMemo: useEffect와 거의 동일, 실행 시점에 있어서 차이가 있음
 // useTransition, useDeferredValue: 느린 컴퍼넌트 성능 향상
+// PWA(Progressing Web App): 웹사이트를 모바일 앱처럼 설치해서 쓸 수 있음
+// PWA: 설치 마케팅 비용 적음, 아날로그 유저들 배려, html css js 만으로 앱 완성 가능, 푸시알림/센서 등등
+// PWA 셋팅된 리액트 프로젝트 설치: npx create-react-app 프로젝트명 --template cra-template-pwa
+// PWA 조건: manifest.json(앱 설정파일) + service-worker.json(오프라인에서도 사이트 열 수 있게 도와줌) 파일 필요함
+// state 변경함수들은 모두 '비동기적'으로 처리됨. 따라서 useEffect를 잘 사용해볼 것
