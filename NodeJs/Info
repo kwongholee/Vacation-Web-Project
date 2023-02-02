@@ -17,3 +17,11 @@ API: (웹 개발 시) 웹서버와 고객간의 소통 방식 = 어떻게 해야
 Rest API: 1. Uniform interface(하나의 자료는 하나의 url로) 2. Client-Server 역할 구분 3. Stateless(요청들 사이의 의존성 X) 4. Cacheable 5. Layered System 6. Code on Demand
 Uniform interface가 가장 중요함
 이름짓기 원칙: URL을 명사로 작성할 것, 하위 문서로 나타낼 땐 /, 파일확장자 쓰지 말 것, 띄어쓰기는 대시 사용, 자료 하나당 하나의 URL
+웹사이트 기능 만들기: 서버로 데이터 전송할 수 있는 UI 만들고 서버에서 원하는대로 정보 처리
+DB종류: 관계형(대부분 SQL이라는 언어 사용), NoSQL(Object 자료형으로 입출력 가능, 데이터 입출력에만 신경 쓸 수 있음)
+db.collection('post').insertOne('저장할 데이터', function(err, res) {console.log('Save')}); db라는 변수 선언 후 db에 저장
+몽고디비는 schema 신경 안 써도 됨
+_id로 직접 부여 가능
+EJS: html을 쓰기 더 쉽게 도와주는 전처리 엔진(ejs 파일 확장자 사용 가능) => 서버 데이터 삽입 가능
+ejs파일 안에서 데이터 넣는 법: <%= 변수이름 %>
+ejs 파일은 항상 views 폴더에다가 넣어서 저장해야함
