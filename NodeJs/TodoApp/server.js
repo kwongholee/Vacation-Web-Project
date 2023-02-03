@@ -34,12 +34,18 @@ app.get('/write', function(req, res) {
 });
 
 app.post('/add', function(req,res) {
-  db.collection('post').insertOne({title: req.body.title, date: req.body.date}, function(err, res) {
-    console.log('Write Save');
-  })
+  db.collection('counter').findOne({name: 'postCount'}, function(err, result) {
+    console.log(result.totalPost);
+    var totalPost = result.totalPost;
+    db.collection('post').insertOne({_id: totalPost+1, title: req.body.title, date: req.body.date}, function(err, res) {
+      console.log('Write Save');
+    })
+  });
   res.send('Good Job');
 });
 
 app.get('/list', function(req, res) {
-  res.render('list.ejs');
+  db.collection('post').find().toArray(function(err, result) {
+    res.render('list.ejs', {posts: result});
+  });
 })
