@@ -35,10 +35,12 @@ app.get('/write', function(req, res) {
 
 app.post('/add', function(req,res) {
   db.collection('counter').findOne({name: 'postCount'}, function(err, result) {
-    console.log(result.totalPost);
     var totalPost = result.totalPost;
     db.collection('post').insertOne({_id: totalPost+1, title: req.body.title, date: req.body.date}, function(err, res) {
       console.log('Write Save');
+      db.collection('counter').updateOne({name: 'postCount'}, {$inc : {totalPost: 1}}, function(err, result) {
+        if(err) return console.log(err);
+      })
     })
   });
   res.send('Good Job');
@@ -48,4 +50,12 @@ app.get('/list', function(req, res) {
   db.collection('post').find().toArray(function(err, result) {
     res.render('list.ejs', {posts: result});
   });
+})
+
+app.delete('/delete', function(req, res) {
+  req.body._id = parseInt(req.body._id);
+  console.log(req.body);
+  db.collection('post').deleteOne(req.body, function(err, result) {
+    console.log('delete success');
+  })
 })

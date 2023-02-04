@@ -30,3 +30,10 @@ db에서 자료 찾기 => 찾은 걸 ejs 파일에 넣기
 ejs파일에서 반복문을 돌리기 위해선 <% %>로 시작과 끝을 감싸야함
 auto increment: db에 항목을 추가할 때마다 자동으로 1증가시켜서 저장하는 기능(몽고디비에는 구현 X)
 보통 영구적인 글번호를 달아서 저장하는 것이 좋음
+db 내의 자료 수정: db.collection('collection name').updateOne({수정할 데이터}, {operator : {수정할 값}}, function(){})
+mongodb 오퍼레이터는 구글링 후 사용해보셈
+html에서 method는 오직 Get과 Post 밖에 안 됨
+DELETE 요청하는 법: method-override 라이브러리 설치(노드에서 가능) / JavaScript AJAX 이용
+AJAX: 새로고침 없이 서버랑 통신할 수 있게 도와주는 JS 문법
+AJAX 문법(JQuery): $.ajax({method: '요청방법', url: '경로', data: '보낼 데이터'}).done(function(result) {})
+data-id: html 파일 안에 보이지 않지만 태그가 가질 수 있는 데이터
