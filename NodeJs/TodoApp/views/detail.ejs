@@ -16,38 +16,18 @@
     
     <%- include('nav.html') %>
 
-    <h4 class="ml-2 my-3 text-center">Todo List</h4>
+    <div class="container mt-4">
+      <h4 class="text-center">Detail Page</h4>
 
-    <div class="container">
-      <ul class="list-group">
-        <% for (var i = 0; i < posts.length; i++){ %>
-        <li class="list-group-item">
-          <h4>title: <%= posts[i].title %></h4>
-          <p>date: <%= posts[i].date %></p>
-          <button class="btn btn-danger delete" data-id="<%= posts[i]._id %>">delete</button>
-        </li>
-        <% } %>
-      </ul>
+      <div class="card" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title"><%= data.title %></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><%= data.date %></h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="card-link">Post</a>
+        </div>
+      </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-
-    <script>
-      $('.delete').click(function(e) {
-        var num = e.target.dataset.id;
-        var clickThis = $(this);
-        $.ajax({
-          method : 'DELETE',
-          url : '/delete',
-          data : { _id : num }
-        }).done(function(){
-          console.log('success');
-          clickThis.parent('li').fadeOut();
-        }).fail(function(a,b,c) {
-          console.log(a,b,c);
-        })
-      })
-    </script>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

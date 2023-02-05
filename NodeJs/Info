@@ -37,3 +37,11 @@ DELETE 요청하는 법: method-override 라이브러리 설치(노드에서 가
 AJAX: 새로고침 없이 서버랑 통신할 수 있게 도와주는 JS 문법
 AJAX 문법(JQuery): $.ajax({method: '요청방법', url: '경로', data: '보낼 데이터'}).done(function(result) {})
 data-id: html 파일 안에 보이지 않지만 태그가 가질 수 있는 데이터
+서버에 요청 응답을 보내는 법: res.status(응답 코드 번호).send({object})
+콜백함수 안에서 (e.click = 지금 클릭한 것) != (this = 지금 이벤트 동작하는 곳)
+서버가 요청을 실패했을 때 ajax함수 뒤에 붙어있는 fail에서 코드 실행됨
+fail(function(a,응답코드,에러메세지) {console.log(a,응답코드,에러메세지)});
+/:(parameter) : 요청 가능한 url를 무진장 많이 만들 수 있음
+bootstrap에서 container class 사용시 좌우 여백 자동으로 줄 수 있음
+보통 css 파일은 public 폴더에 만든 후 사용(js에서 미들웨어를 사용하겠다고 선언해야함)
+ejs에서는 중복되는 부분은 제거한 후 한 html 파일로 옮겨서 <%- include('경로') %>로 조립식 사용 가능

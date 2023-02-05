@@ -5,6 +5,8 @@ app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({extended: true}));
 
+app.use('../public', express.static('public'));
+
 var db; //자료를 저장할 변수 필요
 
 MongoClient.connect('mongodb+srv://leekwongho:albert9883@nodejspractice.ax8x1qt.mongodb.net/?retryWrites=true&w=majority', function(err, client) {
@@ -26,11 +28,11 @@ app.get('/pet', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname+'/html/index.html');
+  res.render('index.ejs');
 });
 
 app.get('/write', function(req, res) {
-  res.sendFile(__dirname+'/html/write.html');
+  res.render('write.ejs');
 });
 
 app.post('/add', function(req,res) {
@@ -57,5 +59,12 @@ app.delete('/delete', function(req, res) {
   console.log(req.body);
   db.collection('post').deleteOne(req.body, function(err, result) {
     console.log('delete success');
+    res.status(200).send({message: 'success'});
+  })
+})
+
+app.get('/detail/:id', function(req, res) {
+  db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err, result) {
+    res.render('detail.ejs', {data : result})
   })
 })
