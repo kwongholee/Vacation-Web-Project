@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
+const methodoverride = require('method-override');
+app.use(methodoverride('_method'));
 
 app.use(express.urlencoded({extended: true}));
 
@@ -66,5 +68,18 @@ app.delete('/delete', function(req, res) {
 app.get('/detail/:id', function(req, res) {
   db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err, result) {
     res.render('detail.ejs', {data : result})
+  })
+})
+
+app.get('/edit/:id', function(req, res) {
+  db.collection('post').findOne({_id: parseInt(req.params.id)}, function(err, result) {
+    res.render('edit.ejs', {data: result}) 
+  })
+})
+
+app.put('/edit', function(req, res) {
+  db.collection('post').updateOne({_id: parseInt(req.body.id)}, {$set: {title: req.body.title, date: req.body.date}}, function(err, result) {
+    console.log('Edit success')
+    res.redirect('/list')
   })
 })

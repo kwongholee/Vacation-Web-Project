@@ -45,3 +45,12 @@ fail(function(a,응답코드,에러메세지) {console.log(a,응답코드,에러
 bootstrap에서 container class 사용시 좌우 여백 자동으로 줄 수 있음
 보통 css 파일은 public 폴더에 만든 후 사용(js에서 미들웨어를 사용하겠다고 선언해야함)
 ejs에서는 중복되는 부분은 제거한 후 한 html 파일로 옮겨서 <%- include('경로') %>로 조립식 사용 가능
+method-override: form에 put, delete 요청도 하게 도와주는 라이브러리(문법이 따로 있으니 검색 ㄱㄱ)
+res.redirect('경로'): 해당 경로로 이동시키기
+회원인증: session, token, open authentication
+session-based: 로그인 시 쿠키(브라우저에 저장하는 긴 문자열) 발행 => 세션 데이터에다가 서버 메모리(로그인 기록) 저장 => 쿠키에 세션아이디 저장
+=> 서버에 마이페이지 요청할 때 쿠키를 서버로 자동으로 보냄 => 세션데이터에서 확인 후 html 보냄 {장점이자 단점: 로그인 상태를 저장}
+token-based(JWT): 로그인 시 서버에서 JSON Web Token을 발행 후 브라우저에 보냄 => 마이페이지 요청 시 헤더에 웹토큰을 같이 전송함
+=> 서버에서 토큰의 유효기간 확인 후 html 보냄 {특징: 유저의 로그인 상태를 저장할 필요가 없음}
+open Authentication(OAuth): {페이스북이나 구글 등의 사이트에서 프로필을 가져옴} 로그인 시 계정 정보를 가져오는 동의 팝업창을 띄움 
+=> 동의 시 프로필을 기반으로 한 로그인 정보를 새롭게 만듦(방식은 자유)
