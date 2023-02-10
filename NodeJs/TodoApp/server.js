@@ -4,8 +4,14 @@ const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
 const methodoverride = require('method-override');
 app.use(methodoverride('_method'));
+const passport = require('passport');
+const Localstoragey = require('passport-local').Strategy;
+const session = require('express-session');
+app.use(session({secret: '비밀코드', resave: true, saveUninitialized: false}));
 
 app.use(express.urlencoded({extended: true}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('../public', express.static('public'));
 
@@ -83,3 +89,52 @@ app.put('/edit', function(req, res) {
     res.redirect('/list')
   })
 })
+
+app.get('/login', function(req, res) {
+  res.render('login.ejs')
+})
+
+app.post('/login',passport.authenticate('local', {
+  failureRedirect: '/fail'
+}) ,function(req, res) {
+  res.redirect('/')
+})
+
+passport.use(new Localstoragey({
+  usernameField: 'id',
+  passwordField: 'pw',
+  session: true,
+  passReqToCallback: false,
+}, function (inputId, inputPw, done) {
+  db.collection('login').findOne({ id: inputId }, function (err, result) {
+    if (err) return done(err)
+    if (!result) return done(null, false, { message: '존재하지않는 아이디요' })
+    if (inputPw == result.pw) {
+      return done(null, result)
+    } else {
+      return done(null, false, { message: '비번틀렸어요' })
+    }
+  })
+}));
+
+passport.serializeUser(function(user, done) { //로그인 성공시 사용됨
+  done(null, user.id);
+});
+passport.deserializeUser(function(id, done) { //나중에 마이페이지 접속시 사용됨
+  db.collection('login').findOne({id: id}, function(err, result) {
+    done(null, result)
+  })
+});
+
+app.get('/mypage', login, function(req, res) {
+  console.log(req.user);
+  res.render('mypage.ejs', {user :req.user});
+})
+
+function login(req, res, next) {
+  if(req.user) {
+    next()
+  } else {
+    res.send('Not Logined')
+  }
+}
