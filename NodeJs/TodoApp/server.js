@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
@@ -17,12 +18,12 @@ app.use('../public', express.static('public'));
 
 var db; //자료를 저장할 변수 필요
 
-MongoClient.connect('mongodb+srv://leekwongho:albert9883@nodejspractice.ax8x1qt.mongodb.net/?retryWrites=true&w=majority', function(err, client) {
+MongoClient.connect(process.env.DB_URL, function(err, client) {
   if(err) return console.log(err);
 
   db = client.db('todoapp'); //todoapp 이라는 database에 연결
 
-  app.listen(8080, function(req, res) {
+  app.listen(process.env.PORT, function(req, res) {
     console.log('listening on 8080');
   })
 })
@@ -138,3 +139,9 @@ function login(req, res, next) {
     res.send('Not Logined')
   }
 }
+
+app.get('/search', (req, res) => {
+  db.collection('post').find({title: req.query.value}).toArray((err, result) => {
+    res.render('searchlist.ejs', {posts: result});
+  })
+})
