@@ -44,32 +44,10 @@ app.get('/write', function(req, res) {
   res.render('write.ejs');
 });
 
-app.post('/add', function(req,res) {
-  db.collection('counter').findOne({name: 'postCount'}, function(err, result) {
-    var totalPost = result.totalPost;
-    db.collection('post').insertOne({_id: totalPost+1, title: req.body.title, date: req.body.date}, function(err, res) {
-      console.log('Write Save');
-      db.collection('counter').updateOne({name: 'postCount'}, {$inc : {totalPost: 1}}, function(err, result) {
-        if(err) return console.log(err);
-      })
-    })
-  });
-  res.send('Good Job');
-});
-
 app.get('/list', function(req, res) {
   db.collection('post').find().toArray(function(err, result) {
     res.render('list.ejs', {posts: result});
   });
-})
-
-app.delete('/delete', function(req, res) {
-  req.body._id = parseInt(req.body._id);
-  console.log(req.body);
-  db.collection('post').deleteOne(req.body, function(err, result) {
-    console.log('delete success');
-    res.status(200).send({message: 'success'});
-  })
 })
 
 app.get('/detail/:id', function(req, res) {
@@ -127,6 +105,12 @@ passport.deserializeUser(function(id, done) { //나중에 마이페이지 접속
   })
 });
 
+app.post('/register', function(req, res) {
+  db.collection('login').insertOne({id : req.body.id, pw: req.body.pw}, function(err, result) {
+    res.redirect('/')
+  })
+})
+
 app.get('/mypage', login, function(req, res) {
   console.log(req.user);
   res.render('mypage.ejs', {user :req.user});
@@ -140,8 +124,53 @@ function login(req, res, next) {
   }
 }
 
+// app.get('/search', (req, res) => {
+//   db.collection('post').find({$text: {$search : req.query.value}}).toArray((err, result) => {
+//     res.render('searchlist.ejs', {posts: result});
+//   })
+// })
+
 app.get('/search', (req, res) => {
-  db.collection('post').find({title: req.query.value}).toArray((err, result) => {
-    res.render('searchlist.ejs', {posts: result});
+  var searchPromise = [
+    {
+      $search: {
+        index: 'titleSearch',
+        text: {
+          query: req.query.value,
+          path: 'title'
+        }
+      }
+    }
+  ]
+  db.collection('post').aggregate(searchPromise).toArray((err, result) => {
+    res.render('searchlist.ejs', {posts: result})
   })
 })
+
+app.post('/add', function(req,res) {
+  db.collection('counter').findOne({name: 'postCount'}, function(err, result) {
+    var totalPost = result.totalPost;
+    var store = {_id: totalPost+1, writer: req.user._id, title: req.body.title, date: req.body.date};
+    db.collection('post').insertOne(store, function(err, res) {
+      console.log('Write Save');
+      db.collection('counter').updateOne({name: 'postCount'}, {$inc : {totalPost: 1}}, function(err, result) {
+        if(err) return console.log(err);
+      })
+    })
+  });
+  res.send('Good Job');
+});
+
+app.delete('/delete', function(req, res) {
+  req.body._id = parseInt(req.body._id);
+  console.log(req.body);
+  var deleteData = {_id: req.body._id, writer: req.user._id};
+  db.collection('post').deleteOne(deleteData, function(err, result) {
+    console.log('delete success');
+    if(err) {console.log(err)}
+    res.status(200).send({message: 'success'});
+  })
+})
+
+app.use('/shop', require('./routes/shop'));
+app.use('/board/sub', require('./routes/board'));
