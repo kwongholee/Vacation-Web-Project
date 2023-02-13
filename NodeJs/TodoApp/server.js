@@ -174,3 +174,27 @@ app.delete('/delete', function(req, res) {
 
 app.use('/shop', require('./routes/shop'));
 app.use('/board/sub', require('./routes/board'));
+
+app.get('/upload', function(req, res) {
+  res.render('upload.ejs')
+})
+
+let multer = require('multer');
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './public/image')
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+var upload = multer({storage: storage});
+
+app.post('/upload', upload.single('profile'), function(req, res) {
+  res.send('upload success');
+}) 
+
+app.get('/image/:img', function(req,res) {
+  res.sendFile(__dirname + '/public/image/' + req.params.img);
+})
