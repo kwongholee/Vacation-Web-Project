@@ -39,6 +39,7 @@
           <h4>Title: <%= posts[i].title %></h4>
           <p>Date: <%= posts[i].date %></p>
           <button class="btn btn-danger delete" data-id="<%= posts[i]._id %>">delete</button>
+          <button class="btn btn-primary chat">Chat</button>
         </li>
         <% } %>
       </ul>
@@ -55,6 +56,19 @@
         }).done(function(){
           console.log('success');
           clickThis.parent('li').fadeOut();
+        }).fail(function(a,b,c) {
+          console.log(a,b,c);
+        })
+      })
+
+      $('.chat').click(function(e) {
+        var num = e.target.dataset.id;
+        $.ajax({
+          method: 'POST',
+          url: '/chat',
+          data: {_id: num}
+        }).done(function() {
+          console.log('success');
         }).fail(function(a,b,c) {
           console.log(a,b,c);
         })

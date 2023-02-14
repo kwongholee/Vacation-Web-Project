@@ -198,3 +198,19 @@ app.post('/upload', upload.single('profile'), function(req, res) {
 app.get('/image/:img', function(req,res) {
   res.sendFile(__dirname + '/public/image/' + req.params.img);
 })
+
+app.get('/chat', login, function(req, res) {
+  db.collection('chatroom').find({member})
+})
+
+app.post('/chat', login, function(req,res) {
+  var data = {
+    member: [req.user._id, req.body.writer],
+    date: new Date(),
+    title: req.body.title,
+  };
+  console.log(req.body);
+  db.collection('chatroom').insertOne(data, function(err, result) {
+    console.log('chat made');
+  })
+})
