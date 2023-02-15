@@ -180,6 +180,7 @@ app.get('/upload', function(req, res) {
 })
 
 let multer = require('multer');
+const { ObjectId } = require('mongodb');
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, './public/image')
@@ -199,18 +200,52 @@ app.get('/image/:img', function(req,res) {
   res.sendFile(__dirname + '/public/image/' + req.params.img);
 })
 
-app.get('/chat', login, function(req, res) {
-  db.collection('chatroom').find({member})
-})
-
-app.post('/chat', login, function(req,res) {
-  var data = {
-    member: [req.user._id, req.body.writer],
-    date: new Date(),
-    title: req.body.title,
-  };
-  console.log(req.body);
-  db.collection('chatroom').insertOne(data, function(err, result) {
-    console.log('chat made');
+app.post('/chatroom', login, function(req, res) {
+  var store = {
+    title: 'chat1',
+    member: [req.user._id, ObjectId(req.body.writerId)],
+    date: new Date()
+  }
+  db.collection('chatroom').insertOne(store).then((result) => {
+    res.send('success');
   })
 })
+
+app.get('/chat', login, function(req,res) {
+  db.collection('chatroom').find({member: req.user._id}).toArray().then((result) => {
+    res.render('chat.ejs', {data: result});
+  })
+})
+
+app.post('/message', login, function(req,res) {
+  var store = {
+    parent: req.body.parent,
+    content: req.body.content,
+    userid: req.user._id,
+    date: new Date()
+  }
+  db.collection('message').insertOne(store).then(() => {
+    res.send('db store success');
+  })
+})
+
+app.get('/message/:id', login, function(req, res) {
+  res.writeHead(200, {
+    "Connection": "keep-alive",
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+  });
+  db.collection('message').find({parent: req.params.id}).toArray().then((result) => {
+    res.write('event: test\n');
+    res.write('data: ' + JSON.stringify(result) + '\n\n');
+  })
+  const pipeline = [
+    { $match: { 'fullDocument.parent' : req.params.id } } 
+  ];
+  const collection = db.collection('message');
+  const changeStream = collection.watch(pipeline);
+  changeStream.on('change', (result) => {
+    res.write('event: test\n');
+    res.write('data: ' + JSON.stringify([result.fullDocument]) + '\n\n');
+  });
+});
