@@ -14,6 +14,10 @@ app.use(express.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+const http = require('http').createServer(app); // socket.io 셋팅 방법
+const {Server} = require('socket.io');
+const io = new Server(http);
+
 app.use('../public', express.static('public'));
 
 var db; //자료를 저장할 변수 필요
@@ -23,7 +27,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client) {
 
   db = client.db('todoapp'); //todoapp 이라는 database에 연결
 
-  app.listen(process.env.PORT, function(req, res) {
+  http.listen(process.env.PORT, function(req, res) { // socket.io 셋팅 방법
     console.log('listening on 8080');
   })
 })
@@ -249,3 +253,23 @@ app.get('/message/:id', login, function(req, res) {
     res.write('data: ' + JSON.stringify([result.fullDocument]) + '\n\n');
   });
 });
+
+app.get('/socket', function(req, res) {
+  res.render('socket.ejs');
+})
+
+io.on('connection', function(socket) { //WebSocket에 접속하면 콜백함수 실행해주세요
+  console.log('connect');
+
+  socket.on('join room', function(data) {
+    socket.join('room1') //채팅방 만들고 입장
+  })
+
+  socket.on('room1-send', function(data) {
+    io.to('room1').emit('broadcast', data);
+  })
+
+  socket.on('user-send', function(data) { //누가 'user-send'로 보내면 콜백함수 실행해주세요
+    io.emit('broadcast', data); //모든 유저에게 전송
+  })
+})

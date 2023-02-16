@@ -99,3 +99,12 @@ get 요청시 서버로 데이터 전송하려면 url parameter 혹은 query str
 서버에서 실시간 전송 시 문자자료만 전송 가능(그래서 JSON화를 많이 함)
 db는 수동적이라 자동 업무가 불가능함
 따라서 mongodb change stream 쓰면 자동 업무가 가능함(db 변동 -> 서버에 알림 -> 유저에게 보냄)
+websocket 쓰면 서버, 유저간 실시간 통신 가능
+차이점: SSE(Server Sent Event)=서버->유저 일방적 통신 가능 / WebSocket=양방향 통신가능
+socket.io 라이브러리 사용(서버랑 html 파일에 socket.io 셋팅해야 함)
+반드시 서버에 설치한 버전과 html에 설치한 socket의 버전이 일치해야함
+메세지 수신은 어느 방향이든 항상 socket.on()
+io.emit() : 모든 유저에게 메세지 보내줌
+io.to(socket.id).emit(): id에 해당하는 사람에게만 메세지를 보내줌(보통 서버와 유저간 단독 통신에 사용)
+리액트 개발 끝나고 build하기 => build한 파일 server랑 같은 폴더에 두기 => 이후 라우팅에 따른 코드 작성
+db 데이터를 보여주고 싶으면: db데이터 뽑아서 보내주는 api 작성 => 리액트는 해당 api로 get요청 날리기
