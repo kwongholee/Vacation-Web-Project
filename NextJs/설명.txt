@@ -16,3 +16,20 @@ public 폴더는 사이트 root 경로로 이동하기 때문에 별다른 경�
 최적화된 이미지 사용: <Image src={} /> (next/image) (단, src 안의 경로는 무조건 import 형태)
 Image로 외부 이미지를 불러올 때는 width와 height 속성을 따로 지정해줘야 함 + next.config.js 셋팅도 필요함
 최적화는 보통 다 만든 후에 하는게 좋음
+길고 복잡한 html을 한 단어로 축약하면 component
+component 제작: 1. function 작명(){ return( 축약할 html)} 2. <작명 />
+component 단점: component끼리 데이터 공유 귀찮음
+재사용이 잦은 html 덩어리들을 component로 제작할 것
+nextjs 컴퍼넌트 종류 : server component, client component
+아무거나 대충 만든건 server component, 파일 맨 위에 'use client' 넣고 만든 건 client component  
+차이점? server component에는 html에 js 기능 넣기가 불가능함(useState, useEffect 등 다 불가능) client는 가능함
+server component: 로딩 속도 빠름, 검색엔진 노출 유리
+큰 페이지는 server component, js 기능이 필요한 곳만 client component
+export default는 한번만 사용 가능
+여러 개를 export하려면 export{변수/함수명} (단, import할 때도 {}형식으로 import 해야함)
+props는 함수 파라미터랑 비슷함(용도가 거의 같음)
+props: 부모에서 자식으로만 전송 가능
+데이터가 많은 컴퍼넌트가 필요하면 그들 중 최고 부모 컴퍼넌트에 보관하는 것이 좋음
+보통 fetch()로 DB데이터 가져옴
+같은 데이터 요청이 여러개면 1개로 압축해줌(deduplication)
+state 변경 함수 사용시 새state === 기존 state일 경우 변경 불가
