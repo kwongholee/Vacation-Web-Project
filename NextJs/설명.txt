@@ -33,3 +33,16 @@ props: 부모에서 자식으로만 전송 가능
 보통 fetch()로 DB데이터 가져옴
 같은 데이터 요청이 여러개면 1개로 압축해줌(deduplication)
 state 변경 함수 사용시 새state === 기존 state일 경우 변경 불가
+
+mongodb 사용할려면 mongodb 라이브러리 사용
+nextjs 폴더에서 util/database.js 만든후 해당 파일과 같이 코드 작성
+db 입출력 코드는 server component 안에서만 쓰자
+첨보는 프로그램 만들기 => 프로그램에 필요한 기능 전부 정리 => 쉬운 기능부터 하나씩 개발
+첨보는 세부기능 만들기 => 어떤 식으로 동작하는지 상세하게 설명 => 코드로 번역
+Dynamic route 폴더: 원하는 route 주소/[들어갈꺼 직명]
+useRouter: 'next/navigation'
+push(목적지): 목적지로 이동, back(): 뒤로가기, forward(): 앞으로가기, refresh(): 바뀐내용만 새로고침, prefetch(목적지): 페이지 미리로드
+Link 태그에도 prefetch 기능이 내장되어있음
+usePathname(): 현재 url 출력
+useSearchParams(): Search parameter 출력
+useParams(): 유저가 [dynamic router] 입력한거 출력
