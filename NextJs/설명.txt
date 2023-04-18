@@ -46,3 +46,12 @@ Link 태그에도 prefetch 기능이 내장되어있음
 usePathname(): 현재 url 출력
 useSearchParams(): Search parameter 출력
 useParams(): 유저가 [dynamic router] 입력한거 출력
+글작성페이지를 만들 때 클라이언트와 db 사이에 프로그램(서버)를 놔두고 검사한 후 보냄(3-tier-architechture)
+nextjs에서 서버기능 만들기: 1. app폴더안에 api폴더에서 서버짜기 2. pages폴더 안에 api 폴더에서 서버 짜기(권장)
+서버는 기능실행 후 유저에게 응답해줘야함
+서버기능 처리 성공시엔 status(200)
+서버기능 처리 실패시엔 status(500)
+(유저의 요청에 의해) 서버기능 처리 실패시엔 status(400)
+서버로 POST method 요청하려면 보통은 form 태그 씀
+redirect(302, '/경로')
+db 에러 예외처리는 try catch
