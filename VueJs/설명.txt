@@ -122,3 +122,44 @@ array, object 사본 만드는 거 spread operator 사용하셈
 mounted() {} :mount되고 나서 작동됨
 app.vue에 훅 걸면 app.vue가 조건에 걸릴 때 작동하는 거임
 서버에서 데이터 가져올 때도 lifecycle hook 안에서 코드 짬
+
+부트스트랩 라이브러리 써서 css 귀찮게 짜지 말자
+css랑 js 링크 땡겨와서 public/index.html 파일에 넣기
+링크로 땡겨오면 외부 링크에서 라이브러리를 땡겨오는 거라 오래 걸릴 수도 있으니 다운받아도 됨
+npm으로 설치할려면 npm install bootstrap + main.js에 (import 'bootstrap', import 'bootstrap/dist/css/bootstrap.min.css' 추가하기)
+원하는 디자인 있으면 bootstrap 홈페이지에서 찾아보셈 개쉬움
+자기는 디자인 못한다 그럼 bootstrap 잘 해보셈
+
+router 사용해서 페이지 분리하자
+vue3버전은 npm install vue-router@4 + main.js에 라우터 셋팅해야함
+근데 main.js에서 하기엔 라우터가 너무 많을 수도 있으니 다른 파일에 라우터를 정리하셈
+여기선 router.js에 정리했음 (router 파일 참고)
+<router-view></router-view>: 라우터로 설정한 컴퍼넌트를 보여줄 자리
+props 전송이 필요하면 router-view 태그에 하면 됨
+router-link를 사용하면 다른 페이지링크로 이동하는 거 만들 수 있음 -> <router-link to="/~~"></router-link>
+
+url 파라미터 문법
+원래 쓰듯이 사용하면 됨
+$route를 사용하면 url에 관한 모든 변수를 다 쏟아냄
+그중에서 params를 사용하면 url 파라미터를 얻을 수 있음
+파라미터를 업그레이드할 수 있음
+파라미터 뒤에 소괄호를 만들고 그 안에 정규식을 붙여서 조건을 만들 수 있다
+필요할 때 찾아보셈 (vue-router4 참고하셈)
+
+nested-routes가 머임?
+라우터를 더 세부적으로 분리하기 쉽게 해주는 거임
+router안에 children을 만든 후 거기에 똑같이 path랑 component 선언하셈
+그리고 부모 컴퍼넌트에 router-view 똑같이 설정해주면 됨
+$router 쓰면 router 관련된 거 다 있음
+
+hash mode? url에 전부 #을 붙인 상태로 시작함
+우리가 기존에 사용하던 방식은 html5 mode임
+요건 서버가 기본적으로 어떤 url로의 get 요청이 들어오면 그걸 걍 vue의 router한테 맡겨주세요라는 기능개발이 따로 필요함
+근데 hash mode 같은 경우는 #이 붙는데 이 #이 의미하는 건 # 뒤에 내용들은 서버로 정보가 넘어가지 않음
+따라서 서버가 라우팅을 채가는걸 방지할 수 있음
+navigation guard? 예를 들어 로그인을 한 유저만 사용할 수 있는 기능이 있을 때, 로그인을 안 한 사람들은 출입을 막아야 하는 거 아님?
+그 역할을 navigation guard가 함 일종의 방지 역할을 하는 셈
+beforeEnter 같은 함수를 router.js에 선언해서 사용함
+beforeEnter는 파라미터가 3개까지 존재할 수 있음. (목적지 페이지, 출발 페이지)
+return false 시키면 라우팅 중단되고, return이 없으면 원래대로 이동시킴
+다른 거 또 알고 싶으면 vue-router4 공식 홈페이지 들어가보던가

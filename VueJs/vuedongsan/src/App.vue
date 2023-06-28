@@ -59,13 +59,13 @@ export default {
     Modal, 
     Products, 
   },
-  mounted() {
-    while(this.percent > 0) {
-        setInterval(() => {
-        this.percent--;
-      }, 1000);
-    }
-  },
+  // mounted() {
+  //   while(this.percent > 0) {
+  //       setInterval(() => {
+  //       this.percent--;
+  //     }, 1000);
+  //   }
+  // },
   beforeUpdate() {
     if(this.month == 2) {
       alert('2개월 너무 짧지 않음? 안팜 ㅅㄱ')
