@@ -163,3 +163,19 @@ beforeEnter 같은 함수를 router.js에 선언해서 사용함
 beforeEnter는 파라미터가 3개까지 존재할 수 있음. (목적지 페이지, 출발 페이지)
 return false 시키면 라우팅 중단되고, return이 없으면 원래대로 이동시킴
 다른 거 또 알고 싶으면 vue-router4 공식 홈페이지 들어가보던가
+
+항상 프젝하기 전에 먼저 기획하고 코드 짜는게 좋음
+재사용할 UI가 생기는 경우, 라우터로 나눌 페이지가 생기는 경우, html이 너무 길어지는 경우에는 컴퍼넌트 생성하셈
+style 겹치는 게 있으면 css 파일 만들고 import 해도 됨 (@import 'style.css')
+:style="" 집어넣을 때 object 자료됴 가능함
+
+ajax 요청이 뭐임?
+서버와 클라이언트간의 통신 방법임
+get: url 잘 적어서 서버한테 요청하면 그거에 맞는 데이터 갖다줌
+post: 서버로 데이터 보낼 때 사용하는 메서드
+get이랑 post 요청하면 브라우저가 자동으로 새로고침됨
+근데 저 새로고침이 싫으면 ajax 요청하면 됨. 그러면 새로고침이 씹힘
+ajax 요청할려면 라이브러리 쓰던가 아니면 fetch 함수 쓰던가(근데 fetch는 최신 브라우저만 지원 가능하다는거 참고하셈)
+npm install axios + import axios from 'axios'
+axios.get('url').then(() => {~~})
+axios.post('url', {전달할 데이터}).then(() => {~~})
