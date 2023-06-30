@@ -1,24 +1,26 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li>Cancel</li>
+      <li v-if="step != 0" @click="step--">Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step == 1" @click="step++">Next</li>
+      <li v-if="step == 2" @click="publish">Post</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :data="data" />
+  <Container @postText="text = $event" :data="data" :step="step" :image="image" />
 
-  <button @click="morePost()">더보기</button>
+  <button v-if="step == 0" @click="morePost()">더보기</button>
 
-  <div class="footer">
+  <div v-if="step == 0" class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
+      <input @change="upload" type="file" id="file" class="inputfile" />
       <label for="file" class="input-plus">+</label>
     </ul>
  </div>
+
 </template>
 
 <script>
@@ -32,6 +34,10 @@ export default {
     return {
       data: data,
       count: 0,
+      step: 0,
+      image: '',
+      text: '',
+      imageFilter: '',
     }
   },
   components: {
@@ -44,7 +50,32 @@ export default {
         this.data.push(result.data);
         this.count++;
       })
+    },
+    upload(e) {
+      let picture = e.target.files;
+      let url = URL.createObjectURL(picture[0]);
+      this.image = url;
+      this.step = 1;
+    },
+    publish() {
+      var myPost = {
+        name: "Kim Hyun",
+        userImage: "https://placeimg.com/100/100/arch",
+        postImage: this.image,
+        likes: 36,
+        date: "May 15",
+        liked: false,
+        content: this.text,
+        filter: this.imageFilter
+      };
+      this.data.unshift(myPost);
+      this.step = 0;
     }
+  },
+  mounted() {
+    this.emitter.on('imageFilter', (a) => {
+      this.imageFilter = a;
+    })
   }
 }
 </script>
