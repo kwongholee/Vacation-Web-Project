@@ -21,12 +21,15 @@
     </ul>
  </div>
 
+ <!-- <p>{{ $store.state.more }}</p>
+ <button @click="$store.dispatch('getData')">더보기</button> -->
 </template>
 
 <script>
 import Container from './components/Container.vue'
 import data from './assets/Data'
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -42,6 +45,13 @@ export default {
   },
   components: {
     Container,
+  },
+  computed: {
+    name() {
+      return this.$store.state.name;
+    },
+    ...mapState([]),
+    ...mapState({작명 : 'name'})
   },
   methods: {
     morePost() {
