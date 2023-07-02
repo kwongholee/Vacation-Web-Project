@@ -1,15 +1,15 @@
-type Name = string | number;
+let 철수쌤 = { subject : 'math' }
+let 영희쌤 = { subject : ['science', 'english'] }
+let 민수쌤 = { subject : ['science', 'art', 'korean'] }
 
-let 이름 :Name = 'kim';
-
-function func(x :number) :number {
-  return x * 2;
+function teachersubject(x :{subject: string|string[]}) :string {
+  if(typeof x.subject === 'string') {
+    return x.subject;
+  } else {
+    return x.subject[x.subject.length-1];
+  }
 }
 
-type Member = [number, boolean];
-let john :Member = [123, true];
-
-type Member2 = {
-  [key :string]: string
-}
-let jon :Member2 = {name: 'kim'};
+console.log(teachersubject(철수쌤));
+console.log(teachersubject(영희쌤));
+console.log(teachersubject(민수쌤));
