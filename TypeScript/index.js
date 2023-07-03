@@ -1,8 +1,3 @@
-var object = {
-    plus: function (a, b) {
-        return a + b;
-    },
-    minus: function (a, b) {
-        return a - b;
-    }
-};
+;
+var dog1 = 'bark';
+var dog2 = { name: 'paw' };

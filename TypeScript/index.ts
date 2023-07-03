@@ -1,13 +1,7 @@
-interface Calc {
-  plus : (a :number, b :number) => number
-  minus : (a :number, b :number) => number
+namespace dog {
+  export type Dog = string;
 }
+interface Dog { name : string };
 
-let object :Calc = {
-  plus(a,b) {
-    return a+b;
-  },
-  minus(a,b) {
-    return a-b;
-  }
-}
+let dog1 :dog.Dog = 'bark';
+let dog2 :Dog = { name : 'paw' }
