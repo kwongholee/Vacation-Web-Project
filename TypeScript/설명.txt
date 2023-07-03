@@ -74,3 +74,112 @@ assertion 문법의 용도가 뭐임?
 그래서 as 문법 사용하면 에러가 있어도 잡아주니까 잘 사용해야 함
 그러니까 평소에는 잘 사용 안 함
 코드짜다가 콘솔창에 변수 출력해보고 싶으면 html 파일 안에 ts 파일 변환시킨 js 파일을 넣어서 확인해보면 됨
+
+type alias는 type을 저장하는 변수 문법임
+type 변수명 = 저장하고자 하는 자료형들
+union type도 저장되고 object 타입도 저장됨
+type 변수 작명 관습으로는 영어대문자 국룰임
+const에 대해 제대로 알고 있음?
+const 쓰면 재할당이 불가능함
+그래서 object를 const로 담으면 object의 수정이 가능함
+근데 typescript를 쓰면 object의 자료 수정도 막을 수 있음
+object 자료 수정을 막을려면 타입 지정할 때 막고 싶은 자료 앞에 readonly 지정하면 됨
+{readonly 속성명 : 자료형}
+참고: 타입스크립트 에러는 에디터와 터미널에서만 존재하고 실제로는 변환이 가능함
+object 속성 안에서도 ?를 사용할 수 있음
+그리고 type alias도 union type으로 병합 가능함
++ &연산자로 object 타입도 합칠 수 있음
+타입변수1 & 타입변수2 를 통해 object 타입을 extend한다
+같은 이름의 type 변수는 재정의 불가능함
+
+사실 변수에 더 엄격한 타입 지정이 가능함
+그걸 전문 용어로 literal types라고 함
+자료형 적던 자리에 원하는 값을 넣으면 됨
+이거 왜 쓰는데요?
+변수에 뭐가 들어올지 더 엄격하게 관리 가능하잖음 + 자동완성도 도와줌
+함수도 당연히 가능합니다
+const 변수에 사실 한계가 있음
+근데 생각해보면 const 변수를 업글한 게 literal type 아님?
+그럼 const 변수처럼 유사하게 사용 가능한 거 아님?
+근데 사실 literal type의 문제점이 존재함
+literal type의 정확한 뜻은 ~~라는 자료만 들어올 수 있다가 아니라 ~~라는 타입만 들어올 수 있다임
+그럼 저거 해결은 어케 함?
+object 만들 때 타입 지정 확실하게 하든가 or as 문법 써서 타입 구라치던가 or as const라는 키워드를 object 끝에다가 붙이던가 (var 변수명 = {~~} as const)
+as const? 1. object value 값을 그대로 타입으로 지정해주고 2. 속성들을 모두 readonly로 바꿔줌
+as const를 쓰면 object 자료를 말그대로 잠글 수 있음
+
+일반 함수는 타입 지정하는 방법 알고 있잖음
+type alias에 함수의 전체 type을 저장할 수도 있음
+type 타입명 = (파라미터 :자료형) => return자료형
+저렇게 생성한 타입명 쓸려면 함수표현식이란 걸 써야함
+let 함수명 :타입명 = function () {}
+object 안에도 함수를 만들 수 있음
+그럼 object 안에 있는 함수의 타입은 어케 지정함?
+똑같이 하던 대로 하면 됨
+
+정보 제공을 위해선 먼저 js 자료형에 먼저 모든 정보들을 담아놔야함
+object 자료형으로 정리하기에는 코드가 너무 길어지지 않음?
+그래서 class 문법을 사용하는 거임
+class = object 뽑아내는 기계
+function 클래스명() { this.속성명 = 값 ... };
+요로케 생긴 거를 constructor라고 부름
+this는 뭔데요? 그거는 기계로부터 생성되는 object임 (=instance)
+new 클래스명() 으로 할당해주면 새로운 object가 생성됨
+es6문법으로 적용시키면
+class 클래스명 { constructor() { this.속성명 = 값 }}
+이때 생성된 친구는 자식, 생성한 친구는 부모 관계가 됨
+
+부모 자식 관계를 표현하기 위한 방법으로 prototype이라는 것도 있음
+prototype은 유전자임
+우리 키가 작은 이유는? 부모님 때문임
+부모님의 키가 작아서가 아니라 부모님이 물려주신 유전자의 특징이 키가 작은 거니까 우리 키가 작은 거임
+모든 object에는 prototype이라는게 존재함
+class명.prototype.속성명 = 값 을 할당시키면 상속 기능 구현 가능함
+class에 추가하면 자식들도 직접 가지고 있지만, prototype은 부모만 가지는 거임
+부모 유전자에 있는 걸 자식이 사용할 수 있는 이유는?
+1. 자식에서 찾아본다 2. 부모에서 찾아본다 3. 부모의 부모에서 찾아본다 .... (prototype chain)
+이런 원리를 이해하면 다른 것들도 이해됨
+[4,2,1] === new Array(4,2,1) -> Array라는 클래스를 불러온다
+Array에서 .sort()를 쓸 수 있는 이유? Array라는 클래스의 prototype에 sort()라는 함수가 내장되어 있는 거임
+
+당연히 ts로도 html 조작 가능한데 조금 다름
+tsconfig.json에 "strictNullChecks": true 요거 추가하고 시작하셈
+일반적으로 하던 대로 하면 타입들이 union type으로 되어 있을 수가 있기 때문에 type narrowing 잘 해야함
+1. 타입명 != null 일 때 바꿔준다든지 등등
+말고도 다른 방법도 많음
+2. 쿼리선택자로있는변수명 instanceof Element (얘를 제일 많이 쓰게 됨)
+3. 처음에 쿼리 선택자로 할당 받은 변수를 assertion 문법 써서 as Element로 바꾸기
+근데 타입을 확정시킬거면 ts 왜 씀? 그래서 잘 안 씀
+4. 오브젝트에 붙이는 ?. 라는 걸 붙이셈 (optional chaining)
+4번을 붙이면 innerHTML이 있으면 붙이고 아니면 undefined를 내놓음
+5. 가장 무식한 해결책은 아까 설정했던 tsconfig.json 그걸 원상태로 되돌릴 수 있음
+ts 쓰면 좀 귀찮을 수는 있지만 이게 안전하잖음 이거 잘 하셈
+ts가 제공하는 기본적인 타입들이 있음
+Element(든 게 몇 개 없음) => 그래서 이걸 옆에 애들한테 상속시킴: HTMLAnchorElement, HTMLHeadingElement, HTMLButtonElement
+eventlistener도 똑같음
+붙일 때 ?. 이런 거 붙이면 쌉가능임
+
+사실 class 안에서 constructor말고도 실제 데이터를 넣을 수 있음
+그 친구를 class 필드값이라고 부름
+class 필드 역시 타입 지정이 가능함
+ts에서는 constructor 안에 속성을 설정하기 전에 필드값에서 타입 지정을 먼저 해줘야할 필요가 있음
+constructor 파라미터 역시 타입 지정해줘야 함
+constructor는 return 타입이 따로 없기 때문에 return에 대한 타입 지정은 필요가 없음
+클래스 내에서도 내장 함수 생성 가능(prototype 때문에)
+그럼 prototype 함수도 타입 지정 가능? 당연히 가능 + 원하면 return 타입도 지정 가능함
+
+type 키워드로 타입 변수 생성 가능
+interface 키워드로도 타입 변수 생성 가능함
+object 타입 지정할 때 interface 사용 가능함
+interface를 쓸 때의 장점이 뭐임?
+extends로 복사가 가능해짐
+interface 타입변수명 extends 확장시켜줄타입변수명
+사실 type alias도 &로 유사한 기능 구현이 가능함 (&기호 = intersection type)
+근데 유사하다고 표현한 이유는 &기호 쓰면 두 타입을 모두 만족하는 타입이여야 함
+type vs interface
+interface는 중복 선언이 가능하지만 type은 불가능함
+interface는 유연하기 때문에 중복 선언을 해주면 자동으로 extends가 됨
+근데 type은 엄격하기 때문에 중복 선언이 안 됨
+외부 라이브러리는 interface로 도배되어 있음 유연하니까 내가 추후에 타입을 따로 더할 수도 있기 때문에 등등
+만약에 extends 쓸 때 중복 속성이 존재하면 어떻게 됨? 에러남 알아서 잘 고치셈
+근데 &기호 사용할 때 중복 속성이 존재하면 에러가 나지 않음 그럼 그 속성은 never 타입으로 바뀌니까 알아서 주의해야함
