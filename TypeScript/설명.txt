@@ -272,3 +272,118 @@ generic 함수 쓰면 함수 내에서 자동으로 자기가 불확실한 경�
 extends 옆에 오는 자료형이름들에는 커스텀 타입도 들어갈 수 있음
 함수 말고 class에도 타입 파라미터 지정 가능합니당
 
+react에서 typescript 어케 씀?
+변수, 함수 만들 때 타입 지정하면 끝임
++ 이상한 타입도 몇 개 있는데 그것도 알아야 함
+설치 방법: npx create-react-app 프로젝트명 --template typescript (기존에 있던 프로젝트에 추가하는 방법은 다름 근데 웬만하면 새롭게 파일 하나 파셈)
+JSX 문법을 쓰는 파일은 .tsx, 일반 파일은 .ts임
+1. 일반 변수나 함수는 원래 하던 것처럼 타입 지정 잘 하면 됨
+2. jsx 표현하는 타입이 따로 있음 => JSX.Element
+3. component 표현하는 타입도 따로 있음 => 파라미터, return 타입 지정 가능함
+4. component props를 표현하는 타입도 있음 => 오브젝트로 담기는 거 주의
+props 잘못 전달해서 생기는 에러가 많으니 주의할 것
+5. useState 타입지정 => 사실 원래 타입 지정 자동으로 되니까 상관없음
+근데 string | number가 들어오는 걸 만들고 싶으면 generic 타입 사용하면 됨
+useState<string | number>(값)
+나머지는 검색해보셈
+
+React에서 Redux 쓰는 이유가 뭐임?
+1. 모든 컴퍼넌트가 state를 공유할 수 있고 2. 수정 방법을 파일 한 곳에 정의해둠
+redux에서 정의하는 거 1. 모든 컴퍼넌트가 공유할 state 2. 미리 정의한 state 수정 방법
+맨날 하던 대로 변수랑 함수 정의에 타입 지정하면 됨
+default 파라미터는 타입 지정할 필요 없음, action은 dispatch() 날릴 때 넣는 파라미터랑 같음
+컴퍼넌트에서 redux에서 만든 state를 쓸 때 hook 같은 거 쓰면 편리하게 사용 가능함
+hook에서 사용하는 콜백 함수에서도 타입 지정 가능함 근데 또다시 타입 지정하기에는 귀찮으니 index.tsx에서 store 타입을 저장함 (공식문서에서 저렇게 하래염)
+const store = createStore(보낼거)
+export type RootState = ReturnType<typeof store.getState>
+dispatch 타입 지정은 redux에서 Dispatch를 import 해와서 Dispatch라고 타입 지정하면 끝임
+redux를 편리하게 사용하기 위해 @reduxjs/toolkit 라이브러리 설치하면 좋음
+state, reducer를 object로 정리한다는게 다름
+저거 쓰면 뭐가 좋음?
+1. 함수라서 보기 좋음 2. state 수정시 사본 만들 필요가 없음
+state + reducer를 합친걸 slice라고 부름
+그럼 slice에는 타입 지정 어케함? 변수 함수 만들 때 알아서 똑같이 잘 하셈
+함수의 첫 번째 파라미터(state)는 타입 지정 안해도 됨
+함수의 두 번째 파라미터(action)는 위 라이브러리에서 PayloadAction을 import 해와서 쓴 후 generic 타입으로 dispatch에서 날라오는 자료형 적어주셈
+그럼 state 꺼낼 때는 어케함? 똑같이 하면 됨 근데 넘어온 state 잘 봐야함
+dispatch 보내는 방식이 좀 다름 파라미터 안에 사용할 reducer 적으면 됨
+그럴려면 reducer export 하면 됨
+
+array에 타입 지정하는 법 알죠?
+type alias보다 엄격하게 타입 지정이 가능함
+위치까지 고려한 타입 == tuple 타입
+tuple 안에서 옵션 표시 가능 -> ? 사용하면 선택적 표현 가능
+단 ?는 순서상 마지막만 가능함 + 복수 개 사용해도 뒤에서부터 지정 가능
+rest parameter도 array 타입이니까 tuple type 지정 가능함
+spread operator를 통해 합친 arr의 타입 지정은 어케함?
+spread operator가 사용된 변수는 타입 지정도 똑같이 ':...자료형[]' 로 받아쳐줘야함
+
+외부 js 파일들을 ts에서 이용하고 싶은데 에러가 나는 경우가 있음
+일반 html css js로 개발한다면 <script src=""> 이용하면 됨
+에러가 나더라도 동작은 되는데 굳이 에러를 안 보고 싶다면 재정의하면 됨
+declare let 재정의할변수명 => 어딘가에 변수가 존재하니 그거 에러내지 말아주세요라는 뜻
+당연히 타입 지정도 가능함
+일반 js 파일 등에 있던 변수를 사용할 때 에러를 내지 않기 위해 재정의 사용함
++ declare로 정의한 내용은 js로 변환되지 않음(사실 할 필요는 없긴 함)
+ts 파일의 변수를 다른 ts 파일로 가져와 쓰고 싶다면 import, export 쓰면 되는 거임
+근데 저것보다 더 쉬운 방법이 있음
+ts의 이상한 특징 = 모든 ts 파일은 ambient module(글로벌 모듈)이 자동으로 됨 == 모든 ts 파일에서는 마음대로 자신들이 선언한 변수들을 자유롭게 사용 가능함
+그럼 모든 ts 파일에서 만든 변수들은 전역 변수가 되는 거 아님? 너무 까다로워질 거 같은데?
+그걸 막기 위해서 ts 파일을 로컬 모듈로 바꾸는 거임
+그걸로 어케 바꿈? import나 export 둘 중 하나라도 있으면 파일이 로컬 모듈로 변환됨
+근데 import, export가 있는 파일에서 전역 변수를 만들고 싶으면 어떡함?
+그럴 때는 declare global {여기 안에서 타입 선언하셈} 요거 사용하면 글로벌 타입으로 사용 가능함
+
+.d.ts 파일이 뭐임?
+프로젝트에서 사용하는 타입들의 정의를 보관하는 파일임
+타입, 인터페이스 등등 다 가능함
+이걸 다른 ts파일에서 쓰고 싶으면 어케함? import, export 하셈
+ts 파일에 타입 정의가 너무 길어지면 d.ts파일에 담아두셈
+import, export 할 게 많아지면 namespace 쓰던가 아니면 import '*' from '~~.d'를 사용하던가
+모든 타입을 정리해놓은 레퍼런스용으로 d.ts 파일로 쓸 수 있음
+tsconfig.json 파일에 declaration: true 사용하면 알아서 d.ts파일에 정리해줌
+변수, 타입 등 모든 거 다 됨
+자동 생성되는 경우에는 d.ts 파일 수정할 필요가 따로 없음
+d.ts 파일은 예외적으로 자동으로 글로벌 모듈로 설정되지 않음 => 로컬 모듈이라고 생각하셈
+그럼 d.ts 파일 글로벌 모듈로 만드는 방법 없음?
+tsconfig.json에서 "typeRoots": ["원하는 폴더의 상대 위치"]로 설정하면 저 폴더 안에 있는 타입들은 글로벌하게 이용 가능함
+저 폴더 안에서 common 파일 생성한 후 그 안에 d.ts 파일 만들어서 사용하면 그 파일 안에서 정리된 친구들은 글로벌하게 이용 가능함
+외부 라이브러리 사용할 때 타입 정의가 안되어있으면 'definitely Typed github 레포지토리'에서 긁어와서 사용해보셈
+혹은 typescript 공식 사이트에서 찾아보면 있음
+npm으로 설치시엔 타입도 자동으로 들어오는 경우도 많음
+굳이 npm으로 type 정의만 따로 들고오고 싶으면 npm에서 설치하셈(이 경우에는 tsconfig.json 파일에서 위에서 설정했던 typeRoots 설정 없애줘야함)
+
+interface는 object 타입 지정할 때 말고도 사실 용도가 하나 더 있음
+class 타입 확인하고 싶을 때 사용 가능함
+class가 가지고 있는 속성들을 타입으로 확인하고 싶을 때 interface + implements로 확인 가능함
+interface를 통해 오브젝트 정의하듯이 정의하고, interface에서 정의한 속성들이 모두 있는지 검사해줌 (class 클래스명 implements 인터페이스명)
+implements는 타입 지정 문법이 아님
+따라서 interface에 있는 속성이 존재하냐의 유무를 가르쳐줄 뿐 interface의 속성까지 강제로 검사하거나 바꾸지는 않음
+
+index signature 쓰면 object 타입 지정 한번에 가능함
+예를 들어 모든 속성은 string이다 라고 타입 지정이 가능해진거임
+[key :타입명1] :타입명2 => 타입명1인 key의 모든 값은 타입명2이다
+index signature와 중복되는 속성은 존재할 수 없음(index signature가 우선적으로 적용됨)
+속성 이름이 숫자면 array에서 꺼내듯이 값을 꺼낼 수 있음 + index signature 당연히 가능함
+object 자료 중에서 속성 안에 또다른 object가 존재하는 자료의 타입 지정은 어케함?
+사실 타입 지정 안해도 자동으로 타입 지정되니까 그대로 사용하거나 아니면 interface 사용해서 쓰던가
+근데 recursive하게 타입을 만들 수도 있음
+사실 우리가 지정한 타입을 속성명에서 사용할 수 있음 => interface MyType {'font-size' : MyType | number}
+
+type을 자동으로 생성할 수도 있고 타입을 한꺼번에 바꿔치기할 수도 있음
+keyof = 오브젝트가 담고 있는 key들을 array로 전달해줌 => Object.keyof(오브젝트자료명)
+interface에서 keyof를 사용하면 interface 안에 있는 속성들로 union type을 생성해줌
+저렇게 가져오면 literal type으로 지정됨
+index signature에 keyof를 쓰면 어케됨? 그러면 key의 속성명을 union type으로 지정해줌
+keyof라는 거 어디에 씀? 
+type을 잘못 지정한 게 너무 많을 때 타입을 자동으로 변환시켜주는 변환기를 만들 수 있음
+type TypeChange<MyType> = { [key in keyof MyType] :타입명 }
+근데 모든 속성들을 하나로 바꾸는 거면 너무 일괄적이지 않음? 조건문 배우면 가능함
+
+if else 조건문 써서 type 변환도 가능함
+삼항 연산자 사용하면 됨 (A ? B : C => A라는 조건이 참이면 B, 아니면 C return 하셈)
+generic 타입은 일반 타입 변수에서도 사용 가능함
+1. type if 문은 삼항 연산자로 2. 대신 조건문은 논리연산자가 아니라 extends 사용해서
+infer 키워드가 뭐임? 조건문에서 사용하고 타입을 왼쪽에서 추출함
+T extends infer R (T에서 타입을 뽑아서 R이라는 변수에 담아주세요)
+타입을 굳이 왜 뽑음? 그러고 싶을 때가 존재하니까
