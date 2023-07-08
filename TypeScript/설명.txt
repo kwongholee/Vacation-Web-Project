@@ -1,0 +1,389 @@
+typescript == javascript + Type 문법 == 자바스크립트 업글버전
+자바스크립트는 dynamic typing이 가능해서 편리하긴 한데
+프로젝트 사이즈가 커지면 문제임
+코드 길게 짤 때 자유도와 유연성이 높을수록 좋지 않음
+그리고 타입스크립트는 에러메세지의 퀄리티가 오짐
+근데 사실 타입스크립트는 코드 에디터 부가 기능과 비슷함
+타입스크립트 쓸려면 1. node.js 설치하고 2. 터미널에 npm install -g typescript 적어보셈
+3. 파일 확장자는 .ts로 마무리하면 되고 4. tsconfig.json이라는 파일 생성해서 기본 셋팅도 마무리해야함
+.ts 파일은 브라우저가 못 읽기 때문에 js파일로 변환시켜야함
+터미널 켜서 tsc -w 입력해두면 알아서 자동변환해줌 (컴파일)
+변수 설정시 :타입명으로 변수의 타입을 지정할 수 있음
+변수 타입이 Array일 때는 ':어레이안에들어갈타입명[]'로 지정하면 됨
+타입이 Object이면 ':{key: 타입명}'로 지정하면 됨 key뒤에 ?를 붙이면 옵션으로 들어와도 되고 안들어와도 되는 것을 설정할 수 있음
+다양한 타입을 가능하게 하고 싶으면 | 연산자 사용 (Union type)
+타입은 변수에 담아서 사용할 수 있음 (type alias) => 보통 type명 작성할 때는 첫글자 대문자
+함수의 파라미터도 똑같이 설정할 수 있으며, return 값의 type을 검사하고 싶으면 파라미터 옆에 똑같이 설정할 수 있음
+array에 쓸 수 있는 타입을 지정할 수 있음(tuple 타입) - 순서에 따라 지정할 수 있음 (ex> [number, boolean] ==> 무조건 첫 번째는 number, 두 번째는 boolean 이어야함)
+Object에 타입 지정해야할 속성이 너무 많으면 key랑 value만 따로 지정 가능
+class도 타입 지정 가능
+
+tsconfig.json 추가 설정
+noImplicityAny는 any라는 타입이 의도치 않게 발생하면 에러 띄워주는 설정
+strictNullChecks는 null, undefined 타입에 이상한 조작하면 에러 띄워주는 설정임
+나머지 부가 설정들은 tsconfig.json 내리면 있음 확인해보셈
+
+JS 문법 그대로 TS에서 사용 가능함
+변수에 타입을 지정한다 == 변수에 쉴드를 씌워준다
+타입에는 undefined나 null도 있음
+어레이 안에 여러 자료형을 같이 넣고 싶으면 union type 쓰세염
+타입스크립트 갓 배운 사람들이 온갖 곳에 다 타입 지정하는데 사실 타입 지정은 원래 자동으로 됨
+따라서 타입지정 문법 생략해도 됨
+
+타입 지정에 조건을 여러 개를 못 두나요?
+둘 수 있음 | 쓰던가 'Union 타입'이라고 부름
+소괄호로 묶어서 보기 좋게 해도 됨 (자료형1 | 자료형2 | 자료형3 ....)
+근데 union 타입으로 묶고 변수 선언을 하면 타입이 하나로 지정됨
+근데 재할당하면 다시 union 타입으로 바뀜
+array나 object에 여러 타입 지정하고 싶으면 union type으로 묶어도 되고
+아니면 any 타입 설정하든가
+any 타입은 모든 자료형을 다 허용해줌
+근데 그러면 타입스크립트 쓰는 이유가 없어지지 않음? 맞음
+any 타입은 타입 지정 쉴드를 없애주세요라고 하는 거랑 같음
+그래서 기본적으로는 타입 지정하지 말고 걍 js 문법으로 변수 설정하든가
+unknown 타입도 있음 얘도 모든 자료형을 허용해줌
+unknown 타입이 any 타입보다 안전함 왜?
+any 타입은 아예 쉴드 자체가 없지만 unknown 타입은 쉴드가 있어서 조금 더 엄격함
+타입스크립트는 js보다 휠씬 엄격함
+간단한 연산도 피연산자 타입이 일치해야 함
+유니온 타입 변수에 값을 할당하지 않은 상태라면 연산이 불가능함
+당연히 unknown 타입으로 지정한 변수도 연산이 가능하겠음? 불가능함
+(강조) 타입스크립트는 타입에 굉장히 엄격함
+
+변수만 따로 설정하면 any 타입으로 할당됨
+그래서 파라미터도 똑같은 방법으로 타입 설정이 가능함
+return 값도 똑같이 타입 설정 가능함
+함수에서는 특별하게 void라는 타입도 존재함
+void 타입을 지정하면 return 값이 존재하지 않는 함수가 되어버림
+타입 지정된 파라미터는 무조건 함수 사용 시 적어야 함 (자바스크립트는 안 써도 됨)
+파라미터가 옵션이라면 파라미터? :타입명으로 선언하셈
+?의 정확한 뜻은 | undefined랑 같은 거임
+애매한 타입들은 미리 타입을 검사하는 것이 필요함
+
+type이 아직 하나로 확정되지 않은 경우엔 type narrowing 써야함
+typeof 변수명 사용하면 변수의 자료형을 문자로 내보내줌
+union type 등의 이유로 어떤 변수의 타입이 아직 불확실하다면 if문 등으로 narrowing 해줘야 조작이 가능해짐
+if문 썼으면 끝까지 써야 안전함 else나 else if 안쓰면 불완전할 수도 있음
+속성명 in 오브젝트자료 / 인스턴스 instanceof 부모 등등도 다 narrowing에 속함
+그냥 현재 변수의 타입이 뭔지 특정만 지을 수 있으면 narrowing으로 판정해줌
+narrowing이 귀찮으면 assertion 문법을 써보던가
+타입 덮어쓰는 형태의 문법임
+변수명 as 자료형 (해당 변수를 해당 자료형으로 덮어씌워주세요) => 근데 그렇다고 변수의 자료형을 바꿀 수는 없음
+assertion 문법의 용도가 뭐임?
+1. narrowing 할 때 쓰기도 하고, 2. 무슨 타입이 100% 확실할 때 사용해야함
+그래서 as 문법 사용하면 에러가 있어도 잡아주니까 잘 사용해야 함
+그러니까 평소에는 잘 사용 안 함
+코드짜다가 콘솔창에 변수 출력해보고 싶으면 html 파일 안에 ts 파일 변환시킨 js 파일을 넣어서 확인해보면 됨
+
+type alias는 type을 저장하는 변수 문법임
+type 변수명 = 저장하고자 하는 자료형들
+union type도 저장되고 object 타입도 저장됨
+type 변수 작명 관습으로는 영어대문자 국룰임
+const에 대해 제대로 알고 있음?
+const 쓰면 재할당이 불가능함
+그래서 object를 const로 담으면 object의 수정이 가능함
+근데 typescript를 쓰면 object의 자료 수정도 막을 수 있음
+object 자료 수정을 막을려면 타입 지정할 때 막고 싶은 자료 앞에 readonly 지정하면 됨
+{readonly 속성명 : 자료형}
+참고: 타입스크립트 에러는 에디터와 터미널에서만 존재하고 실제로는 변환이 가능함
+object 속성 안에서도 ?를 사용할 수 있음
+그리고 type alias도 union type으로 병합 가능함
++ &연산자로 object 타입도 합칠 수 있음
+타입변수1 & 타입변수2 를 통해 object 타입을 extend한다
+같은 이름의 type 변수는 재정의 불가능함
+
+사실 변수에 더 엄격한 타입 지정이 가능함
+그걸 전문 용어로 literal types라고 함
+자료형 적던 자리에 원하는 값을 넣으면 됨
+이거 왜 쓰는데요?
+변수에 뭐가 들어올지 더 엄격하게 관리 가능하잖음 + 자동완성도 도와줌
+함수도 당연히 가능합니다
+const 변수에 사실 한계가 있음
+근데 생각해보면 const 변수를 업글한 게 literal type 아님?
+그럼 const 변수처럼 유사하게 사용 가능한 거 아님?
+근데 사실 literal type의 문제점이 존재함
+literal type의 정확한 뜻은 ~~라는 자료만 들어올 수 있다가 아니라 ~~라는 타입만 들어올 수 있다임
+그럼 저거 해결은 어케 함?
+object 만들 때 타입 지정 확실하게 하든가 or as 문법 써서 타입 구라치던가 or as const라는 키워드를 object 끝에다가 붙이던가 (var 변수명 = {~~} as const)
+as const? 1. object value 값을 그대로 타입으로 지정해주고 2. 속성들을 모두 readonly로 바꿔줌
+as const를 쓰면 object 자료를 말그대로 잠글 수 있음
+
+일반 함수는 타입 지정하는 방법 알고 있잖음
+type alias에 함수의 전체 type을 저장할 수도 있음
+type 타입명 = (파라미터 :자료형) => return자료형
+저렇게 생성한 타입명 쓸려면 함수표현식이란 걸 써야함
+let 함수명 :타입명 = function () {}
+object 안에도 함수를 만들 수 있음
+그럼 object 안에 있는 함수의 타입은 어케 지정함?
+똑같이 하던 대로 하면 됨
+
+정보 제공을 위해선 먼저 js 자료형에 먼저 모든 정보들을 담아놔야함
+object 자료형으로 정리하기에는 코드가 너무 길어지지 않음?
+그래서 class 문법을 사용하는 거임
+class = object 뽑아내는 기계
+function 클래스명() { this.속성명 = 값 ... };
+요로케 생긴 거를 constructor라고 부름
+this는 뭔데요? 그거는 기계로부터 생성되는 object임 (=instance)
+new 클래스명() 으로 할당해주면 새로운 object가 생성됨
+es6문법으로 적용시키면
+class 클래스명 { constructor() { this.속성명 = 값 }}
+이때 생성된 친구는 자식, 생성한 친구는 부모 관계가 됨
+
+부모 자식 관계를 표현하기 위한 방법으로 prototype이라는 것도 있음
+prototype은 유전자임
+우리 키가 작은 이유는? 부모님 때문임
+부모님의 키가 작아서가 아니라 부모님이 물려주신 유전자의 특징이 키가 작은 거니까 우리 키가 작은 거임
+모든 object에는 prototype이라는게 존재함
+class명.prototype.속성명 = 값 을 할당시키면 상속 기능 구현 가능함
+class에 추가하면 자식들도 직접 가지고 있지만, prototype은 부모만 가지는 거임
+부모 유전자에 있는 걸 자식이 사용할 수 있는 이유는?
+1. 자식에서 찾아본다 2. 부모에서 찾아본다 3. 부모의 부모에서 찾아본다 .... (prototype chain)
+이런 원리를 이해하면 다른 것들도 이해됨
+[4,2,1] === new Array(4,2,1) -> Array라는 클래스를 불러온다
+Array에서 .sort()를 쓸 수 있는 이유? Array라는 클래스의 prototype에 sort()라는 함수가 내장되어 있는 거임
+
+당연히 ts로도 html 조작 가능한데 조금 다름
+tsconfig.json에 "strictNullChecks": true 요거 추가하고 시작하셈
+일반적으로 하던 대로 하면 타입들이 union type으로 되어 있을 수가 있기 때문에 type narrowing 잘 해야함
+1. 타입명 != null 일 때 바꿔준다든지 등등
+말고도 다른 방법도 많음
+2. 쿼리선택자로있는변수명 instanceof Element (얘를 제일 많이 쓰게 됨)
+3. 처음에 쿼리 선택자로 할당 받은 변수를 assertion 문법 써서 as Element로 바꾸기
+근데 타입을 확정시킬거면 ts 왜 씀? 그래서 잘 안 씀
+4. 오브젝트에 붙이는 ?. 라는 걸 붙이셈 (optional chaining)
+4번을 붙이면 innerHTML이 있으면 붙이고 아니면 undefined를 내놓음
+5. 가장 무식한 해결책은 아까 설정했던 tsconfig.json 그걸 원상태로 되돌릴 수 있음
+ts 쓰면 좀 귀찮을 수는 있지만 이게 안전하잖음 이거 잘 하셈
+ts가 제공하는 기본적인 타입들이 있음
+Element(든 게 몇 개 없음) => 그래서 이걸 옆에 애들한테 상속시킴: HTMLAnchorElement, HTMLHeadingElement, HTMLButtonElement
+eventlistener도 똑같음
+붙일 때 ?. 이런 거 붙이면 쌉가능임
+
+사실 class 안에서 constructor말고도 실제 데이터를 넣을 수 있음
+그 친구를 class 필드값이라고 부름
+class 필드 역시 타입 지정이 가능함
+ts에서는 constructor 안에 속성을 설정하기 전에 필드값에서 타입 지정을 먼저 해줘야할 필요가 있음
+constructor 파라미터 역시 타입 지정해줘야 함
+constructor는 return 타입이 따로 없기 때문에 return에 대한 타입 지정은 필요가 없음
+클래스 내에서도 내장 함수 생성 가능(prototype 때문에)
+그럼 prototype 함수도 타입 지정 가능? 당연히 가능 + 원하면 return 타입도 지정 가능함
+
+type 키워드로 타입 변수 생성 가능
+interface 키워드로도 타입 변수 생성 가능함
+object 타입 지정할 때 interface 사용 가능함
+interface를 쓸 때의 장점이 뭐임?
+extends로 복사가 가능해짐
+interface 타입변수명 extends 확장시켜줄타입변수명
+사실 type alias도 &로 유사한 기능 구현이 가능함 (&기호 = intersection type)
+근데 유사하다고 표현한 이유는 &기호 쓰면 두 타입을 모두 만족하는 타입이여야 함
+type vs interface
+interface는 중복 선언이 가능하지만 type은 불가능함
+interface는 유연하기 때문에 중복 선언을 해주면 자동으로 extends가 됨
+근데 type은 엄격하기 때문에 중복 선언이 안 됨
+외부 라이브러리는 interface로 도배되어 있음 유연하니까 내가 추후에 타입을 따로 더할 수도 있기 때문에 등등
+만약에 extends 쓸 때 중복 속성이 존재하면 어떻게 됨? 에러남 알아서 잘 고치셈
+근데 &기호 사용할 때 중복 속성이 존재하면 에러가 나지 않음 그럼 그 속성은 never 타입으로 바뀌니까 알아서 주의해야함
+
+rest parameter도 타입 지정 가능함
+rest parameter가 뭐임? 함수의 파라미터 부분에 몇 개의 파라미터가 들어올 지 모를 때 ...parameter로 축약시킬 수 있음
+rest parameter로 받은 데이터들은 모두 array로 받음
+rest parameter는 타입 지정 어떻게 함? 똑같이 타입 지정하면 되는데 array라는 거 명심할 것
+원래 ... 라는 spread operator라는 괄호를 벗겨주세요 라는 기능임
+destructuring: 료들을 빠르게 할당할 수 있는 문법임
+let [변수1, 변수2] = [1, 2] or let {name, age} = {name: 'kim', age: 20}
+파라미터 만드는 문법 == 변수 만드는 문법
+함수 파라미터에도 destructuring 사용 가능함
+
+null & undefined 타입 체크하는 경우가 굉장히 많음
+&& 연산자 사용하면 undefined를 체크하는 동시에 자신의 type을 확인할 수 있음 (변수명 && typeof 변수명 === '자료형')
+근데 잘 모르겠으면 if else 쓰셈
+type narrowing 할 때 typeof로 사용할 수 없는 경우가 있음
+typeof 연산자로는 기본 자료형만 판단 가능하고 type alias로 생성한 type에 대해서는 판정할 수 없음
+그럴때는 in 키워드로 object narrowing 가능함(단 object 끼리의 속성명이 다른 경우에만 판정 가능) (속성명 in 오브젝트자료이름)
+instanceof 연산자로도 object narrowing 가능함(오브젝트이름 instanceof 부모class)
+만약 서로 다른 object의 속성명이 다 같고, 부모class가 없으면 어캄?
+사실 이건 type alias 만들 때 중복되게 만든 당신 잘못이긴 하지만 여튼 그러면 각각의 type alias에 literal type을 지정해주면 좋을 듯
+논리적으로 해당 타입인지 특정 지을 수 있으면 narrowing으로 인정해주니까 익숙해지셈
+
+never type이 뭔지 알아봅시당
+function return type으로 never 타입을 지정할 수 있음 void랑 비슷한데 조건이 좀 까다로움
+1. return 값이 없어야 하고 2. endpoint가 없어야 함(함수 실행이 종료되어서는 안 됨) 근데 사실 1이나 2나 같은 얘기임
+절대 끝나지 않는 함수는 어케 만듦?
+1. 에러를 내셈 => 코드 실행이 중단되기 때문에 끝나지 않음
+2. while (true)의 반복문을 넣으셈
+실생활에서 never 타입 어디다가 씀? 사실 쓸 데가 없음 void 쓰면 되잖음
+그럼 얘 왜 배움? 코드 이상하게 짜면 never 타입이 등장하니까 알긴 알아야 함
+1. 뭔가 이상한 narrowing - narrowing 잘못 짜면 never 타입이 등장함 => 여기서의 never는 있을 수 없는 현상이다 라고 해석하면 됨
+2. 어떤 함수 표현식은 return 타입이 자동으로 never로 등장하는 경우도 있음
+
+ts 쓰면 js에서 못 쓰는 객체지향적 문법도 제공함
+저건 뭐가 좋은 건데요? class 많이 만들어서 개발할 때 유용해지는 거지
+필드나 constructor로 만드나 결과가 같긴 한데 constructor 쓰면 파라미터 쓸 수 있으니까 더 유연한거임
+필드값에 public 키워드를 붙일 수 있음 얘가 붙으면 모든 자식들이 이용 가능함
+근데 원래 쓰던 대로 써도 public 적용되는 거 아님? 정확함
+당연히 함수에도 사용 가능함
+private을 붙이면 어떻게 됨? private이 붙은 친구는 자식에서 수정도 불가능하고 가져다쓰지도 못함
+그럼 private으로 지정된 값은 수정이 불가능하냐? 그건 아니고 class 안에서는 수정 가능함
+근데 만약 자식들이 private으로 지정된 친구의 값을 바꾸고 싶으면 어떻게 하냐?
+1. class 내에 private 값을 수정하는 함수를 하나 생성하고 2. 해당 함수를 자식에서 불러서 사용하면 됨
+데이터를 외부로부터 지키고 싶을 때 많이 사용하는 키워드가 private임
+public 키워드 사용하면 this.변수명 생략해도 됨
+constructor(public 속성명)을 사용하면 자식의 속성에 파라미터를 넣어줌
+
+class를 복사하고 싶을 때 class 새클래스명 extends 기존클래스명 {~~~}
+private 키워드랑 비슷한 protected 라는 키워드가 있음
+얘 쓰면 class 내에서만 사용가능함 근데 private보다 더 확장성 있음
+복사한 class에서는 private 자료는 못 쓰지만, protected 자료는 사용할 수 있음
+static이라는 키워드도 있음
+얘는 뭐할 때 사용함? 쟤 붙이면 부모 class에만 직접적으로 부여되고 자식에게는 물려주지 않음 (+extends하면 잘 따라옴)
+참고로 아무것도 안 붙이면 그 필드 값은 자식만 사용가능함
+그리고 public/private/protected + static 지정이 가능함
+그럼 얘네는 언제 사용함?
+필드값을 유연하게 사용하고 싶을 때 constructor 써서 파라미터에서 땡겨써도 되지만 static 써도 됨
+대신 그냥 필드 값으로 설정하면 자식도 물려받기 때문에 그걸 방지하는 static 키워드를 붙여서 자식에게는 안 보이게 감추는 거임
+static 키워드가 붙은 값들은 this 대신에 부모class명을 붙여야함
+static 키워드는 외부에서 변경 가능함
+근데 항상 외부에서 값을 변경하는 행위는 위험하니 조심해서 사용해야함
+
+ts에서도 import, export 문법 똑같이 사용 가능함
+변수 말고 type이나 class도 똑같이 import, export 가능함
+import, export 없을 때는 script 태그에 싹 다 불러서 썼는데
+그렇게 하니까 변수명이 겹치는 문제가 생겨버림
+그래서 임시방편으로 타입 변수를 숨기는 문법인 namespace를 생성했음
+숨기고 싶은 타입 변수를 object 형태로 숨겼음 namespace 네임스페이스명 {export type 타입명 = ~~}
+숨겨진 타입 변수 쓸려면 오브젝트 쓰는 거처럼 사용해야 함
+근데 import, export 같은 거 쓰면 저런 문제는 거의 사라짐
+그래도 namespace 사용하긴 함
+참고로 현재는 module도 namespace의 일종임
+
+함수에 타입도 파라미터로 입력 가능함
+파라미터에서 지정한 타입은 절대로 바뀌지 않음
+generic 함수 = 파라미터로 타입을 입력하는 함수임
+함수명 옆에 <작명> 있으면 generic 함수임
+실제로 함수를 사용할 때 <>자리에 type명을 입력하면 됨
+참고로 <작명> 한 친구는 함수 파라미터 자료형이랑 return 자료형으로도 선언 가능함
+<>안에는 여러 타입이 들어갈 수도 있음
+generic 함수 왜 쓰는 거임? narrowing보다 확장성 있어보이지 않음?
+그리고 같은 함수더라도 타입을 달리하여 파라미터 입력 가능함
+참고로 generic 함수는 자동으로 타입을 인식하기도 함
+generic 함수 쓰면 함수 내에서 자동으로 자기가 불확실한 경우까지 염려해서 에러를 내기도 함
+그럴 때는 narrowing 해도 되지만 타입파라미터에 제한을 둘 수도 있음
+<타입명 extends 자료형이름> 타입명이 extends에 존재하는 속성들을 가지고 있는지 확인해줌
+extends 옆에 오는 자료형이름들에는 커스텀 타입도 들어갈 수 있음
+함수 말고 class에도 타입 파라미터 지정 가능합니당
+
+react에서 typescript 어케 씀?
+변수, 함수 만들 때 타입 지정하면 끝임
++ 이상한 타입도 몇 개 있는데 그것도 알아야 함
+설치 방법: npx create-react-app 프로젝트명 --template typescript (기존에 있던 프로젝트에 추가하는 방법은 다름 근데 웬만하면 새롭게 파일 하나 파셈)
+JSX 문법을 쓰는 파일은 .tsx, 일반 파일은 .ts임
+1. 일반 변수나 함수는 원래 하던 것처럼 타입 지정 잘 하면 됨
+2. jsx 표현하는 타입이 따로 있음 => JSX.Element
+3. component 표현하는 타입도 따로 있음 => 파라미터, return 타입 지정 가능함
+4. component props를 표현하는 타입도 있음 => 오브젝트로 담기는 거 주의
+props 잘못 전달해서 생기는 에러가 많으니 주의할 것
+5. useState 타입지정 => 사실 원래 타입 지정 자동으로 되니까 상관없음
+근데 string | number가 들어오는 걸 만들고 싶으면 generic 타입 사용하면 됨
+useState<string | number>(값)
+나머지는 검색해보셈
+
+React에서 Redux 쓰는 이유가 뭐임?
+1. 모든 컴퍼넌트가 state를 공유할 수 있고 2. 수정 방법을 파일 한 곳에 정의해둠
+redux에서 정의하는 거 1. 모든 컴퍼넌트가 공유할 state 2. 미리 정의한 state 수정 방법
+맨날 하던 대로 변수랑 함수 정의에 타입 지정하면 됨
+default 파라미터는 타입 지정할 필요 없음, action은 dispatch() 날릴 때 넣는 파라미터랑 같음
+컴퍼넌트에서 redux에서 만든 state를 쓸 때 hook 같은 거 쓰면 편리하게 사용 가능함
+hook에서 사용하는 콜백 함수에서도 타입 지정 가능함 근데 또다시 타입 지정하기에는 귀찮으니 index.tsx에서 store 타입을 저장함 (공식문서에서 저렇게 하래염)
+const store = createStore(보낼거)
+export type RootState = ReturnType<typeof store.getState>
+dispatch 타입 지정은 redux에서 Dispatch를 import 해와서 Dispatch라고 타입 지정하면 끝임
+redux를 편리하게 사용하기 위해 @reduxjs/toolkit 라이브러리 설치하면 좋음
+state, reducer를 object로 정리한다는게 다름
+저거 쓰면 뭐가 좋음?
+1. 함수라서 보기 좋음 2. state 수정시 사본 만들 필요가 없음
+state + reducer를 합친걸 slice라고 부름
+그럼 slice에는 타입 지정 어케함? 변수 함수 만들 때 알아서 똑같이 잘 하셈
+함수의 첫 번째 파라미터(state)는 타입 지정 안해도 됨
+함수의 두 번째 파라미터(action)는 위 라이브러리에서 PayloadAction을 import 해와서 쓴 후 generic 타입으로 dispatch에서 날라오는 자료형 적어주셈
+그럼 state 꺼낼 때는 어케함? 똑같이 하면 됨 근데 넘어온 state 잘 봐야함
+dispatch 보내는 방식이 좀 다름 파라미터 안에 사용할 reducer 적으면 됨
+그럴려면 reducer export 하면 됨
+
+array에 타입 지정하는 법 알죠?
+type alias보다 엄격하게 타입 지정이 가능함
+위치까지 고려한 타입 == tuple 타입
+tuple 안에서 옵션 표시 가능 -> ? 사용하면 선택적 표현 가능
+단 ?는 순서상 마지막만 가능함 + 복수 개 사용해도 뒤에서부터 지정 가능
+rest parameter도 array 타입이니까 tuple type 지정 가능함
+spread operator를 통해 합친 arr의 타입 지정은 어케함?
+spread operator가 사용된 변수는 타입 지정도 똑같이 ':...자료형[]' 로 받아쳐줘야함
+
+외부 js 파일들을 ts에서 이용하고 싶은데 에러가 나는 경우가 있음
+일반 html css js로 개발한다면 <script src=""> 이용하면 됨
+에러가 나더라도 동작은 되는데 굳이 에러를 안 보고 싶다면 재정의하면 됨
+declare let 재정의할변수명 => 어딘가에 변수가 존재하니 그거 에러내지 말아주세요라는 뜻
+당연히 타입 지정도 가능함
+일반 js 파일 등에 있던 변수를 사용할 때 에러를 내지 않기 위해 재정의 사용함
++ declare로 정의한 내용은 js로 변환되지 않음(사실 할 필요는 없긴 함)
+ts 파일의 변수를 다른 ts 파일로 가져와 쓰고 싶다면 import, export 쓰면 되는 거임
+근데 저것보다 더 쉬운 방법이 있음
+ts의 이상한 특징 = 모든 ts 파일은 ambient module(글로벌 모듈)이 자동으로 됨 == 모든 ts 파일에서는 마음대로 자신들이 선언한 변수들을 자유롭게 사용 가능함
+그럼 모든 ts 파일에서 만든 변수들은 전역 변수가 되는 거 아님? 너무 까다로워질 거 같은데?
+그걸 막기 위해서 ts 파일을 로컬 모듈로 바꾸는 거임
+그걸로 어케 바꿈? import나 export 둘 중 하나라도 있으면 파일이 로컬 모듈로 변환됨
+근데 import, export가 있는 파일에서 전역 변수를 만들고 싶으면 어떡함?
+그럴 때는 declare global {여기 안에서 타입 선언하셈} 요거 사용하면 글로벌 타입으로 사용 가능함
+
+.d.ts 파일이 뭐임?
+프로젝트에서 사용하는 타입들의 정의를 보관하는 파일임
+타입, 인터페이스 등등 다 가능함
+이걸 다른 ts파일에서 쓰고 싶으면 어케함? import, export 하셈
+ts 파일에 타입 정의가 너무 길어지면 d.ts파일에 담아두셈
+import, export 할 게 많아지면 namespace 쓰던가 아니면 import '*' from '~~.d'를 사용하던가
+모든 타입을 정리해놓은 레퍼런스용으로 d.ts 파일로 쓸 수 있음
+tsconfig.json 파일에 declaration: true 사용하면 알아서 d.ts파일에 정리해줌
+변수, 타입 등 모든 거 다 됨
+자동 생성되는 경우에는 d.ts 파일 수정할 필요가 따로 없음
+d.ts 파일은 예외적으로 자동으로 글로벌 모듈로 설정되지 않음 => 로컬 모듈이라고 생각하셈
+그럼 d.ts 파일 글로벌 모듈로 만드는 방법 없음?
+tsconfig.json에서 "typeRoots": ["원하는 폴더의 상대 위치"]로 설정하면 저 폴더 안에 있는 타입들은 글로벌하게 이용 가능함
+저 폴더 안에서 common 파일 생성한 후 그 안에 d.ts 파일 만들어서 사용하면 그 파일 안에서 정리된 친구들은 글로벌하게 이용 가능함
+외부 라이브러리 사용할 때 타입 정의가 안되어있으면 'definitely Typed github 레포지토리'에서 긁어와서 사용해보셈
+혹은 typescript 공식 사이트에서 찾아보면 있음
+npm으로 설치시엔 타입도 자동으로 들어오는 경우도 많음
+굳이 npm으로 type 정의만 따로 들고오고 싶으면 npm에서 설치하셈(이 경우에는 tsconfig.json 파일에서 위에서 설정했던 typeRoots 설정 없애줘야함)
+
+interface는 object 타입 지정할 때 말고도 사실 용도가 하나 더 있음
+class 타입 확인하고 싶을 때 사용 가능함
+class가 가지고 있는 속성들을 타입으로 확인하고 싶을 때 interface + implements로 확인 가능함
+interface를 통해 오브젝트 정의하듯이 정의하고, interface에서 정의한 속성들이 모두 있는지 검사해줌 (class 클래스명 implements 인터페이스명)
+implements는 타입 지정 문법이 아님
+따라서 interface에 있는 속성이 존재하냐의 유무를 가르쳐줄 뿐 interface의 속성까지 강제로 검사하거나 바꾸지는 않음
+
+index signature 쓰면 object 타입 지정 한번에 가능함
+예를 들어 모든 속성은 string이다 라고 타입 지정이 가능해진거임
+[key :타입명1] :타입명2 => 타입명1인 key의 모든 값은 타입명2이다
+index signature와 중복되는 속성은 존재할 수 없음(index signature가 우선적으로 적용됨)
+속성 이름이 숫자면 array에서 꺼내듯이 값을 꺼낼 수 있음 + index signature 당연히 가능함
+object 자료 중에서 속성 안에 또다른 object가 존재하는 자료의 타입 지정은 어케함?
+사실 타입 지정 안해도 자동으로 타입 지정되니까 그대로 사용하거나 아니면 interface 사용해서 쓰던가
+근데 recursive하게 타입을 만들 수도 있음
+사실 우리가 지정한 타입을 속성명에서 사용할 수 있음 => interface MyType {'font-size' : MyType | number}
+
+type을 자동으로 생성할 수도 있고 타입을 한꺼번에 바꿔치기할 수도 있음
+keyof = 오브젝트가 담고 있는 key들을 array로 전달해줌 => Object.keyof(오브젝트자료명)
+interface에서 keyof를 사용하면 interface 안에 있는 속성들로 union type을 생성해줌
+저렇게 가져오면 literal type으로 지정됨
+index signature에 keyof를 쓰면 어케됨? 그러면 key의 속성명을 union type으로 지정해줌
+keyof라는 거 어디에 씀? 
+type을 잘못 지정한 게 너무 많을 때 타입을 자동으로 변환시켜주는 변환기를 만들 수 있음
+type TypeChange<MyType> = { [key in keyof MyType] :타입명 }
+근데 모든 속성들을 하나로 바꾸는 거면 너무 일괄적이지 않음? 조건문 배우면 가능함
+
+if else 조건문 써서 type 변환도 가능함
+삼항 연산자 사용하면 됨 (A ? B : C => A라는 조건이 참이면 B, 아니면 C return 하셈)
+generic 타입은 일반 타입 변수에서도 사용 가능함
+1. type if 문은 삼항 연산자로 2. 대신 조건문은 논리연산자가 아니라 extends 사용해서
+infer 키워드가 뭐임? 조건문에서 사용하고 타입을 왼쪽에서 추출함
+T extends infer R (T에서 타입을 뽑아서 R이라는 변수에 담아주세요)
+타입을 굳이 왜 뽑음? 그러고 싶을 때가 존재하니까

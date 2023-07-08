@@ -1,0 +1,344 @@
+vue.js 하기전 설치할 거
+1. nodejs 설치
+2. (터미널) npm install -g @vue/cli
+3. (원하는 위치에서) vue create {프로젝트명}
+4. vue 부가기능 설치 (extensions) - Vetur, Vue 3 snippets, html css support
+5. 미리보기 - npm run serve
+
+원래 html 짜는 거처럼 template 자리에 html 태그 넣고, style 자리에 css 속성 지정하면 됨
+{{데이터 바인딩}}: html에 js 데이터를 꽂아넣을 수 있음
+근데 좀 좋은 점: 원래 js 문법을 그대로 사용하지 않고 vue만의 방식으로 데이터 바인딩 ㅆㄱㄴ
+데이터 만드는 법 - 'data() {return {여기 안에 데이터 넣으면 됨}}' - 데이터 보관함이라고 생각하셈
+단 데이터는 Object 형식으로 저장할 것
+데이터를 집어넣을 때는 '{{데이터 이름}}' 요거 사용하면 됨
+이 문법은 언제 쓸까? - 1. 하드코딩 ㄴㄴ염 변경하기 힘들잖음 2. vue의 실시간 자동 렌더링 기능 사용 가능함! (데이터가 바뀌는 즉시 알아서 변형시켜줌) => 요거 때문에 웹앱 개발 가능한 거임
+대신 바뀌지 않는 데이터는 굳이 데이터 바인딩 하지 말고 걍 원래대로 쓰셈
+html 속성도 데이터 바인딩 가능함 - :속성="데이터이름" 이때는 데이터이름 {{}}로 안 감싸도 됨
+
+반복문
+<태그 v-for="작명 in 반복 횟수" :key="작명">
+반복문에서 :key 안 쓰면 에러남
+근데 사실 반복 횟수 자리에 데이터를 넣을 수도 있음
+<태그 v-for="작명 in 데이터 이름" :key="작명"> - 보통 데이터는 array나 Object임
+<태그 v-for="작명 in 데이터 이름" :key="작명">{{작명}}</태그> -> 요로면 데이터 안의 자료들이 알아서 쓰여짐
+:key의 용도가 뭐임? 반복문 돌린 요소를 컴퓨터가 구분하기 위해 씀 => 반복문 돌면서 변하는 숫자나 문자를 적음
+<태그 v-for="(작명, 작명2) in 데이터 이름" :key="작명2"> - 작명: array 내 데이터, 작명2: 1씩 증가하는 변수
+
+vue 내에서 클릭 구현하려면
+v-on:click="자바스크립트 코드" 요거 써야함 (v-on: 대신 @ 써도 됨)
+사실 click 말고 event가 많음 - mouseover(마우스 올리면) 등등
+자바스크립트 코드가 길어지면 함수 쓰고, 함수를 저 자리에 쓰면 됨
+함수는 어케 만듦?
+method: {함수명() {함수 안에서 동작할 코드}}
+function 안에서 변수 사용할려면 'this.변수명' 사용하셈
+
+vue 개발 팁
+데이터 어떻게 만들지 정하고 로직 짜기로 ㄲ
+img 넣는 법: 절대 경로는 걍 넣으셈. 상대 경로는 원래 하던 대로 하셈
+UI는 어케 만듦? 무에서 유 창조가 아님. 만들어 넣고 안 보이게 했다가 원할 때 보여주는 거임
+동적 UI 만드는 법칙 0. html css로 기본 디자인 설정하셈 1. ui의 현재 상태를 데이터로 저장하셈 2. 데이터에 따라 ui가 어떻게 보일지 작성
+vue의 조건식: v-if="조건식" ==> 역할: 조건식이 참일 때만 html 보여줌
+
+서버에서 데이터 가져오면 되는데 지금은 서버가 없잖음?
+그래서 서버 대용으로 대용량 데이터를 가져왔음. 근데 데이터가 너무 길어서 보기 싫음
+그럴 때는 다른 파일에 넣고 나서 불러오는 게 좋음(import/export)
+파일에서 export 된 데이터만 import 할 수 있음
+export default 변수명 <=> import 변수명 from 경로 -- 변수가 한 개일 때 (변수가 아니라 하나의 데이터여도 가능함)
+export {변수명1, 변수명2, ...} <=> import {변수명1, 변수명2, ...} from 경로 -- 변수가 2개 이상일 때
+
+event 안에 여러 js 코드 넣고 싶으면 한 로직이 끝날 때마다 ; 넣으셈
+if문 알아야 할 점: v-else란 것도 있음 => if 조건문이 참이 아니면 else꺼 보여주세요
+: v-else-if도 있음 => if 조건문 말고도 다른 조건을 걸 수 있음
+
+component: 긴 html 코드를 하나의 태그로 만들 수 있음
+component 생성 방법 1. src 폴더 안에 vue 파일 하나 만들어야 함 2. 그 안에 축약할 html 넣기 (단 vue 파일 형식에 맞게 ㄱㄱ - < 치고 엔터 누르면 됨)
+component 어케 씀? 1. vue파일 import 2. components에 등록하고 3. 태그 쓰듯이 사용하셈
+component 왜 씀? 1. 일단 길면 보기가 싫음 줄이면 예쁘자나 2. 반복적인 ui 사용에 있어서 재사용이 쉬움
+모든 거를 컴퍼넌트로 만들지 마셈. 컴퍼넌트로 만들면 데이터 넣기가 빡세짐
+데이터 바인딩할 친구들은 컴퍼넌트로 만들면 다시 재설정해줘야함 == 빡세다 ㅇㅋ?
+
+기본적으로 데이터바인딩은 밑에 데이터가 존재해야 가능함
+그럼 component에 데이터 바인딩 못 함? - App에 있는거 복붙하면 되는거 아님? => 후에 server랑 연결했을 때 데이터 바뀌면 그거 어케 다 바꿈;; 하지 마셈
+App.vue 안에 Modal.vue가 있잖음 ==> App: 부모 컴퍼넌트, Modal: 자식 컴퍼넌트
+자식 컴퍼넌트가 부모가 갖고 있는 데이터 쓰고 싶으면 props를 통해 받을 수 있음
+props 어케 씀? 1. 데이터 보내기 2. 등록하기 3. 쓰면 됨
+데이터 보내는 방법 <자식 :작명="데이터">
+등록은 props에 하셈 방법은 props: {데이터 이름: 자료형 이름}
+props는 read-only이기 때문에 받아온 거를 수정할 수 없음 즉 재할당이 불가능함
+컴퍼넌트 막 쓰면 복잡해질 수도 있음
+데이터 불러오기 귀찮은데 자식 컴퍼넌트에 쓰면 되는거 아님? ==> 상관 없는데 자식 컴퍼넌트의 데이터를 부모 컴퍼넌트가 쓸 경우가 생기면 어려워짐
+즉 많이 쓰이는 데이터들은 최상위 컴퍼넌트에다가 생성하셈
+
+props로 보낼 때 다양한 자료형 입력 가능함
+Array나 Object를 그대로 적어도 되고, string이나 number도 잘 알아서 감(단 number는 string 형태로 가기 때문에 Number 형태로 넣고 싶으면 작명 앞에 : 잘 붙이셈)
+Object의 key-value를 전부 전송하고 싶으면 . operator 잘 써도 되는데, v-bind="오브젝트 데이터 이름" 요걸로 보내도 됨
+
+custom event
+component 안에서는 props를 통해 전달받은 데이터를 재할당 및 수정할 수 없음(read-only이기 때문)
+그럼 부모에 있는 데이터는 어케 수정함? custom event 사용하셈
+'이벤트 버블링'이라는 걸 이용해도 되지만 그렇게 되면 자식 컴퍼넌트에 있는 세부 요소에 대한 이벤트를 정의할 수 없음
+custom event가 뭐임? 자식이 부모한테 '메세지'를 보냄 그 메세지의 내용은 데이터를 수정해달리는 거임
+자식이 부모에게 메세지 보낼 땐 event="$emit('작명', 데이터)" [데이터 안 보내고 싶으면 작명만 하셈]
+부모가 수신하는 방법은 @작명="자바스크립트 코드"
+자식이 보낸 메세지 안에 있는 데이터는 $event 안에 담겨있음
+$emit()을 함수 안에서 하고 싶으면 함수 안에 기능으로 this.$emit(방식 동일)
+
+input의 값 알아내는 이벤트 == @input : 입력할 때 마다 실행
+change: 값을 입력하고 다른 곳에 커서를 찍었을 때 실행 
+$event = 이벤트 리스너의 콜백 함수 파라미터 e 역할
+or v-model 사용하셈(input 류의 태그에 사용 가능)
+v-model="데이터명" : 데이터명에 해당 데이터를 할당해줌
+input 값을 숫자로 받고 싶으면 .number 붙이셈
+
+watcher: 데이터 감시하는 함수
+보통 언제 씀? 데이터가 잘 받아졌는지 확인할 때 사용하셈
+watch: {감시할데이터(파라미터1, 파라미터2) {}} -> 감시할 데이터가 바뀔 때마다 watcher도 실행됨 (파라미터1 = 변경 전 감시할 데이터 값, 파라미터2 = 변경 후 감시할 데이터 값)
+
+css로 애니메이션 어케줌?
+1. 시작 전 class명 만들기 2. 애니메이션 끝난 후 class명 만들기 3. 원할 때 2번 class명 부착
+조건부로 class 명 넣기 ==> :class="{클래스명: 조건}"
+근데 Vue에서는 <transition> 이용하면 애니메이션 쉽게 주는 거 가능함
+1. 애니메이션 주고 싶은 요소를 <transition name="작명">으로 감싸기 2. class명 3개 작성하기(.작명-enter-from(시작 시 스타일), .작명-enter-active(transition), .작명-enter-to(끝날 시 스타일))
+퇴장시 애니메이션은 enter가 아니라 leave 사용하면 됨
+
+sort()는 뭐임?
+정렬함수지 뭐임 ㅇㅅㅇ 근데 문자 가나다순 정렬임
+숫자 정렬할려면 콜백함수 넣으셈 (sort(function(a,b) {return a-b}))
+sort 함수는 원본을 변형시킴
+근데 map이나 filter는 원본을 변형하지 않음 그래서 요즘은 map이나 filter를 더 많이 사용함
+그래서 sort를 쓴다면 원본을 담고 있는 데이터가 따로 필요함
+array, object 사본 만드는 거 spread operator 사용하셈
+등호로 array를 집어넣으면 두 값은 서로를 공유함(주의사항)
+
+컴퍼넌트의 life cycle
+<컴퍼넌트>는 웹페이지에 표시되기까지 일련의 step을 거침 그 step들을 라이프사이클이라고 부름
+1. create: 데이터만 존재하는 단계
+2. mount: <template> 사이에 있던 걸 실제 html로 표시해줌
+3. 컴퍼넌트 생성: index.html에 장착함
+4. update: data가 변하면 컴퍼넌트가 재랜더링됨
+5. unmount: 컴퍼넌트가 삭제됨
+훅: 컴퍼넌트가 생성되는 중간에 원하는 코드를 실행시킬 수 있음
+라이프사이클 훅 개많음 알아서 필요할 때 찾아서 쓰셈
+mounted() {} :mount되고 나서 작동됨
+app.vue에 훅 걸면 app.vue가 조건에 걸릴 때 작동하는 거임
+서버에서 데이터 가져올 때도 lifecycle hook 안에서 코드 짬
+
+부트스트랩 라이브러리 써서 css 귀찮게 짜지 말자
+css랑 js 링크 땡겨와서 public/index.html 파일에 넣기
+링크로 땡겨오면 외부 링크에서 라이브러리를 땡겨오는 거라 오래 걸릴 수도 있으니 다운받아도 됨
+npm으로 설치할려면 npm install bootstrap + main.js에 (import 'bootstrap', import 'bootstrap/dist/css/bootstrap.min.css' 추가하기)
+원하는 디자인 있으면 bootstrap 홈페이지에서 찾아보셈 개쉬움
+자기는 디자인 못한다 그럼 bootstrap 잘 해보셈
+
+router 사용해서 페이지 분리하자
+vue3버전은 npm install vue-router@4 + main.js에 라우터 셋팅해야함
+근데 main.js에서 하기엔 라우터가 너무 많을 수도 있으니 다른 파일에 라우터를 정리하셈
+여기선 router.js에 정리했음 (router 파일 참고)
+<router-view></router-view>: 라우터로 설정한 컴퍼넌트를 보여줄 자리
+props 전송이 필요하면 router-view 태그에 하면 됨
+router-link를 사용하면 다른 페이지링크로 이동하는 거 만들 수 있음 -> <router-link to="/~~"></router-link>
+
+url 파라미터 문법
+원래 쓰듯이 사용하면 됨
+$route를 사용하면 url에 관한 모든 변수를 다 쏟아냄
+그중에서 params를 사용하면 url 파라미터를 얻을 수 있음
+파라미터를 업그레이드할 수 있음
+파라미터 뒤에 소괄호를 만들고 그 안에 정규식을 붙여서 조건을 만들 수 있다
+필요할 때 찾아보셈 (vue-router4 참고하셈)
+
+nested-routes가 머임?
+라우터를 더 세부적으로 분리하기 쉽게 해주는 거임
+router안에 children을 만든 후 거기에 똑같이 path랑 component 선언하셈
+그리고 부모 컴퍼넌트에 router-view 똑같이 설정해주면 됨
+$router 쓰면 router 관련된 거 다 있음
+
+hash mode? url에 전부 #을 붙인 상태로 시작함
+우리가 기존에 사용하던 방식은 html5 mode임
+요건 서버가 기본적으로 어떤 url로의 get 요청이 들어오면 그걸 걍 vue의 router한테 맡겨주세요라는 기능개발이 따로 필요함
+근데 hash mode 같은 경우는 #이 붙는데 이 #이 의미하는 건 # 뒤에 내용들은 서버로 정보가 넘어가지 않음
+따라서 서버가 라우팅을 채가는걸 방지할 수 있음
+navigation guard? 예를 들어 로그인을 한 유저만 사용할 수 있는 기능이 있을 때, 로그인을 안 한 사람들은 출입을 막아야 하는 거 아님?
+그 역할을 navigation guard가 함 일종의 방지 역할을 하는 셈
+beforeEnter 같은 함수를 router.js에 선언해서 사용함
+beforeEnter는 파라미터가 3개까지 존재할 수 있음. (목적지 페이지, 출발 페이지)
+return false 시키면 라우팅 중단되고, return이 없으면 원래대로 이동시킴
+다른 거 또 알고 싶으면 vue-router4 공식 홈페이지 들어가보던가
+
+항상 프젝하기 전에 먼저 기획하고 코드 짜는게 좋음
+재사용할 UI가 생기는 경우, 라우터로 나눌 페이지가 생기는 경우, html이 너무 길어지는 경우에는 컴퍼넌트 생성하셈
+style 겹치는 게 있으면 css 파일 만들고 import 해도 됨 (@import 'style.css')
+:style="" 집어넣을 때 object 자료됴 가능함
+
+ajax 요청이 뭐임?
+서버와 클라이언트간의 통신 방법임
+get: url 잘 적어서 서버한테 요청하면 그거에 맞는 데이터 갖다줌
+post: 서버로 데이터 보낼 때 사용하는 메서드
+get이랑 post 요청하면 브라우저가 자동으로 새로고침됨
+근데 저 새로고침이 싫으면 ajax 요청하면 됨. 그러면 새로고침이 씹힘
+ajax 요청할려면 라이브러리 쓰던가 아니면 fetch 함수 쓰던가(근데 fetch는 최신 브라우저만 지원 가능하다는거 참고하셈)
+npm install axios + import axios from 'axios'
+axios.get('url').then(() => {~~})
+axios.post('url', {전달할 데이터}).then(() => {~~})
+
+페이지 구분 하는거 vue-router 써도 되는데 탭 UI 만들듯이 해도 됨
+중요해보이는거 + 다양한 컴퍼넌트가 쓸 데이터는 상위 컴퍼넌트에 저장하셈
+v-if랑 v-for은 한 곳에 못 씀
+굳이 라우터 안 써도 간단한 건 tab으로 만들 수 있음
+그럼 라우터 왜 씀? 뒤로가기 기능을 굳이 개발할 필요가 없음
+
+이미지 업로드 어케 함?
+원래 이미지 업로드하면 서버한테 보내주고 서버는 저장시킨 후 그걸 다시 보내줌
+요즘은 브라우저에서 이미지 다루는 함수를 씀
+방법1) FileReader() - 파일을 글자로 변환시켜줌
+방법2) URL.createObjectURL() - 이미지의 가상 url을 생성해줌
+모든 컴퓨터 속 데이터는 바이너리 데이터임
+바이너리 데이터 다룰려면 blob이라는 Object 속에 담아서 사용함
+input 태그 안에 multiple 넣어주면 여러 파일 선택 가능함
+자바 스크립트로 input 받은 파일의 확장자를 검사하면 파일 형식을 제한할 수 있음
+
+글 발행은 어케 함?
+데이터 추가하면 되겠네
+이때까지 배웠던 기능들 알아서 잘 써보셈
+
+props로 가지고 있던 걸 어떻게 하위 컴퍼넌트로 다시 props로 넘검?
+똑같이 하면 됨
+인스타 필터 쓰고 싶으면 
+인스타에서 배포한 필터 있는 css 파일 받아오셈
+css 파일 link는 당연히 index.html에 넣어야함
+
+class명이 여러개면 class 복수 선언해도 됨
+사실 props 말고 부모 컴퍼넌트에서 자식 컴퍼넌트로 데이터 보낼 수 있음
+그게 slot임 훨씬 쉬움
+1. 자식 컴퍼넌트 원하는 곳에 slot이라는 태그를 넣음
+2. 부모 컴퍼넌트에서 <자식컴퍼넌트>요기 사이에 데이터 넣으면 넘어감</자식컴퍼넌트>
+태그 안에 데이터 바인딩할 때만 slot을 사용할 수 있기 때문에 slot으로는 props를 대체할 수 없음
+슬롯을 여러개 쓸려면 name 속성 사용해서 지정하고, 부모에서 template 태그 안에서 v-slot:name으로 지정하면 여러개 뚫을 수 있음
+근데 저렇게 구멍 여러개 뚫을바엔 props가 나을 거 같음
+html 전송하고 싶으면 slot 쓰면 될 거 같음
+
+mitt 라이브러리 쓰면 원하는 컴퍼넌트로 데이터 전송 가능함
+설치하고 나서 main.js에 등록해주셈
+글로벌하게 라이브러리 쓰고 싶으면 globalproperties에다가 전달하면 됨
+mitt으로 데이터 전송 어케 하는 데여?
+1. this.emitter.emit('작명', 데이터)으로 발사하고 2. 수신할 컴퍼넌트에서 mounted() {this.emitter.on('작명', () => {})}으로 수신하셈
+근데 이것도 많아지면 관리가 힘들어지기 때문에 대체로 VueX 많이 씀
+
+VueX라는 거 잘 써보셈
+서로 데이터 주고받기 매우 귀찮고 어려움
+하위컴퍼넌트로 전송은 props, 상위 컴퍼넌트로 전송은 custom event나 mitt'
+어려운 거 싫으면 vuex 씁시다
+이거 쓰면 js파일 하나에 모든 데이터를 몰아넣기 때문에 모든 컴퍼넌트가 직접 꺼내쓸 수 있음
+그럼 이거 쓰지 머하러 다른 거 씀? 간단한 코드도 좀 많이 길어질 수 있음
+그래서 컴퍼넌트, 데이터가 많아지면 VueX 쓰셈
+vuex 셋팅 방법은 js파일 하나 만들고 셋팅하셈
+보통 데이터를 state라고 부름
+그리고 main.js에 등록해주셈
+store.js에 있는 state 어케 꺼내 씀?
+$store 쓰면 안에 있는 데이터 다 꺼내올 수 있음
+하나만 꺼내고 싶으면 $store.state.데이터명
+store.js에 있는 state 변경은 어케함?
+Vuex에서는 컴퍼넌트 안에서 직접 데이터를 수정할 수 없는게 국룰임 (했으면 빨리 지우셈)
+그렇게 하면 데이터 추적이 어려워짐
+그래서 1. 미리 store.js에 수정 방법을 정의해두고 2. 그 방법을 컴퍼넌트에서 소환해서 수정해야함(서버 입장에서는 api 개발해놓고 그거에 맞게 하는 거임)
+
+그래서 수정 기능은 어케 하는 거냐고?
+기능 구현을 이렇게 합시다 
+store.js에 부탁하는 거임 그럼 store.js에서 바꾸는 거임
+state 변경하는 거 정의는 mutations에 정의하셈
+수정 함수 파라미터 안에 state 적고, 데이터 불러올 때 state.데이터명으로 하셈
+수정 부탁은 어떻게 함?
+$store.commit('함수명')으로 해주면 수정 부탁 가능해짐
+이렇게 하면 장점이 뭐임?
+state 변경은 무조건 store.js만 가능해지니 state 이상하면 store.js만 알아보면 됨
+commit할 때 데이터 같이 보낼 수도 있음 - commit('함수명', 데이터)
+그러면 받은 함수에서는 함수명(state, payload) {} 중 payload에 보낸 데이터가 있음
+
+mutations 말고 actions도 있음?
+그건 뭔데?
+ajax하는 곳 or 오래 걸리는 작업들
+mutations안에서 ajax 해도 될 거 같지만 실은 안 됨
++ mutation 함수는 순차적으로 기능하기 때문에 하나의 mutation 함수가 굉장히 오래 걸리면 밑에 있는 것들 실행이 늦어짐
+actions함수를 실행시킬려면 $store.dispatch('함수명')
+근데 state 변경은 무조건 mutations로 해야함
+actions에 추가하는 파라미터는 보통 $store를 뜻함
+
+함수 만들 때 방법 두 가지 1. methods{} 2. computed{}
+둘이 다른 점이 뭐임?
+methods 함수는 사용할 때마다 실행됨
+computed 함수는 사용해도 실행되는게 아니라 처음 실행하고 값을 간직함 (값이 바뀌는 경우에만 재실행 가능)
+그래서 computed 함수는 보통 계산결과를 저장하는데 많이 씀
+computed 함수는 ()없이 이름만 쓰면 사용됨
+mapState 쓰면 store.js에 있는 데이터 빠르게 옮겨쓸 수 있음
+그냥 state를 하나 가져올 때는 mapState 쓰는 게 더 빠를 수도?
+computed 함수는 무조건 return이 존재해야 함
+저것도 귀찮으면 한 번에 축약시키는 것도 있음
+...mapState(['state 이름']) 요거 쓰면 원하는 state들 다 가져올 수 있음 (대신 vuex의 mapState 함수 import 하셈)
+...mapState({작명 : 'name'}): state를 다른 이름으로 쓰고 싶으면 object 형태로 쓰셈
+vuex mutations 한번에 쓰고 싶으면?
+...mapMutations(['함수명']): 원하는  함수 다 가져다 쓸 수 있음
+
+PWA가 뭐임?
+사실 지금 만든 것도 모바일 앱이랑 비슷한데요? 그럼 이걸 앱으로 변환 안됨? 그래서 생긴 게 PWA임
+앱처럼 보이는 웹임 근데 일반 유저 눈에는 앱임
+PWA 할려면 manifest.js랑 service-worker.js가 필요함
+요거 두개 있으면 자동으로 PWA라고 인식해줌
+요거 두개 어케 만듦? 실은 우리가 만드는 건 아니고 라이브러리 쓰셈
+vue add pwa
+요거 하면 registerServiceWorker.js라는 파일이 생김
+요거 가지고 있으면 build하고 나면 자동으로 위 2개의 파일이 생성됨
+얘네 두개는 뭐하는 파일임?
+manifest.js는 앱 정보 담는 파일임
+service-worker.js 얘가 더 중요함
+실제 모바일 앱들은 인터넷 없이도 사용이 가능함
+근데 웹은 그게 불가능하잖음? 그래서 그걸 가능하게 도와줌
+service-worker.js는 1. 웹페이지 구동에 필요한 파일들 다 하드에 저장함. 2. 그럼 오프라인에서 불러올 때 하드에 파일이 있으면 그걸 보여주는 거임
+웹에서 PWA인지 아닌지는 개발자 도구 열어보면 알 수 있음
+manifest.js 있고 service-worker.js 있고 https://로 시작하면 PWA임
+실제 스토어에 등록 가능한 apk 파일은 어케 만듦?
+vue 공식 문서 잘 찾아보면 가능함
+PWA 설정은 어케 바꿈? (빌드할때마다 바뀌잖음)
+vue.config.js 파일 만들고, manifest.js랑 service-worker.js 설정하는 셋팅 하면 됨
+추가 설정은 workbox 라이브러리 쓰거나 vue 공식 문서 찾아보셈
+
+vue 쓸 때 자기도 모르게 나는 에러를 잡고 싶으면
+chrome 확장 스토어에서 Vue devtools 설치해보셈(나중에 출시된 거 설치하기)
+vue에서 띄운 미리보기 창에서 f12 열면 신세계가 보일거임
+
+프로젝트가 커지면 코드가 너무 길어지는 거 아님? 그거 다 어케 관리함?
+이때까지 했던 문법은 Options API임
+관련된 코드를 찢어놓지 않고 개발하는 법이 있음
+위 문법은 Composition API임 근데 필수는 아님
+컴퍼넌트마다 방법 선택 가능함
+public 폴더 특징 build 해도 안 변함
+그래서 여기 있는 파일도 가끔 GET 요청함
+Composition API 써서 개발하려면 setup() {안에 코드 짜셈}
+setup 안에서 거의 모든 기능 개발이 가능함
+setup 안에서 데이터 만들고 싶으면 ref(안에 실제 데이터를 만들어야 함)
+굳이 ref() 왜 씀?
+vue가 재랜더링을 지원하는 이유는 reference data 때문임
+그래서 모든 데이터를 reference data type으로 바꾸면 실시간 반영이 가능해지지 않을까여? 굿
+그리고 데이터 쓸려면 return {안에 담아야 함}
+setup 내에 작성하는 건 createdHook이랑 같음
+그래서 특수한 문법이 필요함
+Composition API에서 lifecycle hook 쓰고 싶으면 on라이프사이클명(() => {실행할 코드})
+
+vue파일들에 있던 css가 build하면 하나로 합쳐지기 때문에 잘 쓸 수 있는 거임
+근데 그게 싫다? 그러면 style 태그 안에 scoped라고 쓰면 다른 vue 파일로 전염 안 됨 <style scoped>
+사실 Composition API에서 데이터 만들 때 ref말고 하나 더 있음
+reactive() 얘는 보통 array, Object 씀
+걍 관습적인 거라 ref 안에 써도 거의 똑같긴 함
+toRefs()란 것도 있음
+원래 props 사용할 때 props에 등록하는 건데 
+Composition API에서 props를 사용하고 싶으면 setup(props, context)로 설정한 뒤 사용하면 됨
+근데 props만 설정하면 실시간 반영이 안 될 수도 있기 때문에 toRefs(props)로 감싸면 잘 사용됨
+그리고 props가 여러 개면 {작명1, 작명2}로 변수 선언하고 작명1.value 쓰면 값을 사용할 수 있음
+Composition API에서 watch 사용할려면 watch(감시할 데이터, () => {감시할 코드})
+Composition API 쓸 때는 영어 작명하셈
+Composition API에서 computed 사용할려면 computed(() => {return 연산 결과})
+Composition API에서 vuex store 사용할려면
+일단 import {useStore} 하셈 
+let store = useStore() 하면 store안에 store.js에 담겼던 모든게 다 담겨있음
+그래서 $store이랑 위에서 선언한 store이랑 같다고 보면 됨
+Composition API에는 mapState 없음 vuex 5버전 이상이면 가능함
+Composition API에서 methods 함수 만드는 법은 function 함수명() {코드} 만들고 return 안에 담아놓으셈
+vue는 항상 데이터를 중심으로 생각해야함
