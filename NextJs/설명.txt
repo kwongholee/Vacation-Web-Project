@@ -1,21 +1,33 @@
+page.js: 메인 페이지
+layout.js: page.js를 감싸는 것들(보통 head 태그 안에 들어가는 것들 등)
+global.css: 모든 페이지에 적용되는 css
+xx.module.css: 특정 페이지에만 적용되는 css
+api 폴더: 서버 기능을 만들 수 있는 공간
+public 폴더: 이미지, 폰트 등을 저장하는 곳
 리액트버전 html: JSX
 React와 Next의 차이점 
 1. return() 안에 html 넣을 때 1개의 태그로 마무리되어야함
 2. class 넣고 싶으면 className으로 선언해야함
-3. html 안에 변수 넣으려면 {} (JSX의 데이터 마인딩)
+3. html 안에 변수 넣으려면 {} (JSX의 데이터 바인딩) (html 속성 안에도 데이터 바인딩 똑같이 가능함)
 4. style 속성 넣으려면 style={{}}
-url과 페이지 만들고 싶으면 1. app 폴더 만들고 2. 그 안에 page.js 넣고 3. 그 안에 레이아웃 만들기
+
+url과 페이지 만들고 싶으면 1. app 폴더에 url에 들어갈 이름의 폴더 만들고 2. 그 안에 page.js 넣고 3. 그 안에 레이아웃 만들기
 page.js 만드는 법 -> component 만들기 -> export default function 폴더명(){ return( <div></div>)}
 Link: a태그와 동일(그러나 a태그보다 부드럽게 넘어감)
 모든 페이지에 보일 html은 layout.js에 작성(페이지 변경과 상관없이 계속 보여줄 ui는 layout.js에 작성하자)
 page.js 보여줄 때 옆에, 상위폴더에 있는 모든 layout.js를 합쳐서 page.js 싸맴
+
 map((a,i) => { return }) - a: array 자료 출력, i: 반복 횟수 -1 //// return에 적은 걸 array 안에 담아줌
-map 반복문 사용시 key={유니크한 값} 넣으면 좋음
+JSX에서 array 안에 담긴 자료들이 html태그들이면 잘 보여줌
+
+map 반복문 사용시 key={유니크한 값} 넣으면 좋음 (반복 생성되는 html 태그들마다 유니크한 값을 넣어줌으로써 구분하기 쉬워지는 거임 그래서 보통 i로 마니 씀)
 이미지는 public 폴더에 저장함
 public 폴더는 사이트 root 경로로 이동하기 때문에 별다른 경로 지정 없이 /로 이동 가능
 최적화된 이미지 사용: <Image src={} /> (next/image) (단, src 안의 경로는 무조건 import 형태)
+반복문을 통해 불러오는 이미지들은 좀 귀찮을 수 있음
 Image로 외부 이미지를 불러올 때는 width와 height 속성을 따로 지정해줘야 함 + next.config.js 셋팅도 필요함
 최적화는 보통 다 만든 후에 하는게 좋음
+
 길고 복잡한 html을 한 단어로 축약하면 component
 component 제작: 1. function 작명(){ return( 축약할 html)} 2. <작명 />
 component 단점: component끼리 데이터 공유 귀찮음
@@ -27,22 +39,38 @@ server component: 로딩 속도 빠름, 검색엔진 노출 유리
 큰 페이지는 server component, js 기능이 필요한 곳만 client component
 export default는 한번만 사용 가능
 여러 개를 export하려면 export{변수/함수명} (단, import할 때도 {}형식으로 import 해야함)
+
 props는 함수 파라미터랑 비슷함(용도가 거의 같음)
 props: 부모에서 자식으로만 전송 가능
 데이터가 많은 컴퍼넌트가 필요하면 그들 중 최고 부모 컴퍼넌트에 보관하는 것이 좋음
 보통 fetch()로 DB데이터 가져옴
 같은 데이터 요청이 여러개면 1개로 압축해줌(deduplication)
-state 변경 함수 사용시 새state === 기존 state일 경우 변경 불가
+
+state 사용할 때 state 값이 변경되면 state를 사용하는 html 부분이 자동으로 재랜던링됨
+state 변경 함수 사용시 새state == 기존 state일 경우 변경 불가
 
 mongodb 사용할려면 mongodb 라이브러리 사용
+.connect 여러번 실행되면 서버한테 부담이 되기 때문에 따로 빼야 함
 nextjs 폴더에서 util/database.js 만든후 해당 파일과 같이 코드 작성
-db 입출력 코드는 server component 안에서만 쓰자
+nextjs 특징: 개발 시 파일 저장하면 모든 js 파일의 코드를 다 읽고 지나감
+db 입출력 코드는 server component 안에서만 쓰자(client component에 있는 코드들은 모두 client한테 전달이 되기 때문에 민감한 정보들을 줄 수 있음)
+
 첨보는 프로그램 만들기 => 프로그램에 필요한 기능 전부 정리 => 쉬운 기능부터 하나씩 개발
 첨보는 세부기능 만들기 => 어떤 식으로 동작하는지 상세하게 설명 => 코드로 번역
-Dynamic route 폴더: 원하는 route 주소/[들어갈꺼 직명]
-useRouter: 'next/navigation'
+Promise를 뱉는 코드에만 await 적용 가능(await 적용시키면 오래걸리는 코드들도 기다려줌)
+{return( <></> )} => <></>
+
+Dynamic route 폴더: 원하는 route 주소/[들어갈꺼 작명]
+_id를 고치지 않고 objectId를 사용할려면 mongodb에서 import 해와야 함
+유저가 dynamic route 자리에 입력한 값을 'props.params.폴더명'을 통해 출력 가능
+
+페이지 이동방법은 많음
+useRouter: 'next/navigation' (client component 안에서만 사용 가능)
+왜 useRouter 사용함? Link보다 옵션이 많음
 push(목적지): 목적지로 이동, back(): 뒤로가기, forward(): 앞으로가기, refresh(): 바뀐내용만 새로고침, prefetch(목적지): 페이지 미리로드
 Link 태그에도 prefetch 기능이 내장되어있음
+prefatch 기능 끄고 싶으면 prefatch={false로 끄셈}
+prefatch 기능은 개발중에는 확인할 수 없음
 usePathname(): 현재 url 출력
-useSearchParams(): Search parameter 출력
+useSearchParams(): Search parameter(query string) 출력
 useParams(): 유저가 [dynamic router] 입력한거 출력
