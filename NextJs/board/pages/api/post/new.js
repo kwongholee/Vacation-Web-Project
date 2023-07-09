@@ -2,7 +2,7 @@ import { connectDB } from "@/util/database"
 
 export default async function handler(req,res) {
   if(req.method == 'POST') {
-    if(req.body.title == '' || req.body.content) {
+    if(req.body.title == '' || req.body.content == '') {
       return res.status(500).json('you post empty title or content')
     }
     try {
