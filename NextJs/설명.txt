@@ -208,3 +208,40 @@ JWT 토큰의 유효기간이 막 1년 이러면 나쁜 유저가 이걸 탈취�
 ok 재발급용 토큰 db랑 맞는지 확인해보고 입장권 보내드림 => 입장권용 토큰 = access token, 재발급용 토큰 = refresh token
 refresh token 도난 당하면 똑같은 문제 아니냐라고 볼 수 있는데 얘를 db에 저장하기 때문에 다른 나쁜 사람이 또 사용하는지를 체크할 수 있음
 그럼 session이랑 다른게 뭐냐? 사실 거의 같긴 한데 세션보단 db 조회를 덜한다는 이점이 있긴 함
+
+CSR로 댓글 기능 만들어보겠음
+새로고침 없이 데이터 넘길려면 ajax 써야 하니까 client component 사용해야함
+유저가 input에 입력한 값을 다루기 근데 form 태그 사용 안하고
+db라도 array 안에 자료가 많으면 수정, 삭제가 힘듦
+db가 objectId 기반으로 한 document 찾기에는 신임
+나중에 데이터 수정, 삭제, 출력이 쉬운 거면 db 저장 잘한거임
+수정 삭제 출력이 어려우면 다른 document로 빼고 어떤 document에 종속되어 있는지 적으면 좋음
+client component에서 서버에 데이터 요청하려면 fetch를 사용하긴 하는데 useEffect() 안에서 사용함
+useEffect: 쓸데 없는 코드 보관함(ajax, 타이머 등을 넣음)
+특이사항이 있음 1. html 로드/재랜더링될 때마다 실행됨 2. 콜백함수 옆에 ,[]를 적으면 1회만 실행됨 3. html 보여준 후에 늦게 실행시작
+ajax 요청 완료후에 html을 보내줘야할 거 같지만 ajax 요청이 오래 걸리면 html 보여주는게 느리니까 수익성이 떨어짐
+fetch에서 post 요청하지 않고 get 요청으로 서버한테 데이터를 보낼려면 query string 잘 써보셈
+서버에서 가져온 데이터를 바로 html에 꽂을 수 없음 무조건 변수나 state에 저장한 후 그걸 html에 넣어야 함
+state변경 함수는 다른 코드들보다 약간 늦게 실행됨 => console.log()를 씹는 경우가 있으니 믿음을 가지고 코딩하셈
+관계형 db 쓸 때는 댓글 작성자 쓰면 별로 안 좋은 습관/ 비관계형 db 쓸 때는 document에 최대한 많은 정보를 저장해도 상관 없음
+CSR의 장점은 html을 실시간 재랜더링할 수 있다는 점임
+좀 지나서 업데이트되면 ajax 같은 복잡한 과정 없이도 CSR 구현할 수 있을 듯?
+
+SSR 단점: 페이지 이동시 Link 태그 사용하면 새로고침 안 함 => 페이지 이동시킬 때 딜레이가 되는 경우가 있음
+웹이 바로 반응이 없으면 유저가 실망하니까 로딩 페이지 같은 걸 만드셈
+로딩중 UI 만들려면 1. 원하는 페이지 넘길 때 로딩 페이지가 있으면 좋겠는 위치에 loading.js 생성 2. export default 컴퍼넌트
+page.js 보여주기 전에 loading.js 보여줌
+모든 page.js 옆에 생성 가능하고, client component로도 생성 가능함
+Suspense 태그랑 똑같은 역할을 해줌
+에러페이지 만들려면 if문 써도 되긴 하는데 error.js로 만들 수도 있음
+1. error.js 만들고 2. use client 생성하고 3. export default function Error({error, reset})
+error: 에러 정보를 알려줌, reset: 페이지를 다시 로드해줌
+error.js 부분 쓰면 page.js 부분만 바꿔줌(전체를 바꿔주는 거랑 다름 - 예쁘고 기능적으로 좋음 => 남은 기능들이 존재하니까 유저한테는 편한 거임)
+참고로 error.js나 loading.js가 옆에 없으면 상위 폴더에서도 찾음
+또 참고사항: error.js는 옆에 있는 layout.js의 에러 사항을 체크할 수 없음
+global-error.js 만들면 최상위 layout.js 에러를 체크할 수 있음(근데 잘 안 씀)
+404 페이지(Not Found)가 기본적으로 셋팅되어 있음
+근데 404 말고 error.js가 먼저 나오는 경우도 있음
+if문으로 404 페이지를 직접 만들어도 되지만 not-found.js 만들어도 됨
+1. not-found.js 만들고 2. 404 페이지를 원할 때 notFound() 실행하셈 => page.js 대신 not-found.js 보여줌
+똑같이 같은 위치에 없으면 상위 폴더의 not-found.js 찾아줌
