@@ -23,7 +23,7 @@ export const authOptions = {
       //직접 DB에서 아이디,비번 비교하고 
       //아이디,비번 맞으면 return 결과, 틀리면 return null 해야함
       async authorize(credentials) {
-        let db = (await connectDB).db('forum');
+        let db = (await connectDB).db('GHBlog');
         let user = await db.collection('user_cred').findOne({email : credentials.email})
         if (!user) {
           console.log('해당 이메일은 없음');

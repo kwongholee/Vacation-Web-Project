@@ -245,3 +245,44 @@ global-error.js 만들면 최상위 layout.js 에러를 체크할 수 있음(근
 if문으로 404 페이지를 직접 만들어도 되지만 not-found.js 만들어도 됨
 1. not-found.js 만들고 2. 404 페이지를 원할 때 notFound() 실행하셈 => page.js 대신 not-found.js 보여줌
 똑같이 같은 위치에 없으면 상위 폴더의 not-found.js 찾아줌
+
+image 어디다 저장함? db에 저장해도 되지만 용량이 커지면 하드디스크에 저장하는게 나음
+하드 빌려주는 클라우드 서비스 사용하시던가 (aws s3)
+나중에 aws 사용할 때 참고하세연
+
+dark 모드 어케 만듦? css 속성 쓰면 개쉽긴 한데 유저가 원할 때 전환할 수 있게 해주는 거임
+style보단 class 만들어서 넣는 게 편할 거 같음
+state 단점: 새로고침 시 기본값으로 리셋됨
+새로고침할때마다 다크모드가 없어지면 안되는 거 아님? 그럼 db에 저장하셈
+페이지 접속시 db에서 다크모드 여부 꺼내서 다크 인 경우 배경 까매지는 class를 추가하는 거임
+근데 db 쓰기 그러니까 브라우저의 저장공간 사용하셈 = 쿠키 or localstorage
+localstorage: key value 값이 있는 숫자/문자를 5MB까지 저장 가능 => 브라우저를 청소하지 않는 이상 껐다 켜도 저장됨(json도 저장 가능)
+session storage: 다 비슷한데 브라우저를 껐다 켜면 데이터 날라감(휘발성 O)
+로컬스토리지 단점: 클라이언트 컴퍼넌트 안에서만 사용 가능함
+클라이언트 컴퍼넌트도 서버에서 랜더링 가능한 건 미리 랜더링해줌
+그래서 클라이언트 컴퍼넌트에서 사용하더라도 가끔씩 에러가 나는 경우가 생김
+따라서 useEffect 안에서 사용해야 함 useEffect(() => {if(typeof window != 'undefined') {localstorage.setItem('mode', 'dark')}}, [])
+근데 useEffect 사용하면 html을 보여주고 나서 실행되기 때문에 반짝해지는 UI를 만드는 거 아님?
+그래서 Cookie를 사용하는게 나을 수도 있음
+Cookie: 자료이름이랑 값 저장 가능 / 사이트당 보통 50개, 4kb 저장 가능 / 쿠키마다 유효기간 설정 가능함 / get, post 요청 시 자동으로 서버로 보냄
+document.cookie = '쿠키이름=값;max-age=초단위시간' (max-age: 쿠키 유효 기간, 만약 유효기간 설정 안 하면 브라우저 끌 때 쿠키도 자동으로 사라짐)
+유효기간은 최대 400일까지 사용 가능
+쿠키는 server component에서 출력 가능함
+server component에서 쿠키 출력할려면 cookies().get('쿠키 이름')
+참고로 쿠키 이름은 영어로 작성해야 잘 나올 거임
+쿠키를 생성하는 건 페이지 만들 때 딱 한번만 하면 되는 거니까 useEffect안에 넣던가 아니면 서버 API 코드에서 넣든가 아니면 미들웨어에서 생성해서 넣던가
+근데 쿠키가 이미 있을 때 똑같은 이름으로 쿠키를 생성하면 덮어씌워지는 거 아님? 그러면 쿠키가 없을 때만 생성해달라고 조건문 짜셈
+있는지 어케앎? 코드 있으니까 그거 따라치셈
+쿠키가 비어있으면 value 값이 undefined 나옴
+state를 바꾸면 재렌더링 되지만 쿠키는 바뀐다고 재렌더링 되고 그딴거 없습니당
+
+서버랑 클라이언트의 요청과 응답 중간에 간섭할 수 있음
+간섭하는 그 친구의 이름은 미들웨어
+미들웨어 만들려면 middleware.js 파일 하나 만드셈
+1. 유저가 get, post 요청 날리면 or 페이지 접속 시 2. middleware.js가 먼저 실행되고 3. 그다음 서버코드가 실행됨
+middleware 안에서 사용할 수 있는 자료들은 굉장히 많음(request.nextUrl = 유저가 요청중인 URL, request.cookies = 유저의 쿠키, request.headers = 유저의 headers 정보)
+middleware 기능 마지막엔 NextResponse.next(), NextResponse.redirect(), NextResponse.rewrite() 써줘야함
+next: 너 통과, redirect: 다른 페이지로 강제 이동(주소창도 변경), rewrite: 다른 페이지로 강제 이동(주소창은 냅둠)
+미들웨어 안에서도 nextauth.js 사용해서 유저 정보 빼올 수 있음
+근데 .env 파일에 JWT 시크릿 키 뽑아야 함 + JWT 방식만 사용 가능함
+미들웨어에서 한 번에 관리할려고 미들웨어 쓰는 거임

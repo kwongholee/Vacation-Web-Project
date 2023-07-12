@@ -51,4 +51,11 @@ a {
 }
 .logo {
   font-weight: bold;
-} 
+}
+
+.dark-mode .navbar {
+  background-color: #222;
+}
+.dark-mode .navbar a{
+  color: white;
+}
