@@ -1,0 +1,21 @@
+데이터베이스를 정리해봅시당
+1. key-value: key랑 value 형태로 저장(서브용 db로 사용함) ex> redis(램에 저장하는 형태라 ㅈㄴ 빠름)
+그래서 보통 redis는 메인 db에 저장을 하다가 자주 꺼내쓰는 데이터는 redis에 저장을 하고 꺼내달라할 때 redis에서 꺼내줌
+자주 사용하는 데이터 캐싱, 등등
+2. Relational DB: 관계형 디비, table(표)로 데이터를 저장함, 걍 Excel임 ex> Oracle, MySQL 등
+점유율이 ㅈㄴ 높음
+얘 쓸때는 SQL이라는 언어 사용해야 함 + 데이터 정규화를 지켜야 함
+ACID Transaction 기능이 있어서 정확도가 매우 중요한 서비스라면 얘 쓰면 됨
+3. Graph DB: 관계를 표현하고 싶으면 얘 쓰면 됨 ex> neo4j
+노드라는 걸 만들고 거기 안에 데이터를 저장함. 특이점은 노드끼리의 관계를 저장할 수 있다 + Graph Query Language라는 걸 사용해야 한다
+비행기 노선, SNS 친구 관계, 코로나 전염맵, 추천 서비스 등등에 사용함
+4. Document DB: 관계형 DB보다 더 자유로움 ex> MongoDB, CouchDB, Cloud Firestore 등
+collection이라는 폴더 안에 Document라는 파일들 안에 json형태로 데이터를 저장함
+갑자기 구조 바뀌어도 에러 안 남 + 정규화를 안 함(중복 내용 제거 X) + 대부분 분산처리 매우 잘함
+5. Column-family Database: 표로 저장하고 싶은데 유연하게 사용하고 싶으면 쓰셈 ex> cassandra, Google cloud Bigtable 등
+table 안에 row 안에 데이터를 저장함 근데 SQL 언어를 안 쓰고 자기만의 언어를 씀 + 복제, 분산처리 잘해줌(근데 복제를 하면 데이터 일관성이 부족해짐) + 정규화 X
+시간 기록도 잘 해줌
+6. Search Engine: index 보관에 특화됨 ex> elastic, Amazon CloudSearch 등
+index: 빠른 검색 도와주는 목차 같은 거임
+실시간 검색어, 추천 검색어, 검색어 오타교정 등에 사용됨
+
