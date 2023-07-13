@@ -1,0 +1,22 @@
+flutter project 생성하셈
+lib 폴더 안의 main.dart가 메인 페이지임
+시작하기 전에 analysis_options.yaml의 rules 부분에 4줄 추가할 것(rules 보다 두칸 뒤에 있어야함)
+Lint 잠깐 끄는 용도(초보때는 쓸데없음)
+
+void main() {} 제외하고 다 지우셈
+stless 입력 후 tab 키
+void main runApp() => 앱 구동시켜주세요(void main 안에서만 구동 가능함)
+앱 메인 페이지 만드는 법 알 필요 없음
+flutter에서 앱 디자인 어케 넣음? 위젯을 짜집기하면 됨
+글자 넣고 싶으면 Text('글자')
+브라우저로 띄워지지만 실제로는 앱임
+꼭 알아야 할 위젯(글자, 이미지, 아이콘, 박스 위젯)
+아이콘 넣을 땐 Icon(Icons.star)
+이미지 넣을 땐 보관용 assets 폴더 만들고 이미지 넣은 후 Image.asset('assets/경로')
+이미지 쓰겠다고 등록도 해야 함 pubspec.yaml 파일에 외부 패키지, 라이브러리 같은 모든 걸 다 거기에 저장함
+flutter 밑에 assets: -assets/ 적으면 됨
+네모 박스 넣을 땐 Container(width: ~, height: ~, color: Color.~)
+스타일 줄 땐 (스타일명 : 값)
+flutter의 사이즈 단위는 LP임
+어디서부터 사이즈를 정하는지에 대해서는 부모가 정함
+내 자식 위젯의 기준점을 중앙으로 설정해줄려면 Center(이 안에 적던가)
