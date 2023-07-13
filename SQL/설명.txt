@@ -19,3 +19,35 @@ table 안에 row 안에 데이터를 저장함 근데 SQL 언어를 안 쓰고 �
 index: 빠른 검색 도와주는 목차 같은 거임
 실시간 검색어, 추천 검색어, 검색어 오타교정 등에 사용됨
 
+DBMS(Database Management System): 데이터베이스 관리해주는 프로그램
+dbms 쓰면 1. 데이터 입출력 쉬워짐 2. db 접속 계정 발급 가능 3. 백업도 쉬움
+가벼운거 좋아하면 custom으로 옵션 설정하셈
+server: 우리가 아는 db 본체, workbench: 포인트 앤 클릭 만으로 db 조작 가능
+root 계정 패스워드 설정한거 기억해둬야 함(sandbox149883!)
+window service로 등록하기 무조건 체크해야함!
+mysql 사용하려면 workbench 실행하면 됨
+존재하는 서버 누르면 MySQL 서버 띄울 수 있음(서버 띄워놔야 db 조작 가능함)
+데이터 조작시 mysql workbench 이용해도 되고 터미널 이용해도 되고 DBeaver 이용해도 되고
+DBeaver: 깔끔하고 쉽고 다른 DBMS 연결도 쉬움
+DBeaver 실행해서 MySQL 연결해놓으면 됨
+
+DBeaver 같은 GUI 툴 쓰는게 편함
+Database: 폴더 & table: 파일
+table을 만들고 싶으면 table이 어케 생겨먹었는지 미리 작성해야 함
+== table에 어떤 컬럼(세로줄)이 들어갈 지 정해야 함
+컬럼의 Data type 잘 골라야함 => 컬럼에 저장할 데이터 종류(숫자: INT, 문자: varchar(100))
+Data type 정리
+문자 -> 젤 마니 사용하는 건 Varchar / 긴문자 저장시 LongText, MediumText / 정말 간단한 문자 저장시 char 사용하긴 하는데 용량 손해때 문에 잘 안 씀
+숫자 -> 보통은 INT or BigINT / 소수점까지 저장하고 싶으면 FLOAT, DOUBLE, DECIMAL(<- 요 친구는 소수점 오차가 거의 없음)
+날짜/시간 -> DATE, TIME, DATETIME(얘를 젤 자주 사용함), TIMESTAMP
+db 마다 전부 data type이 다르니까 알아서 잘 맞추셈
+
+SQL 언어? 데이터베이스 조작에 필요한 언어
+데이터 삽입, 출력, 삭제, 수정하는 거임 + 조건문, 반복문, 함수, 변수 등 프로그래밍 가능함
+SQL 에디터에 막 프로그래밍 하고 실행할 수 있음
+테이블 데이터 출력하는 법 -> select * from 테이블명
+테이블의 특정 컬럼만 출력하려면 select 컬럼명 from 테이블명
+(취향) SQL 문법들 대문자로 자동완성시키고 시프면 알아서 환경설정하셈
+데이터는 출력만 한다고 쓸모가 있지는 않음 가공해야지 => 정렬하셈
+출력한 데이터 정렬하는 법 => select 컬럼명 from 테이블명 order by 컬럼명 asc(오름차순)/desc(내림차순) - 기본적으로 오름차순임
+order by 카테고리명1 방법, 카테고리명2 방법 == 카테고리명1으로 먼저 정렬, 근데 같으면 카테고리명2으로 정렬
