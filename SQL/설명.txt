@@ -224,3 +224,50 @@ table명1 inner join table명2 on 조건식
 inner join 사용해서 테이블을 3개 이상 붙이려면 => table명1 inner join table명2 on 조건식 inner join table명3 on 조건식
 cross join 사용하면 모든 행의 조합을 출력할 수 있음
 cross join은 거의 사용 안 하긴 함(더미 데이터가 필요할 때 간혹 사용하기도 함)
+
+left (outer) join = inner join + 왼쪽 테이블 전부 출력해주세요
+right (outer) join = inner join + 오른쪽 테이블 전부 출력해주세요
+왜 쓰는 건데요?
+테이블 간 접점이 없는 행들을 출력하고 싶을 때 사용하면 됩니당 => null 부분을 확인할 수 있음
+컬럼명 is null => null 값인 값들 다 가져와줌
+full join = left join + right join (MySQL에서는 사용 불가) <- 지원을 안 하는 이유는 쓸모 없어서 그럼
+
+table에 데이터 집어넣는 SQL 문법 알아봅시다
+insert into table명 (존재하는 컬럼명) values (넣을 값)
+(참고) 모든 컬럼에 데이터 넣을 때는 컬럼명 다 기입하지 않고 생략해도 됨
+(참고) null 대신 빈 문자열, 0 이런거 넣어도 됨
+1. 1개의 값만 출력하는 서브쿼리 넣어도 상관 없음
+2. values() 대신 서브쿼리 넣어도 상관 없음
+3. 새 테이블 생성 & 복사할 수도 있음
+select * into 새로운테이블명 from 기존테이블명 (MySQL은 얘 사용 불가능)
+create (temporary) table 새로운테이블명 select * from 기존테이블명 (temporary 사용하면 임시로 사용가능함 => 재접속시 사라짐)
+테이블 복사는 언제함? 쿼리 결과 잠깐 저장하거나 테스트할 때 사용함
+삽입/수정/삭제는 위험한 작업임 => 많은 사람들한테 해당 권한을 주면 나중에 높은 확률로 망할 수 있음
+지금 로그인 중인 root 계정은 한명 내지 두명만 주고 나머지 사원들에게는 권한 축소시킨 아이디 발급해주셈
+MySQL workbench에서 Server-Users and Previleges-> 계정 하나 만들고 권한 주셈
+
+데이터 수정하려면 update 테이블명 set 수정할 컬럼 where 조건식(어떤 행을 수정할지)
+set 뒤에 여러 컬럼 수정 가능 + set 뒤에 있는 등호는 대입해주는 연산자임
+(주의사항) where 빼면 모든 행이 수정됨
+행을 삭제하려면 delete from 테이블명 where 조건식(삭제하고픈 행 찾는 식)
+(주의사항) 역시 where 빼면 모든 행이 삭제됨
+다른 테이블에서 foreign key로 사용중인 행은 삭제 불가능함
+join한 테이블에도 update, delete 사용 가능
+join한 테이블에서 삭제되는 부분을 delete 옆에 기입함으로써 설정할 수 있음
+
+union 쓰면 select 결과들 하나로 합칠 수 있음
+select 구문 사이에 union 써주면 끝임
+같은 테이블 출력결과도 union으로 합쳐줄 수 있음
+(주의사항) 컬럼갯수가 맞아야 union으로 합칠 수 있음
+union 사용하면 테이블 간의 중복데이터를 제거해줌 <=> 중복제거 안하고 싶으면 union all 사용하셈
+join: 테이블을 양옆으로 붙여줌 / union: 테이블을 위아래로 붙여줌
+
+table 말고 view라는 친구도 있음
+view: 가상의 테이블 (select로 찾은 행들을 테이블로 저장해서 쓰고 싶을 때 사용함)
+create view view명 as select 컬럼1, 컬럼2, ... from 테이블명
+view도 table처럼 select insert update delete 전부 가능함 (MySQL 기준)
+1. 복잡한 join 형태의 table을 view로 저장해서 재사용하기 쉬움
+2. view는 실제 테이블이 아니기 때문에 일반 table보다 하드용량 차지가 적음
+3. table의 컬럼 변경을 view를 통해 먼저 시도해볼 수 있음
+4. view 안에서 또다른 view를 select를 통해 만들어 낼 수 있음
+실은 view가 실제로 테이블이 생성되는 게 아니라 select 문법을 테이블 형태로 눈속임해주는 거임
