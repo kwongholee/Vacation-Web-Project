@@ -271,3 +271,59 @@ view도 table처럼 select insert update delete 전부 가능함 (MySQL 기준)
 3. table의 컬럼 변경을 view를 통해 먼저 시도해볼 수 있음
 4. view 안에서 또다른 view를 select를 통해 만들어 낼 수 있음
 실은 view가 실제로 테이블이 생성되는 게 아니라 select 문법을 테이블 형태로 눈속임해주는 거임
+
+매우 많이 쓰는 SQL 쿼리문이 있다면 store procedure로 만들어두면 됨
+흔히 프로그래밍에서 사용하는 함수 문법이랑 같다고 보면 됨
+SQL 코드로 stored procedure 만드는 법
+Delimiter $$
+$$
+create procedure db명.프로시저명()
+begin
+  코드~~;
+end
+$$
+Delimiter ;
+실행은 call db명.프로시저명()
+Delimiter는 코드를 마치는 기호임(;)
+Delimiter를 $로 바꿔서 procedure를 생성하는 코드를 따로 보는 거임
+procedure 지울려면 drop procedure is exists db명.프로시저명()
+stored procedure는 db 접속하는 사람들끼리 공유 가능
+stored procedure 쓰면 성능이 좋아질 수도 있음
+SQL 코드 실행시 일어나는 일 (문법 틀린거 없나 -> 조작 권한은 있나? -> 어떻게 실행하는게 좋을까? (execution plan 생성 후 가장 베스트 인걸 1개 가져옴) -> 또 쓸 수 있으니 메모리에 저장(cache) -> 컴퓨터가 알아듣는 코드로 컴파일)
+만약 execution plan에 cache가 존재하면 곧바로 캐싱된 실행계획을 불러옴
+
+같은 문자, 숫자 자료가 너무 자주 출현한다 => 변수에 저장하자
+set @변수명 = 값;
+@변수명을 통해 바로 출력 가능함
+procedure와 비슷하지 않음? => procedure는 긴 SQL 쿼리문을 한 단어로 축약함
+변수에는 자료 하나만 한 단어로 축약 가능
+= 대신 := 넣어도 똑같음(set 안에서는 =이 := 역할 해줌)
+값을 하나만 뱉어내는 서브쿼리문도 변수에 저장 가능
+변수에 들어있는 데이터 수정은 똑같이 재선언해야 함
+기존 값에 추가하는 방식 역시 재선언과 동일함
+사실 procedure 안에서 declare 키워드 써도 변수 생성이 가능함
+begin 안에 declare 변수명 데이터타입 default 넣을값; 넣으면 됨
+procedure 안에서 데이터 수정은 set 데이터명 = 바꾸고싶은값
+차이점은 뭐임? 
+@변수(=user variable) : 전역 변수(모든 곳에서 사용가능) + db 접속 종료시 사라짐  
+declare 변수 : 지역 변수(=변수 만든 procedure 안에서만 사용 가능) + procedure 실행종료시 사라짐
+
+procedure에서 파라미터 사용 가능
+(파라미터명 datatype) => 파라미터 사용가능함
+파라미터를 여러 개 뚫을 수도 있음
+procedure 안으로 자료를 넣을 수도(in parameter), 안에 있던 자료를 밖으로 뺄 수도 있음(out parameter)
+set 파라미터명 = 값; => 소괄호에 등록 (out 파라미터명 datatype) => procedure 사용시 procedure명(@작명) 해놓고 @작명 사용하면 뺄 수 있음
+사실 데이터를 밖으로 뺄 일이 있으면 function을 더 마니 사용하긴 함
+다른 SQL DB들은 분법이 좀 다름
+
+날짜나 시간은 어떻게 다룸?
+datetime(6) 숫자 기입하면 소수점 최대 6자리까지 보관 가능
+SQL 문법은 뭘로 쓰는 거임?
+insert into 테이블명 values('xxxx-xx-xx xx:xx:xx') => 문자처럼 작성하면 됨
+필터링도 그냥 문자 취급하듯이 하면 됨
+시간 비교할 때는 between보단 등호 비교가 좋음
+ex> 2022-03-09에 발행된 글 찾기 => where 발행일 >= '2022-03-09 00:00:00' and 발행일 < '2022-03-10 00:00:00'
+현재 날짜는 어떻게 가져옴? now() 쓰면 현재 datetime 가져다줌
+now 파라미터에 숫자 넣으면 해당 자리수까지 소수점 보여줌
+날짜, 시간을 다른 형식으로 포맷팅 가능함 => date_format(날짜시간, '바꿀형식')
+'바꿀형식'에는 진짜 아무거나 넣어도 됨. 근데 저 안에 (%Y=현재년도, %M=현재월, %d=현재날짜)를 출력해줌
