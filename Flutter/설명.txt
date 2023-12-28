@@ -37,3 +37,44 @@ display: flex랑 겁나 유사함
 Row의 mainAxis - 가로축, crossAxis - 세로축
 Column은 반대임
 ctrl + space바를 통해 자동 완성 검색하면서 쓰셈
+
+BottomAppBar 높이 조절도 할 수 있음
+height를 줄 수도 있지만 그런 옵션은 없음
+그러면 어케 함? Container 안에 Row를 넣어서 하면 될 듯
+Container라는 위젯은 무겁고 SizedBox 위젯이 좀 더 가벼움
+width, height, child만 필요한 박스면 SizedBox 사용하는게 성능상으로 더 좋음
+박스 디자인하는 방법 알아봅시다
+박스에 여백을 주고 싶으면 margin: EdgeInsets.all(값), padding: EdgeInsets.all(값)
+개별로 여백을 주고 싶으면 EdgeInsets.fromLTRB(left, top, right, back)에 대한 값을 넣어주면 됨
+나머지 찌끄레기 박스 스타일들은 decoration 안에 넣으면 됨
+대신 decoration: BoxDecoration 사용하면 이 안에서 color 적용시켜야 함!
+박스 위치는 어케 정렬함
+정중앙 정렬은 Center() 안에 담으면 됨
+다른 곳에 정렬하고 싶으면 Algin으로 감싸셈
+밑에 alignment: Alignment.~~ 넣으면 해당 방향으로 정렬
+박스 width를 가로로 꽉차게 하고 싶다면 width: double.infinity (부모 박스를 넘지 않는 선에서)
+
+Typography가 뭐임
+글자에 스타일 주는 거임
+Text(value, style: TextStyle(여기 안에 넣으면 됨))
+색상, 폰트 종류, 사이즈 이런 거 다 가능함
+색주는 방법은 1. Colors.컬러명 or 2. Color(0xffaaaaaa) -> hex 방식임, or 3, Color.fromRGBO(Red, Green, Blue, Opacity)
+2번 방법의 장점은 hex 방식으로 넣기 때문에 다양한 색 넣을 수 있음
+나중에 필요할 때 검색해서 찾아쓰셈
+fontWeight: FontWeight.w~
+아이콘 디자인 하는 방법은 (Icons.~, color: ~, size: ~)
+버튼 위젯도 있고 이거 디자인할 수 있음
+TextButton, IconButton, ElevateButton 셋 중에 하나 택하셈
+버튼 위젯은 child: ~, onPressed: ~ 요 두개의 파라미터는 무조건 필수임
+버튼 디자인은 style: ~~
+IconButton은 Icon을 넣어야 함
+AppBar도 디자인 할 수 있음 그전에 안에 들어가는 파라미터 해석해볼 거임
+title: 왼쪽 제목
+leading: 왼쪽에 넣을 아이콘
+actions: [우측 아이콘 리스트]
+레이아웃 혼자서도 잘짜는 법이 뭐임?
+1. 예시디자인이 필요함 그거 준비하거나 없으면 다른 앱 베끼셈
+2. 예시화면에 네모 그려보셈 (빈 공간 없게 네모 그려보셈)
+3. 바깥 네모부터 하나하나 위젯으로 만들어보셈
+가로로 배치해야 하면 row, 세로로 배치해야하면 column임
+4. 마무리 디자인하면 됨
