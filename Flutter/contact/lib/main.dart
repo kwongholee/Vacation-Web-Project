@@ -1,41 +1,42 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MaterialApp(
+      home: MyApp()
+    )
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var name = ["이광호", "홍길동", "장영주"];
+  var like = [0,0,0];
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(title: Text('앱임'),),
-          body: Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(width: 100, height: 100, color: Colors.black,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('캐논 DSLR 100D (단렌즈, 충전기 16기가SD 포함)', style:
-                      TextStyle(fontWeight: FontWeight.w900),),
-                    Text('성동구 행당동 끌올 10분전'),
-                    Text('210,000원'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                      Icon(Icons.favorite),
-                      Text('4')
-                    ],)
-                  ],
-                )
-              ],
-            )
+    return Scaffold(
+          floatingActionButton: FloatingActionButton(onPressed: (){
+            showDialog(context: context, builder: (context) {
+              return Dialog(child: Text('내용'));
+            });
+          },),
+          appBar: AppBar(),
+          body: ListView.builder(
+            itemCount: 3,
+            itemBuilder: (c, i){
+              return ListTile(
+                leading: Icon(Icons.person),
+                title: Text(name[i])
+              );
+            },
           ),
-        )
-    );
+          bottomNavigationBar: BottomAppBar(),
+        );
   }
 }
