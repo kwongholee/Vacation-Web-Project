@@ -209,3 +209,67 @@ onChanged(a: 유저가 입력한 데이터) {실행할 코드}
 TextField가 많을 경우는 onChanged가 좀 더 편함
 [] - List, {} - Map
 둘 다 변수 여러개 저장할 때 편함
+
+에뮬레이터 설정 방법 알려드림 (윈도우용 / 맥은 알아서 안드로이드 스튜디오 깔면 자동으로 에뮬레이터 깔림 아니면 말고 ㅎ)
+1. PC 재부팅 시키면서 BIOS 셋팅 들어가야함 (부팅하자마자 F2키나 Del키 연타하면 들어갈 수 있음)
+AMD CPU -> Virtual 어쩌구(or SVM)를 Enabled로 바꾸기
+Intel CPU -> Virtual 어쩌구를 Enabled로 바꾸기
+바꿨으면 저장하고 재시작하기
+2. 시작-검색 창에서 Windows 기능 켜기 검색해서 실행
+Hyper-V, 하이퍼바이저 플랫폼 이런거 다 체크해제해야 함 안보이면 패스
+3. Android studio 켜서 file-settings-appearance&behavior-system settings-andriodSDK 우측 SDK Tools 탭
+여러 체크 박스 나오는데
+AMD CPU면 Hypervisor Driver for AMD 어쩌구 체크
+Intel CPU면 Intel x86 Emulator 어쩌구 체크
+Apply 버튼 누르기 간단한 프로그램 설치 진행될거임 
+(만약 안되면 1,2번이 잘못된거니까 다시 확인 고고)
+-안드로이드 가상 기기 만들기 (맥북에서도 안드로이드 버전 원하면 이거 따라해야함)
+1. 상단메뉴 tools - avd manager 눌러서 + create virtual device 누르기
+2. 기기 고르라고 나오면 맘에드는거 고르기
+3. 시스템 이미지 고르는 단계인데
+지금은 최신버전 다운 받으시고 나중에 앱 발행할때 옛날버전까지 다 실험해보셈
+
+사용자의 연락처를 쓸려면 유저의 허락을 받아야 함
+사진, 위치 같은 것들 전부 다 권한 받고 시작하잖음? 그거 하는 거임
+대신 permission_handler라는 외부 패키지 다운 받아야함
+pubspec.yaml 파일에서 permission_handler: ^8.3.0 적어주셈
+그리고 main.dart 상단에 import 문법으로 불러와주면 설치 완료된거임
+Android 기기 셋팅할려면
+1. android/gradle.properties 확인하고
+2. android/app/build.gradle 확인하고
+3. android/app/src/main/AndroidManifest.xml 파일 들어가서 셋팅하기
+IOS 셋팅은 나중에 찾아보셈
+이런 권한 받는 거는 나중에 도큐먼트 자세하게 읽어봅시당
+initState() 안에 적은 코드는 위젯 로드될 때 한 번 실행됨 (useEffect(() => {}, []) 이거랑 똑같음)
+요즘은 앱 맨 처음 실행할 때 팝업을 띄우는 게 아니라 
+openAppSettings()로 앱 설정화면을 켜주는 게 좋을 듯
+그래서 진짜 그 기능이 필요한 시점에 권한 설정을 받는게 좋을 듯
+
+실제 연락처를 꺼내는 패키지는 또 따로 있음 (매우 귀찮군...)
+pubspec.yaml 파일 들어가서 contacts_service: ^0.6.3 다운 받으셈
+main.dart에서는 import문 필요
+Dart문은 타입을 매우매우매우 엄격하게 보기 때문에 잘 지켜야 함 (Typescript랑 비슷함)
+Union 사용해서 타입을 합쳐줄 수도 있지만 더 직관적인 방법은
+빈 리스트로 둬서 dyanmic 타입으로 정해주면 됨 dyanmic이 되면 어떤 타입이 들어오든 상관 안 씀
+혹은 변수 만들 때부터 미리 타입을 강제 지정해줘도 됨
+
+이번에는 빌드 해볼거임
+빌드하면 apk 혹은 aab 파일 확장자로 바뀔거임
+대신 빌드하기 전에 테스트해봐야 함
+새 폰에서 테스트하면 무조건 정상인데 왜 유저폰에서 하면 에러가 남?
+유저들 폰은 새 폰처럼 모든 기능이 완벽하게 정상으로 작동하지 않기 때문에
+그래서 예외처리를 잘해야 함
+1. 타입 지정 잘했는지
+2. null check 했는지 이런거 잘 확인해야함
+변수나 함수에 타입 지정 잘 했는지 꼭 확인하기
+null check는 어떻게 함? if문 잘 사용하면 될 듯
+혹은 삼항연산자나 ?? 잘 사용하면 될 듯
+빌드 방법은 나중에 다시 도큐먼트 읽어보셈 ㅎ
+
+TextField 꾸미는 법
+TextField(
+  decoration: InputDecoration(
+    ~~~여기서꾸미면됨~~~
+  )
+)
+어우 다 적기 귀찮네 그냥 필요할 때 구글에서 찾아보세요 ㅎㅎ

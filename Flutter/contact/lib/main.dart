@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 void main() {
   runApp( MaterialApp(
@@ -15,14 +17,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var name = ["이광호", "홍길동", "김정욱"];
-  var like = [0,0,0];
-  var total = 3;
+  var name = [];
+
   addOne(n) {
     setState(() {
-      total++;
       name.add(n);
     });
+  }
+
+  getPermission() async {
+    var status = await Permission.contacts.status;
+    if(status.isGranted) {
+      var contacts = await ContactsService.getContacts();
+      setState(() {
+        name = contacts;
+      });
+    }
+    else if(status.isDenied) {
+      print("rejected");
+      Permission.contacts.request();
+      openAppSettings();
+    }
   }
 
   @override
@@ -33,13 +48,15 @@ class _MyAppState extends State<MyApp> {
               return DialogUI(addOne: addOne);
             });
           },),
-          appBar: AppBar(title: Text(total.toString()),),
+          appBar: AppBar(title: Text(name.length.toString()), actions: [
+            IconButton(onPressed: (){getPermission();}, icon: Icon(Icons.contacts))
+          ],),
           body: ListView.builder(
-            itemCount: total,
+            itemCount: name.length,
             itemBuilder: (c, i){
               return ListTile(
                 leading: Icon(Icons.person),
-                title: Text(name[i])
+                title: Text(name[i].givenName)
               );
             },
           ),
@@ -63,8 +80,10 @@ class DialogUI extends StatelessWidget {
         child: Column(
           children: [
             TextField(onChanged: (n) {inputData = n;},),
-            TextButton(onPressed: (){
-              addOne(inputData);
+            TextButton(onPressed: () async {
+              var newPerson = Contact();
+              newPerson.givenName = inputData;
+              await ContactsService.addContact(newPerson);
               Navigator.pop(context);
             }, child: Text("완료")),
             TextButton(onPressed: (){Navigator.pop(context);}, child: Text("취소"))
