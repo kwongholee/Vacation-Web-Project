@@ -6,12 +6,36 @@ import 'package:flutter/rendering.dart';
 import 'upload.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'profile.dart';
+import 'package:provider/provider.dart';
+import 'notification.dart';
 
 void main() {
-  runApp(MaterialApp(
-    theme: theme,
-    home: MyApp(),
-  ));
+  runApp(
+    ChangeNotifierProvider(create: (c) => Store1(), child: MaterialApp(
+      theme: theme,
+      home: MyApp(),
+    ),)
+  );
+}
+
+class Store1 extends ChangeNotifier {
+  var follower = 0;
+  var profileImage = [];
+  getImageData() async {
+    var result = await http.get(Uri.parse('https://codingapple1.github.io/app/profile.json'));
+    profileImage = jsonDecode(result.body);
+    notifyListeners();
+  }
+  changeFollowerNum(b) {
+    if(b) {
+      follower++;
+    } else {
+      follower--;
+    }
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -26,6 +50,12 @@ class _MyAppState extends State<MyApp> {
   var post = [];
   var direction = "up";
   var userImage;
+
+  saveData() async {
+    var storage = await SharedPreferences.getInstance();
+    storage.setString('name', 'data');
+    var result = storage.get('name');
+  }
 
   getPost(l) {
     setState(() {
@@ -50,11 +80,19 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getData();
+    saveData();
+    initNotification(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Text('alarm'),
+        onPressed: () {
+          showNotification();
+        },
+      ),
       appBar: AppBar(
         title: Text("Instagram"),
         actions: [
@@ -66,10 +104,10 @@ class _MyAppState extends State<MyApp> {
                     setState(() {
                       userImage = File(image.path);
                     });
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => Upload(userImage: userImage, getPost: getPost, post: post))
+                    );
                   }
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => Upload(userImage: userImage, getPost: getPost, post: post))
-                  );
                 },
                 icon: Icon(Icons.add_box_outlined),
                 iconSize: 30,
@@ -141,8 +179,19 @@ class _HomeState extends State<Home> {
               widget.r[i]['image'] is File
               ? Image.file(widget.r[i]['image'])
               : Image.network(widget.r[i]['image']),
+              GestureDetector(
+                child: Text(widget.r[i]['user']),
+                onTap: () {
+                  Navigator.push(context,
+                    PageRouteBuilder(
+                        pageBuilder: (c,a1,a2) => Profile(),
+                        transitionsBuilder: (c,a1,a2,child) => 
+                            FadeTransition(opacity: a1, child: child),
+                    )
+                  );
+                },
+              ),
               Text('좋아요 ${widget.r[i]['likes']}'),
-              Text(widget.r[i]['user']),
               Text(widget.r[i]['content'])
             ],
           );
