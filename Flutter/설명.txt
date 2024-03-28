@@ -501,3 +501,80 @@ onSelectNotification: (payload) {
 알림에 유저는 볼 수 없는 부가정보도 넣어놓을 수 있음
 그러면 위의 파라미터인 payload에서 꺼내서 쓸 수 있음
 근데 잘 쓰지 말라고 flutter에서 권고함
+
+이번에는 알림을 주기적으로 띄우거나 원하는 시간에 띄워주는거 해볼거임
+timezone이라는 notification 내부 패키지 사용하면 됨
+일단 import부터 하셈
+3번째 함수로 복붙하셈
+이거 실행하면 원하는 시간에 알림을 띄울 수 있음
+저번이랑 다른게 뭐임?
+저번에는 show로 띄웠는데 이번에는 zonedSchedule로 띄워야 함
+그 안에 tz.TZDateTime.now(tz.local).add(Duration(seconds: ~)) 넣으면 됨
+이러면 ~초 뒤에 알림이 전송됨
+minutes, hours, days 등으로 설정 가능함
+만약 주기적으로 알람을 띄우고 싶은 거라면 periodicallyShow로 바꾸셈
+그리고 안에 RepeatInterval.~로 주기를 설정할 수 있음
+단 내가 원하는 시간에 주기적으로 띄울 수는 없음
+내가 원하는 시간에 주기적으로 알림을 띄우고 싶으면 zonedSchedule로 돌아가셈
+그리고 밑에 matchDateTimeComponents: DateTimeComponents.time 추가해주면 
+매일 이 시간에 알림을 줄 거 같음
+이외에도 설정하는 건 찾아보는게 좋을 듯
+4번째 함수는 오늘날짜의 시간을 원하는대로 정할 수 있음
+그거 사용하면 매우 유용할 거 같음 ㅎㅎ
+지금까지는 로컬 알림임
+나는 서버에서 보내는 push 알림을 띄우고 싶다 그러면 
+firebase cloud messaging서비스로 서버가 알림을 보내면 
+걔가 그걸 잘 분석해서 google play라는 앱으로 보내서 거기서 push 알림을 보내줄거임
+이런것도 다 패키지로 나와있기 때문에 찾아보세욤
+
+서버 대신 만들어주는 firebase 서비스도 한번 찍먹해보겠음
+일단 패키지 설치부터 
+android/app/build.gradle에 applicationID가 있는데
+보통은 com.회사명.프로젝트명 으로 짓는데 바꾸고 싶다?
+그러면 터미널 켜서 'dart pub global activate rename' 눌러서 엔터키 치고
+'dart pub global run rename --bundleId com.회사명.프로젝트명' 입력해주면 바뀜
+근데 안 바뀌면 터미널 껐다가 켜서 다시 입력해주면 바뀔거임
+플러터에도 firebase 셋팅이 필요함
+터미널 켜서 'dart pub global activate flutterfire_cli' 입력해주면 패키지 하나 설치됨
+만약 환경변수 등록하라고 하면 하면 됨
+환경변수 등록한 뒤에는 에디터 껐다 다시 켜고
+이후 터미널에 'flutterfire configure' 입력하면 됨
+그러고 나서 main.dart에 import문이랑 main 함수 안에 설정해주고
+minSdkVersion 높이기 위에 android/app/build.gradle에서
+minSdkVersion을 찾아서 21로 높여주셈
+맥북 있으면 ios/Profile들어가서 ios 버전을 10.0이상으로 높이면 됨
+미리보기 띄웠을 때 문제 생기면 다시하면 됨 ㅎ
+아이폰은 firebase 설치 후 켜는데만 10분 걸림
+
+매우 유용한 패키지들 좀 알려주겠음
+- photobview
+pinch 제스쳐라고 하는 사진 줌인 제스쳐 사용할 수 있음
+기본적인 갤러리, 캐러셀 UI도 쉽게 사용 가능
+- simple_animations
+위젯 하나로 애니메이션 구현 가능
+- flutter_launcher_icons
+설치했을 때 뜨는 앱 런쳐 아이콘을 바꾸고 싶으면
+원래는 사이즈별로 다 준비해야 하는데
+패키지 설치하고 터미널 명령어 넣으면 끝임
+- get
+플러터 문법이 매우 쉬워짐
+꼭 나중에 한 번 해보시길 추천함
+- shimmer
+shimmer 이펙트 넣을 수 있음
+- flutter_staggered_grid_view
+사이즈가 다양한 GridView 만들 수 있음
+SliverGrid로는 못 만듦
+- lottie
+adobe after effects 애니메이션을 json으로 보내서 그걸 재생시켜줌
+- pull_to_refresh
+위로 아래로 당기면 코드실행시켜주는 위젯 제공
+- fl_chart
+이쁜 차트 제공해줌
+- flutter_background_geolocation
+폰이 대기상태일 때도 백그라운드에서 계속 위치추적해줌
+단점은 유료임
+- font_awesome_flutter
+font awesome 5버전 아이콘 사용 가능
+- flutter_secure_storage
+shared_preferences랑 같은데 암호화해서 저장해줌
+민감한 정보 빨리 가져와야 할 거 있을때 유용할듯

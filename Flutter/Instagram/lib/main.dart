@@ -11,7 +11,7 @@ import 'profile.dart';
 import 'package:provider/provider.dart';
 import 'notification.dart';
 
-void main() {
+void main() async {
   runApp(
     ChangeNotifierProvider(create: (c) => Store1(), child: MaterialApp(
       theme: theme,
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
       floatingActionButton: FloatingActionButton(
         child: Text('alarm'),
         onPressed: () {
-          showNotification();
+          showNotification2();
         },
       ),
       appBar: AppBar(

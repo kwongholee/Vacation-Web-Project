@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "962805598055",
+    "project_id": "fluttergram-5040c",
+    "storage_bucket": "fluttergram-5040c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962805598055:android:375cde1104e818fbfed1c2",
+        "android_client_info": {
+          "package_name": "com.example.instagram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDohCP4X6UdTnLD1M1qUdwKINoQjx4Wxrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
