@@ -1,0 +1,113 @@
+Intellij Community 버전으로 Spring Boot 시작해볼거임
+Ultimate도 있긴 하지만 그건 부자 되면 월 2만원 내고 하면 될 듯?
+Ultimate 버전은 직접 에디터 안에서 Spring boot 프로젝트를 생성할 수 있지만 무료 버전은 그게 안되기 때문에 
+구글 검색창에 Spring intializr 검색해서 들어가기
+들어가서 gradle, java 선택하고
+spring boot 버전은 괄호 없는걸로 선택하는게 안정적이고
+프로젝트 이름도 설정해주고
+java 버전은 최신 버전만 아니면 됨
+기본 라이브러리는 spring web, spring boot dev tools 두 개 정도 기본적으로 설치해주면 좋을 듯
+이거 다운받고 압축 풀면 프로젝트로 사용할 수 있음
+코드 짜기 전에 에디터 설정이 좀 필요함
+1. file - project structure - SDK 버전을 프로젝트 java 버전보다 높은 버전으로 선택해야 함
+2. file - setting - gradle 검색 - build and run using 이랑 run tests using을 Intellij IDEA로 바꾸기
+3. setting - java compiler 검색 - input창에 '-parameters' 입력해주기
+4. plugin 메뉴에서는 셋팅같은거 해줄 수 있음
+src 폴더가 파일 짜는 곳
+main/java/../안에 있는 .java파일이 spring boot를 이용해서 웹서버 띄우는 곳
+resources는 html css 같은 static 파일 같은 거 넣는 곳
+apllication.properties는 설정하는 곳
+gradle은 뭐임? 컴퓨터 친화적인 코드로 바꿔주고, 라이브러리 관리해주고, 테스트 돌려주는거
+자동으로 해주는 파일임
+build.gradle은 많이 보게 될 거임
+
+java 문법 정도는 좀 보고 가야지
+코드는 main 함수 안에 적어야 함
+java 프로젝트를 실행하면 main 함수 안이 제일 먼저 실행되기 때문임
+변수는 어떻게 선언하고 사용함?
+변수명Type 변수명 = 값;
+String, int, long, float, double, boolean 등등임
+타입을 적기 귀찮다면 java 10버전 이상부터는 var로 선언가능함
+그렇지만 타입을 명시적으로 적어주는게 제일 좋음
+(참고) Kotlin은 var 많이 사용하긴 함
+final을 type명 앞에 붙이면 변경 불가능함
+조건문은 어떻게 사용함?
+if(조건) {} else {}
+반복문은?
+for(int i = ~; i ~~ ; i~~) {}
+함수는 어떻게 만듬?
+보통은 class 안에 함수를 만듦
+ReturnType 함수명() {~~}
+
+class는 뭐임
+변수랑 함수의 보관함이라고 생각하면 편할 듯
+class 클래스명 {
+  변수
+  함수
+  ~
+}
+class 안에 있는 변수나 함수를 쓰고 싶다면 class를 복사해서 써야함
+var 변수 = new 클래스명();
+변수는 Object 형태로 생겼음
+사용법은 object랑 같음
+(참고) sout이라고 적으면 System.out.println() 나올거임
+var이 아니라 클래스명 으로 적어도 변수 선언 가능함
+근데 이건 어디에다 쓸거임? 왜 class를 만들어서 사용하는 거임?
+1. java를 선택한 이상 클래스를 강요함
+2. 관련 있는 변수 혹은 함수를 한 곳에 정리할 수 있음
+3. 중요한 변수, 함수의 원본을 지킬 수 있음
+(참고1) new로 복사 안되는 변수, 함수도 제작 가능하고, 복사 안해도 쓸 수 있는 변수 함수 제작 가능함
+(참고2) class 안에 있는 변수는 field/attribute, 함수는 method로 불림
+constructor는 뭐임?
+class를 찍어내는 기계라고 생각하면 될 듯
+class 클래스명 {
+  클래스명() { // 얘는 new 클래스명() 할 때마다 실행되는 친구임
+    this.성질명 = ~~;
+  }
+}
+
+지금부터는 server 만들어볼거임
+일단 Web Server부터 만들어볼거임
+class 위에 @Controller 사용하면 SpringBoot 문법 사용됨
+그러면 서버 기능을 하는 class 만들어짐
+@GetMapping("/")
+@ResponseBody
+String(보통은 String으로 씀) 함수명() {
+    return 유저에게보낼데이터;
+}
+/로 접속하면 return 옆의 데이터가 뜰 듯
+다른 routes는 어케함?
+위에처럼 똑같이 하면 될 듯?
+근데 main 함수 안에 코드 짜야한다고 했는데 왜 거기 안 짜도 실행이 되는 거임??
+Spring 프레임워크 때문임
+@Controller라고 붙이면 Spring이 알아서 실행해주는 거라고 생각하면 됨
+문자 말고 html을 보내려면 그냥 return 옆에 html을 보내면 됨
+근데 보통은 html 파일을 만들어두고 그걸 전송해줄 수도 있음
+html 파일은 보통 static 폴더 안에 만들어둠
+html 파일을 보내줄려면 경로 넣어주면 됨
+(참고) static 폴더가 기본 경로이므로 그거 생각해서 보내면 됨
+html 파일을 보낼 때는 @ResponseBody 빼야 함
+얘는 문자 그대로 보내달라는 거고, 쟤를 빼면 파일을 보내주세요 라는 뜻인거임
+
+내가 만든 클래스를 다른 파일에서도 쓰고 싶으면
+package 경로; 적으면 됨
+package com.~.~; 안 쓰면 다른 파일에서 저거 못 씀
+public 없으면 같은 폴더 안에서만 사용 가능함
+publicd 붙이면 다른 폴더에서도 사용 가능함
+
+html에 서버/데이터베이스의 데이터를 집어넣을 수 있음
+템플릿 엔진 사용하면 되는 거임
+Thymeleaf 사용해볼거임
+build.gradle 열어서 
+dependencies에 
+implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+적어주셈
+그리고 load gradle changes 버튼 눌러주면 됨
+라이브러리 설치하면 서버 껐다 켜야함
+thymeleaf 어떻게 사용함?
+templates 폴더에 만들어줘야함
+html에 서버데이터를 넣으려면
+1. 파라미터에 Model model 넣고
+2. model.addAttribute("전달할데이터이름", "값") 넣어주면 됨
+보낸 데이터를 html에서 어떻게 사용함?
+태그 안에 th:text="${전달할데이터이름}"
