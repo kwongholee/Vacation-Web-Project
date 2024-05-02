@@ -111,3 +111,120 @@ html에 서버데이터를 넣으려면
 2. model.addAttribute("전달할데이터이름", "값") 넣어주면 됨
 보낸 데이터를 html에서 어떻게 사용함?
 태그 안에 th:text="${전달할데이터이름}"
+
+MySQL 데이터베이스 호스팅 사용해볼거임
+Azure 사용해서 호스팅 받아볼거임
+database browser라는 플러그인 설치해서 사용하는중
+
+database를 새로 만들고 싶으면 console에서 
+create database 데이터베이스명;
+그냥 SQL문 짜면 됨
+혹은 DBeaver 같은 걸로 새로 하나 만드셈
+보통 table은 서버에서 SQL문으로 코드를 짜서 만드는게 일상임
+이거 할려면 라이브러리 필요함
+runtimeOnly 'com.mysql:mysql-connector-j'
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+요거 두개 build.gradle dependencies에 넣고 load gradle changes누르면 됨
+위에거는 MySQL 접속 도와주는 라이브러리
+밑에거는 ORM 라이브러리임
+ORM: 자바 코드로 SQL문을 대신 짜줌 + 뽑은 데이터 타입 체크도 편함 등등
+but 데이터 입출력 설치가 느릴 수도 있음
+JPA: 자바의 ORM의 표준 문법
+Hibernate: JPA 쓰기 좋게 구현한 라이브러리 (지금 설치하는 거임)
+설치하면 셋팅도 필요함
+application.properties에 설정들 넣어주셈
+
+테이블 만들고 싶으면
+JPA에선 @Entity 클래스 하나 만들면 됨
+그러면 클래스명으로 Entity가 하나 생김
+테이블에 어떤 컬럼이 들어갈지 정의해줘야 함
+컬럼을 만드는 법은 그냥 변수를 하나 만들면 됨
+컬럼용 변수에서는 int 말고 Integer로 쓰라고 강요하니 이거 써야할 듯
+Integer는 20억까지 저장가능함
+이거 넘는 숫자는 long 타입 쓰면 됨 얘는 900경까지 가능함
+대신 long은 숫자 쓰는 법이 따로 있음
+키 컬럼에는 @Id를 위에 적어줘야 함
+auto increment기능을 원하면 @GeneratedValue(strategy = GenerationType.IDENTITY)
+(참고) @Entity 변수들에 public을 붙이면 다른 모든 클래스에서 문제 없이 사용 가능함
+안 붙이면 같은 폴더 내의 패키지 내에서만 사용가능함
+근데 public을 남발하면 안 좋지 않을까?
+그런 친구들은 private로 설정해주는게 좋지만 그 변수들은 getter, setter 함수로만 변경 가능함
+(참고2) @Column()으로 컬럼에 제약 설정 가능함
+nullable (컬럼 비면 입력 막는 설정)
+unqiue (컬럼 안의 데이터들은 유니크해야하는가에 대한 설정)
+columnDefinition (Varchar(255)를 뚫는 Text 타입으로 지정할 수 있음)
+length (Varchar의 길이 설정)
+(참고3) 그런데 컬럼 설정 변경사항은 DB에 반영이 자동으로 안 될 수도 있음
+그럴 때는 테이블을 삭제하고 다시 만드는게 좋음
+결론: 처음 만들 때 잘 만드는 게 좋음
+
+Lombok 라이브러리 설치해봅시다 (코드 자동생성 라이브러리임)
+compileOnly 'org.projectlombok:lombok'
+annotationProcessor 'org.projectlombok:lombok'
+플러그인도 설치해주고
+annotationProcess라는 항목에서 체크 하나 해주면 됨
+jpa로 데이터를 입출력하려면 3스텝 필요함
+1. repository 만들고
+같은 폴더 하나 만드셈 대신 이번에는 interface로 만들기
+클래스명 옆에
+extends JpaRepository<엔티티명, id컬럼타입> 사용해야 함
+interace 만들면 같은 이름으로 클래스도 만들어줌
+대신 그 안에는 db 입출력 함수들이 막 들어있는 구조임
+2. 원하는 클래스에 repository 등록하고
+db 입출력을 원하는 곳으로 가서 
+클래스명 위에 @RequiredArgsConstructor 써주고
+private final 인터페이스명 변수명; 으로 등록해주셈
+3. repository.입출력문법() 사용하기
+그냥 사용하면 됨 이건
+Lombok 없이도 등록할 수 있긴 한데 그건 나중에 찾아보셈
+.findAll() -> 다 찾아오기
+.save() -> 데이터 저장하기
+findAll로 가져온 데이터들은 ArrayList 형태로 담겨있음
+하나만 출력할려면 ArrayList데이터명.get(index번호)
+ArrayList랑 LinkedList 등등 여러개 있는데
+이 모든 걸 묶는 친구는 List임
+
+thymeleaf에서 th:each 사용하면 반복문 사용 가능함
+th:each="작명: ${서버에서보낸데이터명}"
+작명에는 서버에서 보낸 데이터가 하나씩 차례대로 들어감
+
+자바로 코드 짜다보면 불편한 점 중 하나가
+object만 출력하면 아무것도 안 나온다는 거임
+object의 변수들을 한번에 출력할려면 함수를 하나 만들어주셈
+그걸 return으로 뱉어달라고 해야 하는 거임
+근데 이걸 모든 사람들이 다 이렇게 사용하니까 lombok이 이걸 만들어줌
+object 위에 @ToString이라고 적어주면 되는 거임
+그러면 sout으로 봤을 때 모든 object 내부가 한눈에 다 보이게 됨
+
+코드 관리를 도와주는 문법들 좀 알아봅시당
+이건 java랑 관련된 것들임
+Access Modifier라고 불리는 애들임
+변수, 클래스, 함수 등 여러 곳에 붙여질 수 있음
+public을 붙이면 모든 곳에서 사용 가능함
+아무것도 안 붙이면 package-private으로 자동 확정됨
+이 친구들은 같은 폴더의 클래스에서만 사용 가능함
+private을 붙이면 다른 클래스에서 사용 불가능함
+protected라는 걸 붙이면 그냥 아무것도 안 붙인 package-private랑 같음
+단 예외사항이 있는데 상속한 클래스는 맘대로 사용 가능함
+상속은 객프에서 배운대로 extends를 통해 사용함
+잘 사용하지는 않음 좀 복잡하기 때문에
+요즘은 상속보단 composition을 더 많이 사용하는 추세임
+static을 붙이면 클래스.변수 이렇게 직접 사용 가능함
+대신 이렇게 사용하면 클래스를 사용하는 의미가 많이 없긴 함
+클래스는 복사본으로 사용하는 게 의미있는 거임
+그래서 얘네는 utility용 함수 만들 때 사용하게 됨
+사실은 private 붙은 변수도 출력은 가능함
+그냥 private 변수를 출력하는 메서드를 따로 만들면 되는거임 => getter함수로 불림
+수정도 마찬가지로 메서드를 따로 만들면 되는거임 => setter 함수로 불림
+근데 이렇게 만드는 것도 귀찮잖음
+그렇다면 lombok에서 만들어준 @Getter, @Setter를 사용하셈
+그냥 사용하고 싶은 친구 위에 붙이면 됨
+private은 왜 붙이는 거임?
+함부로 변경되지 않고 setter 변경하는 것이 더 안전하니까!
+근데 setter를 만들어두는게 왜 안전한거임?
+setter 자체는 안전한 게 아닌데 그 안에 로직을 넣어두는게 안전해지는거임
+나중에 타입을 변환시키고 싶다면?
+그것도 setter함수를 통해 변경시킨다면 사용된 모든 곳을 바꾸는게 아니라
+setter함수에 로직만 설정해주면 다 되는 거임
+이런 디테일들이 대형 프로젝트나 협업에서 도움이 될 수 있음
+잘 참고하셈

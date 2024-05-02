@@ -6,17 +6,15 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Gwangho's Shoppingmall</title>
+    <link rel="stylesheet" href="/main.css">
 </head>
 <body>
-    <div>
-        <img>
-        <h4 th:text="${name}">pants</h4>
-        <p>70000</p>
-    </div>
-    <div>
-        <img>
-        <h4>shirts</h4>
-        <p>80000</p>
+    <div class="card" th:each="data : ${items}">
+        <img src="https://placehold.co/300">
+        <div>
+            <h4 th:text="${data.title}">pants</h4>
+            <p th:text="${data.price}">70000</p>
+        </div>
     </div>
 </body>
 </html>
