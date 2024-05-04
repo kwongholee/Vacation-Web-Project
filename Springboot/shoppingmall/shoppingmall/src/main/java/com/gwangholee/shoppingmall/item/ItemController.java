@@ -1,12 +1,11 @@
-package com.gwangholee.shoppingmall;
+package com.gwangholee.shoppingmall.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,7 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemRepository itemRepository;
-    private final itemService itemService;
+    private final com.gwangholee.shoppingmall.item.itemService itemService;
+    private final S3Service s3Service;
 
     @GetMapping("/list")
     String list(Model model) {
@@ -64,5 +64,26 @@ public class ItemController {
         Item.setPrice(price);
         itemRepository.save(Item);
         return "redirect:/list";
+    }
+
+    @DeleteMapping("/item")
+    String delete(@RequestParam Long id) {
+        itemRepository.deleteById(id);
+        return "redirect:/list";
+    }
+
+    @GetMapping("/list/page/{id}")
+    String list2(@PathVariable Integer id, Model model) {
+        Page<item> result = itemRepository.findPageBy(PageRequest.of(id-1, 5));
+        var pages = result.getTotalPages();
+        model.addAttribute("items", result);
+        return "list.html";
+    }
+
+    @GetMapping("/presigned-url")
+    @ResponseBody
+    String getURL(@RequestParam String filename) {
+        var result = s3Service.createPreSignedUrl("test/" + filename);
+        return result;
     }
 }

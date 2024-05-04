@@ -332,3 +332,160 @@ throw new ResponseStatusException(HttpStatus.에러종류, "에러메세지")
 DB 데이터 수정 기능 배우기
 save를 통해 데이터를 넣을 때
 이미 있는 컬럼의 내용이 있으면 자동으로 수정해줌
+
+AJAX?
+웹페이지에서 서버로 요청 날리는 법
+1. 주소창에 URL 적기 (get)
+2. form 태그 전송(get, post)
+3. ajax (get, post, put, delete 등)
+ajax: 새로고침 없이 서버로 요청 날리는 js 코드
+ajax  사용할 때 세부설정이 가능함
+method - http request 방법
+body - 서버로 보낼 데이터
+array나 object로 보낼 때는 json화 시켜서 보내야 함
+headers도 추가해주는게 좋음
+headers: {'Content-Type': 'application/json'}
+ajax에서 넘어온 데이터들은 @Requestbody 안에 담겨있음
+파라미터 타입 앞에 붙여주면 됨
+query string 사용해서 데이터 보낼 수도 있음
+query string으로 보낸 데이터를 출력하고 싶으면 @RequestParam 데이터타입 데이터명
+
+Authentication
+내가 아는 Session, Token 방식 그대로임
+Session은 Session id만 적혀있음
+서버에 로그인 요청하면 DB에 아이디, 로그인 기간 등등을 저장해놓음
+그리고 서버가 유저한테 session id를 하나 넘겨줌
+다음부터는 유저가 로그인 요청할 때 session id를 넘겨주면 db에 있는지 확인하고 마무리하면됨
+장점은 유저의 get/post 요청을 할 때마다 확인하니까 로그인 상태를 수시로 체크할 수 있음
+단점은 db가 좀 힘들수도? 그래서 Reddis 같은 Ram을 사용하는 db에 저장시킴
+Token에는 내용이 좀 많음
+로그인 요청하면 db에 들어갈 내용을 암호화시켜서 token에 적고 그걸 서버가 넘겨줌
+다음부터 서버한테 로그인 요청할 때 token 넘겨주면 그거 확인해서 보내줌
+장점은 db 조회가 필요가 없음 그래서 유저가 많거나 MSA 구조에서 좋을 듯
+OAuth도 있음
+다른 사이트에서의 권한을 대여하는 걸 정하는 규칙임
+카카오, 페이스북 등이 OAuth로 사용자의 정보를 대신 넘겨주는 거임
+
+Spring에서는 Spring Security를 자주 사용함
+implementation 'org.springframework.boot:spring-boot-starter-security'
+implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE' 
+위에 2개 build.gradle에 넣어주면 될 듯
+Spring Security 6버전 사용함
+처음 라이브러리 설치하면 모든 사이트의 경로들이 로그인 화면으로 막힘
+콘솔 잘 보면 초기 비번이 있음
+아이디에 user 넣고 비번에 그거 넣으면 해결되긴 함
+근데 모든 경로에 다 로그인 화면을 걸 것은 아니기 때문에 그게 싫으면 아래처럼 하셈
+@Configuration, @EnableWebSecurity annotation 넣어주면 설정 건드릴 수 있음
+그중에서 SecurityFilterChain 넣으면 어떤 페이지에 로그인 화면 넣을지 정할 수 있음
+CSRF 보안기능도 끄셈
+CSRF? 다른 사이트에서도 우리 사이트로 링크를 바꿀 수 있는데 그걸 CSRF라고 부름
+JWT 입장권을 직접 fetch의 headers 부분에 넣으면 굳이 CSRF 안 꺼도 됨
+JAVA에서 Arrow Function 사용할려면 -> 이거 써야 함
+이외에는 사용법이 같음
+Java에서는 bcrypt를 기본적으로 제공해줌
+new BCryptPasswordEncoder().encode("문자") 여기 안에 랜덤 문자열이 남아있게됨
+Hashing의 특징
+1. 같은 문자 해싱하면 똑같은 결과가 나옴
+2. 원래 문자를 추론하는게 거의 불가능함
+3. salt도 자동 추가해줌
+
+누가 만들어놓은 클래스를 DI로 쓰고 싶으면 
+함수를 하나 만들고 그 위에는 @Bean,
+함수를 감싸고 있는 클래스 위에는 @Configuration 붙여주면 됨
+그러면 그 함수는 Bean으로 작동함
+그리고 그걸 사용할 곳에 가서 등록하고 쓰면 됨
+
+Spring Security 사용하면 셋팅만 해주면 로그인 기능 완성됨
+1. 로그인 페이지 만들기
+2. 폼으로 로그인하겠다고 설정하기
+3. DB에 있던 유저 정보 꺼내는 코드 작성하기
+로그인 페이지 작성할 때는 Spring Security가 시키는대로 form 태그 작성해야 함
+그다음 설정 넣는 SecurityConfig 파일에 밑에 코드 넣어주면 됨
+http.formLogin((formLogin) -> 
+  formLogin.loginPage("/login").defaultSuccessUrl("/")
+);
+로그인 url은 /login, 성공하면 /, 실패하면 /login?error로 감
+실패시 url은 default값으로 작동하며 내가 직접 넣을때는 defaultFailUrl 넣으면 됨
+db에 있던 유저 정보 꺼내는 코드 적을 파일 하나 만들고
+밑에 코드 넣어주셈
+@Service
+public class MyUserDetailsService implements UserDetailsService {
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    DB에서 username을 가진 유저를 찾아와서
+    return new User(유저아이디, 비번, 권한);
+  }
+} 
+기본적으로 Spring Security가 유저가 제출한 비번과 DB에 있던 비번이 같은지는
+알아서 검사해주지만
+DB에 있던 비번이 어디에 있는지는 모르기 때문에 그걸 찾아주는 코드는 작성해야함
+interface & implements
+interface: 함수 정의만 넣는 class (클래스 생김새 가이드라인)
+implements: A라는 클래스가 B라는 interface를 그대로 따라가는지 확인해주세요
+파라미터인 username에는 username이 적혀있음
+이번에는 username이 들어있는 행을 찾아와야 함
+repository에서 findBy컬럼명 으로 함수 만들어놓으면 진짜 그걸로 찾아주는 함수 만들 수 있음
+사이에 All 붙이면 다 가져와줌
+Derived query methods라고 부르는 행위임
+말고도 할 수 있는 기능이 많으니 나중에 찾아보기
+권한 넣는 법은 코드 참고하셈
+로그인한 유저만 볼 수 있는 페이지를 만들려면
+Controller에서 Authentication auth를 통해서 
+현재 유저의 로그인 정보를 출력할 수 있음
+그거를 기반으로 코드 작성하면 됨
+타임리프 문법 쓰면 굳이 서버에서 로그인된 정보 안 보내줘도
+자기가 로그인된 유저 정보를 확인할 수 있음
+로그아웃은 아래 코드를 SecurityConfig에 넣어주면 됨
+http.logout(logout -> logout.logoutUrl("/logout"));
+/logout으로 get요청 날리면 로그아웃 자동으로 됨
+그런데 Authentication auth를 통해서는 현재 유저의 username, 권한만 들어있음
+displayname 같은 거 수정하고 싶으면?
+그러면 username 꺼내서 DB 뒤지면 되지만 비효율적임
+그러면 왜 displayname이 왜 없을까?
+loadUserByUsername에서 return에 displayname이 없기 때문임
+그러면 원래 있던 클래스를 바꾸기는 힘드니
+내가 직접 만든 클래스를 return 시키면 될 듯
+그래서 그것과 비슷하게 만들 수 있는 extends 키워드 사용하면 될 듯
+Object는 모든 타입의 상위버전임
+그래서 타입을 지정하기 불분명할 때 자주 사용함
+타입 캐스팅해서 내가 원하는 타입으로 바꾸면 될 듯?
+그냥 변수 값 앞에 (원하는타입) 붙여주면 됨
+(참고1) 로그인 후 세션 유지기간을 맘대로 설정할 수 있음
+(참고2) 세션 데이터를 DB에 안전하게 보관할 수 있음
+spring-session-jdbc 사용하면 편함
+
+object를 보낼 일이 굉장히 많음
+근데 이 object를 변경해서 보낼 일도 많을거임
+(참고) 한글 인코딩이 깨지면 utf-8 인코딩 쓰거나 ResponseEntity 사용하셈
+변경하려면
+1. map 자료에 필요한 것만 넣거나
+2. 새로운 object를 만들어서 필요한 것만 넣거나
+2번째 형태를 새로운 클래스로 만든 것을 
+Data Transfer Object (데이터 변환용 클래스) - DTO 라고 부름
+(참고) constructor 문법 사용하면 object 선언하는 것도 깔끔할 듯
+object를 json 형태로 변환시켜서 보내줄 때 
+public이 안 붙어있으면 json화가 안됨
+public을 붙이거나 Getter 붙이거나 
+DTO 파일은 별도의 java 파일로 분리해서 넣기
+DTO를 사용하면 장점은?
+1. 보내는 데이터의 타입 체크가 쉬워짐
+2. 재사용이 쉬움
+(참고) Mapping 라이브러리(MapStruct) 쓰면 Object 변환 쉬워짐
+
+Pagination
+PageRequest.of(page번호, 페이지당 몇 개)
+page번호는 0부터 시작함
+위에서 정해진 개수만큼 가져오는 거임
+page 변수의 .getTotalPages()로 페이지 몇개인지 확인 가능함
+(참고) 전체 페이지 개수 필요 없으면 Slice 타입으로 주면 됨
+
+보통 이미지는 하드에 저장하고, 이미지 경로를 DB에 저장하는 편임
+근데 배포할 때 좀 부담스러울 수 있음
+그래서 보통은 이미지 클라우드 서비스를 사용하는 편임
+AWS S3 사용합시당
+서버에 AWS 라이브러리 설치해서 사용할거기 때문에 access key가 필요함
+이미지를 보내는 법
+1. post 요청으로 이미지를 서버로 보내고 그걸 클라우드에 저장하거나
+2. Presigned URL 방식 - 서버를 안 거치고 유저가 직접 S3에 넣거나
+근데 안 거치면 위험하니 서버한테 허락을 받고, 허락 받은 이미지에
+Presigned url을 발급해서 그걸 S3에 업로드하는 방식임

@@ -16,5 +16,27 @@
         <input name="price">
         <button type="submit">submit</button>
     </form>
+
+    <input type="file" onchange="getURL(this)">
+    <img src="">
+
+    <script>
+        async function getURL(e) {
+            let name = encodeURIComponent(e.files[0].name);
+            let result = await fetch('/presigned-url?filename=' + name);
+            result = await result.text();
+            console.log(result);
+
+            let r = await fetch(result, {
+                method: "PUT",
+                body: e.files[0]
+            });
+            console.log(r.url.split("?")[0]);
+
+            if(r.ok) {
+                document.querySelector('img').src = r.url.split("?")[0];
+            }
+        }
+    </script>
 </body>
 </html>

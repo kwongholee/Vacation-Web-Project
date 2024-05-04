@@ -16,7 +16,10 @@
             <a th:href="@{'/detail/' + ${data.id}}" th:text="${data.title}">pants</a>
             <a th:href="@{'/edit/' + ${data.id}}">수정</a>
             <p th:text="${data.price}">70000</p>
+            <p th:onclick="fetch('/item?id=[[${data.id}]]', {method: 'DELETE'})
+                .then(() => {location.reload();})
+            ">delete</p>
         </div>
     </div>
 </body>
-</html>
+</html> list
